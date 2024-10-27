@@ -13,3 +13,8 @@ venv/
 # Flask
 instance/
 .webassets-cache
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/

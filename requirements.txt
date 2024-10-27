@@ -5,3 +5,4 @@ flask-babel == 4.0.0
 Flask-Admin == 1.6.1
 
 # Additional utilities
+pytest == 8.3.3
