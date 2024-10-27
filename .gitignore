@@ -10,6 +10,9 @@ venv/
 # PyCharm
 .idea/
 
+# vscode
+.vscode/
+
 # Flask
 instance/
 .webassets-cache
