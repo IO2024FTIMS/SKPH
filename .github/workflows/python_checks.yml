@@ -39,4 +39,4 @@ jobs:
     - name: Run Flake8
       run: |
         python -m flake8 $(git ls-files '*.py') \
-        --format="::error:: file=%(path)s, line=%(row)d, col=%(col)d: %(code)s %(text)s%0A%(text)s"
+        --format="::error:: file=%(path)s, line=%(row)d, col=%(col)d %(code)s %(text)s%0A%(text)s"
