@@ -30,7 +30,8 @@ jobs:
     - name: Run Pylint
       run: |
         python -m pylint $(git ls-files '*.py') \
-        --output-format=github
+        --output-format=github \
+        --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}"
 
     - name: Run Flake8
       run: |
