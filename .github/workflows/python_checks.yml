@@ -34,7 +34,7 @@ jobs:
     - name: Run Pylint
       run: |
         python -m pylint $(git ls-files '*.py') \
-        --msg-template="::{category}::{path}:{line}:{column}: {msg_id} ({symbol}) {msg}"
+        --msg-template="::error::{path}:{line}:{column} {msg_id} ({symbol})\n{msg}"
 
     - name: Run Flake8
       run: |
