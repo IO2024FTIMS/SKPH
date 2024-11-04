@@ -9,9 +9,13 @@ on:
 jobs:
   linters:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     strategy:
       matrix:
         python-version: [ "3.12" ]
+    timeout-minutes: 1
     
     steps:
     - name: Checkout repository
@@ -30,8 +34,7 @@ jobs:
     - name: Run Pylint
       run: |
         python -m pylint $(git ls-files '*.py') \
-        --output-format=github \
-        --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}"
+        --msg-template="::{category}::{path}:{line}:{column}: {msg_id} ({symbol}) {msg}"
 
     - name: Run Flake8
       run: |
