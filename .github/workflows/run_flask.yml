@@ -52,16 +52,18 @@ jobs:
         export DATABASE_URI=postgresql+psycopg2://${{ env.db_user }}:${{ env.db_password }}@localhost:${{ env.db_port }}/${{ env.db_name }}
         python -m flask run &
 
-    - name: Check if Flask App is running
+    - name: Check Flask App
       run: |
         echo "Waiting for Flask App to start..."
         sleep 10
 
         echo "::group::Response from / endpoint:"
         curl -sS http://localhost:5000/
+        echo -e "\n::endgroup::"
 
         echo "::group::Response from /db endpoint:"
         curl -sS http://localhost:5000/db
+        echo -e "\n::endgroup::"
 
     - name: Tear down Docker Compose
       if: always()
