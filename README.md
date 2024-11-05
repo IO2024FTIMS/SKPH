@@ -17,7 +17,7 @@ DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:54329/${db
 
 3. Run the docker container with database
 ```sh
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/database/docker-compose.yml up -d
 ```
 
 ### Running the application
