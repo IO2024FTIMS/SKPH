@@ -8,6 +8,7 @@ on:
 
 jobs:
   linters:
+    name: Python Checks
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}

@@ -8,6 +8,7 @@ on:
 
 jobs:
   run-flask:
+    name: Run Flask App
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,6 +35,7 @@ jobs:
         echo "DB_USER=${{ env.db_user }}" >> .env
         echo "DB_PASSWORD=${{ env.db_password }}" >> .env
         echo "DB_PORT=${{ env.db_port }}" >> .env
+
         docker compose -f ${{ env.db_path }} up -d
 
     - name: Set up Python
@@ -58,11 +60,9 @@ jobs:
 
         echo "::group::Response from / endpoint:"
         curl -sS http://localhost:5000/
-        echo "::endgroup::"
 
         echo "::group::Response from /db endpoint:"
         curl -sS http://localhost:5000/db
-        echo "::endgroup::"
 
     - name: Tear down Docker Compose
       if: always()
