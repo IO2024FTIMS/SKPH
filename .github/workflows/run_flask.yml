@@ -34,6 +34,7 @@ jobs:
         echo "DB_USER=${{ env.db_user }}" >> .env
         echo "DB_PASSWORD=${{ env.db_password }}" >> .env
         echo "DB_PORT=${{ env.db_port }}" >> .env
+
         docker compose -f ${{ env.db_path }} up -d
 
     - name: Set up Python
@@ -51,18 +52,18 @@ jobs:
         export DATABASE_URI=postgresql+psycopg2://${{ env.db_user }}:${{ env.db_password }}@localhost:${{ env.db_port }}/${{ env.db_name }}
         python -m flask run &
 
-    - name: Check if Flask App is running
+    - name: Check Flask App
       run: |
         echo "Waiting for Flask App to start..."
         sleep 10
 
         echo "::group::Response from / endpoint:"
         curl -sS http://localhost:5000/
-        echo "::endgroup::"
+        echo -e "\n::endgroup::"
 
         echo "::group::Response from /db endpoint:"
         curl -sS http://localhost:5000/db
-        echo "::endgroup::"
+        echo -e "\n::endgroup::"
 
     - name: Tear down Docker Compose
       if: always()

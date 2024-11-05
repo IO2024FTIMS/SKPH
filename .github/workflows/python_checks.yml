@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  linters:
+  python-checks:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}

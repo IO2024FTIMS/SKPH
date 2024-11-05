@@ -10,13 +10,13 @@ DB_PASSWORD="<password>"
 DB_PORT="<port>"
 ```
 
-2. Set the `DATABASE_URI` environment variable to match with the `.env` file.
-> Note: Restarting your terminal/IDE may be required for the change to take place.
+2. Set the `DATABASE_URI` environment variable to match the values in the `.env` file.
+> **Note**: You may need to restart your terminal or IDE for the changes to take effect.
 ```sh
-DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:54329/${db_name}
+DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:${port}/${db_name}
 ```
 
-3. Run the docker container with database
+3. Run the Docker Compose with the database.
 ```sh
 docker compose -f docker/database/docker-compose.yml up -d
 ```
@@ -48,5 +48,5 @@ To merge changes into the `main` branch, please ensure the following requirement
 For more complex functionality that may require multiple `feature/**` branches:
 
 - Create an `epic/<name_of_the_epic>` branch to develop related features.
-- Develop smaller `feature/**` branches and merge them into the `epic` branch without worrying about the CI checks and branch protection rules.
+- Develop smaller `feature/**` branches and merge them into the `epic` branch without needing to pass CI checks or follow branch protection rules.
 - When the `epic` branch is ready for integration into `main`, ensure it meets all the above requirements.
