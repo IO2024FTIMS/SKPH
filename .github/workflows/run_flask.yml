@@ -18,7 +18,7 @@ jobs:
       db_name: ${{ secrets.DB_NAME }}
       db_user: ${{ secrets.DB_USER }}
       db_password: ${{ secrets.DB_PASSWORD }}
-      db_port: 54329
+      db_port: 5432
       db_path: docker/database/docker-compose.yml
     
     steps:
@@ -30,6 +30,10 @@ jobs:
 
     - name: Run Docker Compose with local Database
       run: |
+        echo "DB_NAME=${{ env.db_name }}" >> .env
+        echo "DB_USER=${{ env.db_user }}" >> .env
+        echo "DB_PASSWORD=${{ env.db_password }}" >> .env
+        echo "DB_PORT=${{ env.db_port }}" >> .env
         docker compose -f ${{ env.db_path }} up -d
 
     - name: Set up Python

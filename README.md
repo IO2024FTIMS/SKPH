@@ -1,15 +1,16 @@
 # IO_2024
 
 ### Setup
-1. Create `.env` file in the `docker` directory with the selected credentials to your local database.
+1. Create `.env` file in the `docker/database` directory with the selected credentials and settings to your local database.
 
 ```conf
-POSTGRES_DB="<db_name>"
-POSTGRES_USER="<user_name>"
-POSTGRES_PASSWORD="<password>"
+DB_NAME="<db_name>"
+DB_USER="<user_name>"
+DB_PASSWORD="<password>"
+DB_PORT="<port>"
 ```
 
-2. Set the `DATABASE_URI` environment variable to match the `.env` file.
+2. Set the `DATABASE_URI` environment variable to match with the `.env` file.
 > Note: Restarting your terminal/IDE may be required for the change to take place.
 ```sh
 DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:54329/${db_name}
