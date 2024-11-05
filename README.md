@@ -1,6 +1,6 @@
 # SKPH (IO_2024)
 
-### Setup
+## Setup
 1. Create `.env` file in the `docker/database` directory with the selected credentials and settings to your local database.
 
 ```conf
@@ -21,7 +21,7 @@ DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:${port}/${
 docker compose -f docker/database/docker-compose.yml up -d
 ```
 
-### Running the application
+## Running the application
 ```sh
 flask run
 ```
