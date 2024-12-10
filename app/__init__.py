@@ -2,8 +2,8 @@ from flask import Flask, render_template
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.extensions import db, babel, get_locale
 import app.models
+from app.extensions import babel, db, get_locale
 from config import Config
 
 

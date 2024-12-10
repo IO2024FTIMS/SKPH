@@ -1,6 +1,7 @@
-from app.extensions import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.extensions import db
 
 
 class Volunteer(db.Model):
