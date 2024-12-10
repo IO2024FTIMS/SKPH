@@ -9,9 +9,9 @@
         {% for task in volunteer.tasks %}
             <li>
                 <strong>{{ task.name }}</strong>: {{ task.description }}
-                {%if task._evaluation  %}
+                {%if task.evaluation_  %}
                 <li>
-                    <strong>Evaluation: {{ task._evaluation }}</strong>
+                    <strong>Evaluation: {{ task.evaluation_ }}</strong>
                 </li>
                 {% endif %}
             </li>

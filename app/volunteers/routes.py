@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for
-from app.extensions import db
+from flask import Blueprint, redirect, render_template, request, url_for
 
+from app.extensions import db
 
 bp = Blueprint("volunteers", __name__,
                template_folder="../templates/volunteers",
@@ -22,9 +22,9 @@ def fetch_all():
 
 @bp.route('/samples')
 def samples():
-    from app.models.volunteer import Volunteer
     from app.models.address import Address
     from app.models.task import Task
+    from app.models.volunteer import Volunteer
     with db.session() as session:
         v1 = Volunteer(first_name='Wiktor', last_name='Stepniewski', email='ws', phone='wsphone')
         a1 = Address(street='Pomorska', street_number='42a', city='Lodz', voivodeship='Lodzkie')
@@ -75,7 +75,7 @@ def eval_task(task_id):
         description = request.form['description']
 
         task_evaluation = Evaluation(score=score, description=description)
-        task._evaluation = task_evaluation
+        task.evaluation_ = task_evaluation
         db.session.add(task)
         db.session.commit()
 

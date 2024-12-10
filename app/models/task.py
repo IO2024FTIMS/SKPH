@@ -1,6 +1,7 @@
-from app.extensions import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.extensions import db
 
 
 class Task(db.Model):
@@ -10,7 +11,7 @@ class Task(db.Model):
     volunteer_id = mapped_column(ForeignKey("volunteer.id"))
     evaluation_id = mapped_column(ForeignKey("evaluation.id"))
 
-    _evaluation = relationship("Evaluation")
+    evaluation_ = relationship("Evaluation")
     volunteer = relationship("Volunteer", back_populates="tasks")
 
     def __repr__(self):
