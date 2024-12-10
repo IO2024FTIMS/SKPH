@@ -1,0 +1,40 @@
+{% extends "base.jinja" %}  
+
+{% block title %}Volunteer List{% endblock %}
+
+{% block content %}
+   <div class="container mt-2">
+    <h1>Volunteer List</h1>
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Address ID</th>
+            <th scope="col">Street</th>
+            <th scope="col">Street number</th>
+            <th scope="col">City</th>
+            <th scope="col">Voivodeship</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for volunteer in volunteers %}
+        <tr>
+            <td>{{ volunteer.id }}</td>
+            <td>{{ volunteer.first_name }}</td>
+            <td>{{ volunteer.last_name }}</td>
+            <td>{{ volunteer.email }}</td>
+            <td>{{ volunteer.phone }}</td>
+            <td>{{ volunteer.address_id }}</td>
+            <td>{{ volunteer.address.street }}</td>
+            <td>{{ volunteer.address.street_number}}</td>
+            <td>{{ volunteer.address.city}}</td>
+            <td>{{ volunteer.address.voivodeship}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}
