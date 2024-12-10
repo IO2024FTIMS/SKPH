@@ -1,10 +1,10 @@
-from flask import Flask
-from sqlalchemy.exc import SQLAlchemyError
+from flask import Flask, render_template
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
-
+import app.models
+from app.extensions import babel, db, get_locale
 from config import Config
-from app.extensions import db
 
 
 def create_app(config_class=Config):
@@ -13,12 +13,19 @@ def create_app(config_class=Config):
 
     # Initialize Flask extensions here
     db.init_app(app)
+    babel.init_app(app, locale_selector=get_locale)
+
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
 
     # Register blueprints here
+    from app.volunteers.routes import bp as volunteers_bp
+    app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
     @app.route('/')
     def hello():
-        return "Hello World!!"
+        return render_template('index.jinja')
 
     @app.route('/db')
     def check_db():
