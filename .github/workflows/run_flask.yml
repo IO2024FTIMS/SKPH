@@ -53,6 +53,7 @@ jobs:
     - name: Run Flask App
       run: |
         export DATABASE_URI=postgresql+psycopg2://${{ env.db_user }}:${{ env.db_password }}@localhost:${{ env.db_port }}/${{ env.db_name }}
+        pybabel compile -d translations
         python -m flask run &
 
     - name: Check Flask App
