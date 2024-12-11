@@ -21,3 +21,6 @@ instance/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Babel
+*.mo
