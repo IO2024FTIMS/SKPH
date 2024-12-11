@@ -4,18 +4,33 @@
 
 {% block content %}
 <div class="container mt-2">
+  <div>
+    <a href="{{ url_for('volunteers.fetch_all') }}" class="btn btn-secondary">Back</a>
+  </div>
+  <hr class="my-4"/>
   <h3>Tasks for {{ volunteer.first_name }} {{ volunteer.last_name }}</h3>
-  <ul>
-    {% for task in volunteer.tasks %}
-    <li>
-      <strong>{{ task.name }}</strong>: {{ task.description }}
-      {%if task.evaluation_ %}
-    <li>
-      <strong>Evaluation: {{ task.evaluation_ }}</strong>
-    </li>
-    {% endif %}
-    </li>
-    {% endfor %}
-  </ul>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Evaluation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in volunteer.tasks %}
+      <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>
+          {% if task.evaluation_ %}
+          Score: {{ task.evaluation_.score }}<br />Description: {{ task.evaluation_.description }}
+          {% else %}
+          <a href="{{ url_for('volunteers.eval_task', task_id=task.id) }}" class="btn btn-primary">Evaluate</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+  </table>
 </div>
 {% endblock %}
