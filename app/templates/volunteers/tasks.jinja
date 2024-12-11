@@ -1,21 +1,21 @@
-{% extends "base.jinja" %}  
+{% extends "base.jinja" %}
 
 {% block title %}Volunteer Tasks{% endblock %}
 
 {% block content %}
-     <div class="container mt-2">
-    <h3>Tasks for {{ volunteer.first_name }} {{ volunteer.last_name }}</h3>
-    <ul>
-        {% for task in volunteer.tasks %}
-            <li>
-                <strong>{{ task.name }}</strong>: {{ task.description }}
-                {%if task.evaluation_  %}
-                <li>
-                    <strong>Evaluation: {{ task.evaluation_ }}</strong>
-                </li>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-     </div>
+<div class="container mt-2">
+  <h3>Tasks for {{ volunteer.first_name }} {{ volunteer.last_name }}</h3>
+  <ul>
+    {% for task in volunteer.tasks %}
+    <li>
+      <strong>{{ task.name }}</strong>: {{ task.description }}
+      {%if task.evaluation_ %}
+    <li>
+      <strong>Evaluation: {{ task.evaluation_ }}</strong>
+    </li>
+    {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}
