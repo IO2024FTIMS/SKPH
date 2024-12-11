@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, Response, jsonify
 from .report_service import ReportService
 from .report_generator import ReportGenerator
 
-bp = Blueprint("reports", __name__, template_folder="/templates/reports", static_folder="static")
+bp = Blueprint("reports", __name__, template_folder="/templates/reports", static_folder="../static/reports")
 
 report_service = ReportService()
 
