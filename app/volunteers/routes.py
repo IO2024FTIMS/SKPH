@@ -1,6 +1,11 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from app.extensions import db
+from app.models.address import Address
+from app.models.evaluation import Evaluation
+from app.models.task import Task
+from app.models.volunteer import Volunteer
+
 
 bp = Blueprint("volunteers", __name__,
                template_folder="../templates/volunteers",
@@ -15,16 +20,12 @@ def index():
 
 @bp.route('/all')
 def fetch_all():
-    from app.models.volunteer import Volunteer
     volunteers = db.session.scalars(db.select(Volunteer))
     return render_template('view.jinja', volunteers=volunteers.all())
 
 
 @bp.route('/samples')
 def samples():
-    from app.models.address import Address
-    from app.models.task import Task
-    from app.models.volunteer import Volunteer
     with db.session() as session:
         v1 = Volunteer(first_name='Wiktor', last_name='Stepniewski', email='ws', phone='wsphone')
         a1 = Address(street='Pomorska', street_number='42a', city='Lodz', voivodeship='Lodzkie')
@@ -38,7 +39,6 @@ def samples():
 
 @bp.route('/tasks/<int:volunteer_id>')
 def list_tasks(volunteer_id):
-    from app.models.volunteer import Volunteer
     volunteer = db.session.get(Volunteer, volunteer_id)
     if volunteer is None:
         return "Volunteer not found", 404
@@ -47,8 +47,6 @@ def list_tasks(volunteer_id):
 
 @bp.route('/tasks/create', methods=['GET', 'POST'])
 def create_task():
-    from app.models.task import Task
-    from app.models.volunteer import Volunteer
     volunteers = db.session.scalars(db.select(Volunteer))
 
     if request.method == 'POST':
@@ -66,9 +64,6 @@ def create_task():
 
 @bp.route('/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])
 def eval_task(task_id):
-    from app.models.evaluation import Evaluation
-    from app.models.task import Task
-
     task = db.session.scalar(db.select(Task, task_id))
     if request.method == 'POST':
         score = request.form['score']
