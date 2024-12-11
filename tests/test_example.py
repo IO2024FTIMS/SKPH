@@ -11,4 +11,4 @@ def test_inc_zero():
 
 def test_inc_string():
     with pytest.raises(TypeError):
-        inc("a")
+        inc('a')

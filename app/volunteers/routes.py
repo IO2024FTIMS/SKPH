@@ -7,10 +7,10 @@ from app.models.task import Task
 from app.models.volunteer import Volunteer
 
 
-bp = Blueprint("volunteers", __name__,
-               template_folder="../templates/volunteers",
-               static_folder="static",
-               static_url_path="volunteers")
+bp = Blueprint('volunteers', __name__,
+               template_folder='../templates/volunteers',
+               static_folder='static',
+               static_url_path='volunteers')
 
 
 @bp.route('/')
@@ -58,7 +58,7 @@ def samples():
 def list_tasks(volunteer_id):
     volunteer = db.session.get(Volunteer, volunteer_id)
     if volunteer is None:
-        return "Volunteer not found", 404
+        return 'Volunteer not found', 404
     return render_template('tasks.jinja', volunteer=volunteer)
 
 
