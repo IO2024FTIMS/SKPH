@@ -2,8 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head><title>Reports</title></head>
+<link rel="stylesheet" type="text/css" href="../../reports/static/css/view.css">
+<script src = '../../reports/static/js/viewInHTML.js' defer></script>
 <body>
   <h1>Reports</h1>
+  <button id="back-btn">Powrót do Reports UI</button>
   <ul>
     {% for report in reports %}
     <li>
@@ -18,5 +21,7 @@
     </li>
     {% endfor %}
   </ul>
+
+<img id="spell" src="../../reports/static/images/hubal.jpg" alt="Spell">
 </body>
 </html>

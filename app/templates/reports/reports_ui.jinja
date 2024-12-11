@@ -2,23 +2,26 @@
 <html>
 <head>
     <title>Reports UI</title>
+    <link rel="stylesheet" type="text/css" href="../../reports/static/css/reportsUI.css">
+    <script src = '../../reports/static/js/scriptUI.js' defer></script>
 </head>
 <body>
     <h1>Reports User Interface</h1>
-    <p>Wybierz jedną z akcji:</p>
 
-    <button id="generate-btn">Generuj raport (JSON)</button>
+    <div class="button-container">
+        <button id="generate-btn">Generuj raport (JSON)</button>
 
-    <button id="view-btn">Pokaż raporty (JSON)</button>
+        <button id="view-btn">Pokaż raporty (JSON)</button>
 
-    <input type="number" id="report-id-input" placeholder="Report ID" style="width:100px;">
-    <button id="export-btn">Pobierz CSV</button>
+        <input type="number" id="report-id-input" placeholder="Report ID">
+        <button id="export-btn">Pobierz CSV</button>
 
-    <button id="all-btn">Przeglądaj raporty w HTML</button>
+        <button id="all-btn">Przeglądaj raporty w HTML</button>
+    </div>
 
     <h2>Wynik:</h2>
     <pre id="result"></pre>
 
-    <script src="../../reports/static/js/scripts.js" defer></script>
+
 </body>
 </html>
