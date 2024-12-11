@@ -24,7 +24,7 @@ def create_app(config_class=Config):
     app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
     @app.route('/')
-    def hello():
+    def home():
         return render_template('index.jinja')
 
     @app.route('/db')
