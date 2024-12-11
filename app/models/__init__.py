@@ -1,4 +1,1 @@
-from .address import Address
-from .evaluation import Evaluation
-from .task import Task
-from .volunteer import Volunteer
+__author__ = 'Wiktor Stępniewski, Wiktor Szewczyk'
