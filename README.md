@@ -23,6 +23,7 @@ docker compose -f docker/database/docker-compose.yml up -d
 
 ## Running the application
 ```sh
+pybabel compile -d translations # Compile translations
 flask run
 ```
 

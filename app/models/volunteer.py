@@ -10,10 +10,10 @@ class Volunteer(db.Model):
     last_name: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
     phone: Mapped[str] = mapped_column(unique=True)
-    address = relationship("Address")
-    address_id = mapped_column(ForeignKey("address.id"))
+    address = relationship('Address')
+    address_id = mapped_column(ForeignKey('address.id'))
 
-    tasks = relationship("Task", back_populates="volunteer")
+    tasks = relationship('Task', back_populates='volunteer')
 
     def __repr__(self):
         return f'Volunteer:(id={self.id!r}, first_name={self.first_name!r}, last_name={self.last_name!r}\

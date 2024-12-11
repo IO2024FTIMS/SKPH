@@ -17,27 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: app/templates/index.jinja:12
+#: app/templates/base.jinja
+msgid "Crisis Management System"
+msgstr ""
+
+#: app/templates/base.jinja
 msgid "SKPH"
 msgstr ""
 
-#: app/templates/index.jinja:20
+#: app/templates/base.jinja
 msgid "Home"
 msgstr ""
 
-#: app/templates/index.jinja:25
+#: app/templates/base.jinja
 msgid "Crises"
 msgstr ""
 
-#: app/templates/index.jinja:28
+#: app/templates/base.jinja
 msgid "Organizations"
 msgstr ""
 
-#: app/templates/index.jinja:31
+#: app/templates/base.jinja
 msgid "About"
 msgstr ""
 
-#: app/templates/index.jinja:44
+#: app/templates/base.jinja
 msgid "Login"
 msgstr ""
-
