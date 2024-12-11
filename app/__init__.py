@@ -15,6 +15,8 @@ def create_app(config_class=Config):
     db.init_app(app)
 
     # Register blueprints here
+    from app.reports.routes import bp as reports_bp
+    app.register_blueprint(reports_bp, url_prefix='/reports')
 
     @app.route('/')
     def hello():

@@ -1,0 +1,22 @@
+<!-- view.jinja -->
+<!DOCTYPE html>
+<html>
+<head><title>Reports</title></head>
+<body>
+  <h1>Reports</h1>
+  <ul>
+    {% for report in reports %}
+    <li>
+      <strong>Report ID:</strong> {{ report.report_id }}<br>
+      <strong>Created At:</strong> {{ report.created_at }}<br>
+      <strong>Entries:</strong>
+      <ul>
+        {% for entry in report.entries %}
+          <li>{{ entry.resource_name }}: {{ entry.quantity }} ({{ entry.location }})</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
