@@ -1,1 +1,1 @@
-__author__ = "Wiktor Stępniewski, Wiktor Szewczyk"
+__author__ = 'Wiktor Stępniewski, Wiktor Szewczyk'
