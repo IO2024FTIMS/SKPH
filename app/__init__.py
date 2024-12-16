@@ -22,7 +22,6 @@ def create_app(config_class=Config):
         db.create_all()
 
     # Register blueprints here
-    
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
