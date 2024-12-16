@@ -1,1 +1,1 @@
-__author__ = "Filip Kobierski, Łukasz Moskwa"
+__author__ = 'Filip Kobierski, Łukasz Moskwa'
