@@ -2,6 +2,7 @@ import csv
 import os
 from datetime import datetime
 
+
 class ResourceReport:
     def __init__(self, report_id, created_at, entries):
         self.report_id = report_id
@@ -14,6 +15,7 @@ class ResourceReport:
             "created_at": self.created_at.isoformat(),
             "entries": self.entries
         }
+
 
 class ReportService:
     def __init__(self):
