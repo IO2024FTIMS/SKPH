@@ -3,7 +3,9 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import babel, db, get_locale
+from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
+
 from config import Config
 
 
@@ -20,6 +22,8 @@ def create_app(config_class=Config):
         db.create_all()
 
     # Register blueprints here
+    flask_app.register_blueprint(reports_bp, url_prefix='/reports')
+
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
     @flask_app.route('/')

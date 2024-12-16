@@ -1,0 +1,27 @@
+<!-- view.jinja -->
+<!DOCTYPE html>
+<html>
+<head><title>Reports</title></head>
+<link rel="stylesheet" type="text/css" href="../../static/reports/css/view.css">
+<script src = '../../static/reports/js/viewInHTML.js' defer></script>
+<body>
+  <h1>Reports</h1>
+  <button id="back-btn">Powrót do Reports UI</button>
+  <ul>
+    {% for report in reports %}
+    <li>
+      <strong>Report ID:</strong> {{ report.report_id }}<br>
+      <strong>Created At:</strong> {{ report.created_at }}<br>
+      <strong>Entries:</strong>
+      <ul>
+        {% for entry in report.entries %}
+          <li>{{ entry.resource_name }}: {{ entry.quantity }} ({{ entry.location }})</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+
+<img id="spell" src="../../static/reports/images/hubal.jpg" alt="Spell">
+</body>
+</html>
