@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenStreetMap Example</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  </head>
+  <body>
+    <div id="map" style="width: 600px; height: 400px;"></div>
+    <script>
+      var map = L.map('map').setView([{{ lat }}, {{ lon }}], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      L.marker([{{ relief_area.coordinates[0].lat }}, {{ relief_area.coordinates[0].lon }}]).addTo(map)
+        .bindPopup('<b>{{ relief_area.name }}</b><br>{{ relief_area.description }}<br>{{ relief_area.status }}<br>{{ relief_area.equipment_list | join: ", " }}<br>')
+        .openPopup();
+    </script>
+  </body>
+</html>
