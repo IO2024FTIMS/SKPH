@@ -1,1 +1,1 @@
-__author__ = 'Wojtek Sierocki, Jakub Tenentka'
+__author__ = "MAXIMUTANT, Jakub Tenentka"
