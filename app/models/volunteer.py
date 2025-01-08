@@ -15,6 +15,8 @@ class Volunteer(db.Model):
 
     tasks = relationship('Task', back_populates='volunteer')
 
+    user_id = mapped_column(ForeignKey('users.id'))
+
     def __repr__(self):
         return f'Volunteer:(id={self.id!r}, first_name={self.first_name!r}, last_name={self.last_name!r}\
                  email={self.email!r}, phone={self.phone!r}, address_id={self.address_id!r})'
