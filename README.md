@@ -11,9 +11,17 @@ DB_PORT="<port>"
 ```
 
 2. Set the `DATABASE_URI` environment variable to match the values in the `.env` file.
+Additionally, set the `MAIL` environment variables .
 > **Note**: You may need to restart your terminal or IDE for the changes to take effect.
 ```sh
 DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:${port}/${db_name}
+MAIL_SERVER=your-mail-server
+MAIL_PORT=your-mail-port
+MAIL_USE_SSL=True/False
+MAIL_USE_TLS=True/False
+MAIL_USERNAME=your-email-username
+MAIL_PASSWORD=your-email-password
+MAIL_DEFAULT_SENDER=your-default-sender-email
 ```
 
 3. Run the Docker Compose with the database.
