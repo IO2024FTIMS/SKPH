@@ -53,6 +53,14 @@ jobs:
     - name: Run Flask App
       run: |
         export DATABASE_URI=postgresql+psycopg2://${{ env.db_user }}:${{ env.db_password }}@localhost:${{ env.db_port }}/${{ env.db_name }}
+        export MAIL_SERVER=${{ secrets.MAIL_SERVER }}
+        export MAIL_PORT=${{ secrets.MAIL_PORT }}
+        export MAIL_USE_SSL=${{ secrets.MAIL_USE_SSL }}
+        export MAIL_USE_TLS=${{ secrets.MAIL_USE_TLS }}
+        export MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+        export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+        export MAIL_DEFAULT_SENDER=${{ secrets.MAIL_DEFAULT_SENDER }}
+
         pybabel compile -d translations
         python -m flask run &
 
