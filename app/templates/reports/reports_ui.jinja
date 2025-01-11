@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports UI</title>
-    <link rel="stylesheet" type="text/css" href="../../static/reports/css/reportsUI.css">
-    <script src = '../../static/reports/js/scriptUI.js' defer></script>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    <script src='../../static/reports/js/scriptUI.js' defer></script>
 </head>
-<body>
-    <h1>Reports User Interface</h1>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-primary text-center">Reports User Interface</h1>
 
-    <div class="button-container">
-        <button id="generate-btn">Generuj raport (JSON)</button>
+        <div class="button-container text-center mt-4">
+            <button id="generate-btn" class="btn btn-primary mx-2">Generuj raport (JSON)</button>
+            <button id="view-btn" class="btn btn-secondary mx-2">Pokaż raporty (JSON)</button>
+            <div class="d-inline-block mx-2">
+                <input type="number" id="report-id-input" class="form-control d-inline-block w-auto" placeholder="Report ID">
+            </div>
+            <button id="export-btn" class="btn btn-success mx-2">Pobierz CSV</button>
+            <button id="all-btn" class="btn btn-info mx-2">Przeglądaj raporty w HTML</button>
+        </div>
 
-        <button id="view-btn">Pokaż raporty (JSON)</button>
-
-        <input type="number" id="report-id-input" placeholder="Report ID">
-        <button id="export-btn">Pobierz CSV</button>
-
-        <button id="all-btn">Przeglądaj raporty w HTML</button>
+        <h2 class="mt-5 text-dark">Wynik:</h2>
+        <pre id="result" class="border p-3 bg-white"></pre>
     </div>
-
-    <h2>Wynik:</h2>
-    <pre id="result"></pre>
-
-
 </body>
 </html>
