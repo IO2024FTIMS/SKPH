@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user
 from flask_mailman import EmailMessage
 
 from app.models.user import User
-from app.static.auth.reset_password_email_html_content import reset_password_email_html_content
+from app.static.auth.reset_password_email_html_content import RESET_PASSWORD_EMAIL_HTML_CONTENT
 
 login_manager = LoginManager()
 
@@ -62,7 +62,7 @@ def send_reset_password_email(user):
     )
 
     email_body = render_template_string(
-        reset_password_email_html_content, reset_password_url=reset_password_url
+        RESET_PASSWORD_EMAIL_HTML_CONTENT, reset_password_url=reset_password_url
     )
 
     message = EmailMessage(

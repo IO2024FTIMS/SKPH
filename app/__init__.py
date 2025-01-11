@@ -1,17 +1,17 @@
 import os
 
 from flask import Flask, render_template
-from flask_mailman import Mail, EmailMessage
+from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+
+from config import Config
 
 from app.auth.user_service import init_login_manager
 from app.extensions import babel, db, get_locale
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.auth.routes import bp as auth_bp
-
-from config import Config
 
 
 def create_app(config_class=Config):

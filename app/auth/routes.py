@@ -40,97 +40,102 @@ def index():
     return "Admin user created if it did not exist already."
 
 
+def get_registration_form(user_type):
+    form_classes = {
+        'volunteer': VolunteerRegisterForm,
+        'organization': OrganizationRegisterForm,
+        'donor': DonorRegisterForm,
+        'affected': AffectedRegisterForm,
+        'authorities': AuthoritiesRegisterForm
+    }
+    return form_classes.get(user_type)()
+
+
+def create_user_and_related_data(form, user_type):
+    user = User(email=form.email.data, type=user_type)
+    user.set_password(form.password.data)
+    db.session.add(user)
+    db.session.commit()
+
+    if user_type == 'donor':
+        donor = Donor(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            user_id=user.id
+        )
+        db.session.add(donor)
+
+    if user_type in ['volunteer', 'organization', 'affected', 'authorities']:
+        address = Address(
+            street=form.street.data,
+            street_number=form.street_number.data,
+            city=form.city.data,
+            voivodeship=form.voivodeship.data
+        )
+        db.session.add(address)
+        db.session.commit()
+
+        if user_type == 'volunteer':
+            volunteer = Volunteer(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                address=address,
+                address_id=address.id,
+                user_id=user.id
+            )
+            db.session.add(volunteer)
+
+        elif user_type == 'organization':
+            organization = Organization(
+                organization_name=form.organization_name.data,
+                description=form.description.data,
+                address=address,
+                address_id=address.id,
+                user_id=user.id
+            )
+            db.session.add(organization)
+
+        elif user_type == 'affected':
+            affected = Affected(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                needs=form.needs.data,
+                address=address,
+                address_id=address.id,
+                user_id=user.id
+            )
+            db.session.add(affected)
+
+        elif user_type == 'authorities':
+            authorities = Authorities(
+                name=form.name.data,
+                phone=form.phone.data,
+                address=address,
+                address_id=address.id,
+                user_id=user.id
+            )
+            db.session.add(authorities)
+
+    db.session.commit()
+
+
 @bp.route('/register/<user_type>', methods=['GET', 'POST'])
 def register(user_type):
     if current_user.is_authenticated:
         return redirect(url_for('home'))
 
-    if user_type == 'volunteer':
-        form = VolunteerRegisterForm()
-    elif user_type == 'organization':
-        form = OrganizationRegisterForm()
-    elif user_type == 'donor':
-        form = DonorRegisterForm()
-    elif user_type == 'affected':
-        form = AffectedRegisterForm()
-    elif user_type == 'authorities':
-        form = AuthoritiesRegisterForm()
-    else:
+    form = get_registration_form(user_type)
+    if not form:
         abort(404)
 
     if form.validate_on_submit():
-        existing_user = User.query.filter_by(email=form.email.data).first()
-        if existing_user:
+        if User.query.filter_by(email=form.email.data).first():
             flash('Email already registered. Please use a different email.', 'danger')
             return render_template('register.jinja', form=form, user_type=user_type)
 
-        user = User(email=form.email.data, type=user_type)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-
-        if user_type == 'donor':
-            donor = Donor(
-                first_name=form.first_name.data,
-                last_name=form.last_name.data,
-                user_id=user.id
-            )
-            db.session.add(donor)
-
-        if user_type in ['volunteer', 'organization', 'affected', 'authorities']:
-            address = Address(
-                street=form.street.data,
-                street_number=form.street_number.data,
-                city=form.city.data,
-                voivodeship=form.voivodeship.data
-            )
-            db.session.add(address)
-            db.session.commit()
-
-            if user_type == 'volunteer':
-                volunteer = Volunteer(
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    email=form.email.data,
-                    phone=form.phone.data,
-                    address=address,
-                    address_id=address.id,
-                    user_id=user.id
-                )
-                db.session.add(volunteer)
-
-            elif user_type == 'organization':
-                organization = Organization(
-                    organization_name=form.organization_name.data,
-                    description=form.description.data,
-                    address=address,
-                    address_id=address.id,
-                    user_id=user.id
-                )
-                db.session.add(organization)
-
-            elif user_type == 'affected':
-                affected = Affected(
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    needs=form.needs.data,
-                    address=address,
-                    address_id=address.id,
-                    user_id=user.id
-                )
-                db.session.add(affected)
-
-            elif user_type == 'authorities':
-                authorities = Authorities(
-                    name=form.name.data,
-                    phone=form.phone.data,
-                    address=address,
-                    address_id=address.id,
-                    user_id=user.id
-                )
-                db.session.add(authorities)
-
-        db.session.commit()
+        create_user_and_related_data(form, user_type)
         return redirect(url_for('auth.login'))
 
     return render_template('register.jinja', form=form, user_type=user_type)
