@@ -8,6 +8,7 @@ class DonatioMoney(Base):
     donation_id = Column(Integer, primary_key=True, index=True)
     description = Column(String, nullable=False)
     donation_date = Column(Date, nullable=False)
+    donation_type = Column(String, nullable=False)
     cashAmount = Column(Float, nullable=False)
     donor_id = Column(Integer, ForeignKey("donors.donor_id"))
 
@@ -27,6 +28,7 @@ class DonationItem(Base):
     donation_id = Column(Integer, primary_key=True, index=True)
     description = Column(String, nullable=False)
     donation_date = Column(Date, nullable=False)
+    donation_type = Column(String, nullable=False)
     number = Column(Float, nullable=False)
     donor_id = Column(Integer, ForeignKey("donors.donor_id"))
 
