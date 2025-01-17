@@ -28,11 +28,11 @@
         <td>{{ request.status.value }}</td>
         <td>{{ request.affected.first_name }} {{ request.affected.last_name }}</td>
         <td>{{ request.needs }}</td>
-        <td>{{ request.address_id }}</td>
-        <td>{{ request.address.street }}</td>
-        <td>{{ request.address.street_number}}</td>
-        <td>{{ request.address.city}}</td>
-        <td>{{ request.address.voivodeship}}</td>
+        <td>{{ request.req_address_id }}</td>
+        <td>{{ request.req_address.street }}</td>
+        <td>{{ request.req_address.street_number}}</td>
+        <td>{{ request.req_address.city}}</td>
+        <td>{{ request.req_address.voivodeship}}</td>
       </tr>
       {% endfor %}
     </tbody>

@@ -33,6 +33,7 @@ def samples():
         return redirect(url_for('affected.index'))
 
     with db.session() as session:
+        # Tworzenie przykładowych osób poszkodowanych
         aff1 = Affected(first_name='Geto', last_name='Mill', needs='Shelter')
         a1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
         aff1.address = a1
@@ -41,9 +42,32 @@ def samples():
         a2 = Address(street='Wiejska', street_number='2b', city='Warsaw', voivodeship='Mazowieckie')
         aff2.address = a2
 
-
         session.add(aff1)
         session.add(aff2)
+
+        # Tworzenie przykładowego requesta dla pierwszego poszkodowanego
+        req1_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
+        req2_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
+        session.add(req1_address)
+        session.add(req2_address)
+        session.flush()  # Upewnij się, że ID adresu jest dostępne
+
+        req1 = Request(
+            name='Food Assistance',
+            status=RequestStatus.PENDING,
+            req_address=req1_address,
+            needs='Food',
+            affected_id=aff1.id
+        )
+        req2 = Request(
+            name='Shelter needed',
+            status=RequestStatus.PENDING,
+            req_address=req2_address,
+            needs='Shelter',
+            affected_id=aff2.id
+        )
+        session.add(req1)
+        session.add(req2)
         session.commit()
 
     flash('Sample data added successfully!')
@@ -92,7 +116,7 @@ def create_request(affected_id):
         new_request = Request(
             name=name,
             status=status,
-            address=new_address,
+            req_address=new_address,
             needs=needs,
             affected_id=affected_id
         )

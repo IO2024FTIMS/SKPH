@@ -16,8 +16,8 @@ class Request(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     status: Mapped[RequestStatus] = mapped_column(SQLEnum(RequestStatus), nullable=False)
-    address = relationship('Address')
-    address_id = mapped_column(ForeignKey('address.id'))
+    req_address = relationship('Address')
+    req_address_id = mapped_column(ForeignKey('address.id'))
     affected_id = mapped_column(ForeignKey('affected.id'))
     needs: Mapped[str]
 
