@@ -4,6 +4,8 @@ from collections import Counter
 from app.extensions import db
 from app.models.affected import Affected
 from app.models import ResourceReport
+from app.models.request import Request
+from app.models.request import RequestStatus
 
 class ReportService:
     def __init__(self):
@@ -72,4 +74,22 @@ class ReportService:
             n = aff.needs if aff.needs else "Brak"
             data[n] = data.get(n, 0) + 1
         return data
+
+    def stats_request_by_status(self):
+        data = {}
+        requests_list = db.session.query(Request).all()
+        for req in requests_list:
+            # req.status jest RequestStatus, np. RequestStatus.PENDING
+            status_str = req.status.value  # 'Pending', 'Approved', ...
+            data[status_str] = data.get(status_str, 0) + 1
+        return data
+
+    def stats_request_by_needs(self):
+        data = {}
+        requests_list = db.session.query(Request).all()
+        for req in requests_list:
+            n = req.needs if req.needs else "No needs"
+            data[n] = data.get(n, 0) + 1
+        return data
+
 

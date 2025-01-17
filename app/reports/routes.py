@@ -87,45 +87,64 @@ def affected_csv():
 
 @bp.route('/affected/detailed', methods=['GET'])
 def affected_detailed():
+    # 1. Pobieramy listy i statystyki
     affected_list = db.session.query(Affected).all()
+
     city_stats = report_service.stats_by_city()
     voiv_stats = report_service.stats_by_voivodeship()
     needs_stats = report_service.stats_by_needs()
 
-    city_chart = create_bar_chart_base64(city_stats, "Liczba poszkodowanych wg Miasta")
-    voiv_chart = create_bar_chart_base64(voiv_stats, "Liczba poszkodowanych wg Województwa")
-    needs_chart = create_bar_chart_base64(needs_stats, "Rozkład NEEDS (rodzaj pomocy)")
+    # Nowe statystyki z Request
+    request_status_stats = report_service.stats_request_by_status()
+    request_needs_stats = report_service.stats_request_by_needs()
 
+    # 2. Generujemy wykresy w base64
+    city_chart = create_bar_chart_base64(city_stats, "Poszkodowani wg Miasta")
+    voiv_chart = create_bar_chart_base64(voiv_stats, "Poszkodowani wg Województwa")
+    needs_chart = create_bar_chart_base64(needs_stats, "Rodzaj NEEDS (Affected)")
+    # Nowe wykresy
+    req_status_chart = create_bar_chart_base64(request_status_stats, "Requests wg Statusu")
+    req_needs_chart = create_bar_chart_base64(request_needs_stats, "Requests wg Needs")
+
+    # 3. Składamy HTML (rozbudowany przykład)
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8"/>
-        <title>Raport Affected (szczegółowy)</title>
+        <title>Raport Affected + Requests</title>
         <link rel="stylesheet" type="text/css" href="../../static/style.css">
     </head>
     <body class="bg-light">
         <div class="container mt-5">
-            <h1 class="text-primary text-center">Bogaty raport poszkodowanych</h1>
+            <h1 class="text-primary text-center">Bogaty raport poszkodowanych i requestów</h1>
             <p>
-                Poniżej znajduje się zestaw statystyk dotyczących tabeli <strong>Affected</strong>,
-                w tym liczba osób w danym mieście, województwie oraz rozkład typów potrzeb (<em>needs</em>).
+                Ten raport prezentuje statystyki zarówno z tabeli <strong>Affected</strong>,
+                jak i <strong>Request</strong>.
             </p>
 
-            <h2>1. Statystyki i wykresy</h2>
+            <h2>1. Statystyki Affected</h2>
             <h3>1.1. Liczba poszkodowanych wg Miasta</h3>
             <img src="data:image/png;base64,{city_chart}" alt="Wykres wg miasta"/>
 
             <h3>1.2. Liczba poszkodowanych wg Województwa</h3>
             <img src="data:image/png;base64,{voiv_chart}" alt="Wykres wg województwa"/>
 
-            <h3>1.3. Rozkład rodzajów needs</h3>
-            <img src="data:image/png;base64,{needs_chart}" alt="Wykres needs"/>
+            <h3>1.3. Rodzaje NEEDS (z Affected)</h3>
+            <img src="data:image/png;base64,{needs_chart}" alt="Wykres needs Affected"/>
 
             <hr/>
 
-            <h2>2. Szczegółowa lista poszkodowanych</h2>
-            <p>Poniżej pełna tabela z danymi z bazy:</p>
+            <h2>2. Statystyki Request</h2>
+            <h3>2.1. Requests wg Statusu</h3>
+            <img src="data:image/png;base64,{req_status_chart}" alt="Wykres RequestStatus"/>
+
+            <h3>2.2. Requests wg Needs</h3>
+            <img src="data:image/png;base64,{req_needs_chart}" alt="Wykres Request.needs"/>
+
+            <hr/>
+
+            <h2>3. Szczegółowa lista poszkodowanych (Affected)</h2>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -135,6 +154,7 @@ def affected_detailed():
                         <th>Needs</th>
                         <th>Miasto</th>
                         <th>Województwo</th>
+                        <th>Liczba Requestów</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,6 +163,8 @@ def affected_detailed():
     for aff in affected_list:
         city = aff.address.city if aff.address else ""
         voiv = aff.address.voivodeship if aff.address else ""
+        # Liczba requestów
+        request_count = len(aff.requests) if aff.requests else 0
         html_content += f"""
                     <tr>
                         <td>{aff.id}</td>
@@ -151,12 +173,14 @@ def affected_detailed():
                         <td>{aff.needs or ""}</td>
                         <td>{city}</td>
                         <td>{voiv}</td>
+                        <td>{request_count}</td>
                     </tr>
         """
 
     html_content += """
                 </tbody>
             </table>
+
             <hr/>
             <a href="/reports/ui" class="btn btn-secondary">Powrót do Reports UI</a>
         </div>
