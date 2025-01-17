@@ -4,6 +4,7 @@ from flask import Flask, render_template
 from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+from flask_socketio import SocketIO
 
 from config import Config
 
@@ -12,6 +13,7 @@ from app.extensions import babel, db, get_locale
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.auth.routes import bp as auth_bp
+from app.communication.routes import bp as chat_bp
 
 
 def create_app(config_class=Config):
@@ -47,6 +49,8 @@ def create_app(config_class=Config):
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
+
+    flask_app.register_blueprint(chat_bp, urfl_url_prefix="/communication")
 
     @flask_app.route('/')
     def home():
