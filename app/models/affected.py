@@ -11,8 +11,10 @@ class Affected(db.Model):
     needs = db.Column(db.Text)
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # Add the missing relationship
+    requests = relationship('Request', back_populates='affected')
 
     def __repr__(self):
         return f'Affected(id={self.id}, needs={self.needs})'
