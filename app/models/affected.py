@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, mapped_column, Mapped
-
+from app.models.request import Request
 from app.extensions import db
 
 
@@ -14,7 +14,7 @@ class Affected(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Add the missing relationship
-    #requests = relationship('Request', back_populates='affected')
+    requests = relationship('app.models.request.Request', back_populates='affected')
 
     def __repr__(self):
         return f'Affected(id={self.id}, needs={self.needs})'
