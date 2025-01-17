@@ -1,3 +1,4 @@
+<!-- reports_ui.jinja -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,10 +20,20 @@
             </div>
             <button id="export-btn" class="btn btn-success mx-2">Pobierz CSV</button>
             <button id="all-btn" class="btn btn-info mx-2">Przeglądaj raporty w HTML</button>
+
+            <button id="affected-btn" class="btn btn-warning mx-2">Raport Affected</button>
+            <button id="affected-detailed-btn" class="btn btn-dark mx-2">Raport Affected (szczegółowy)</button>
         </div>
 
         <h2 class="mt-5 text-dark">Wynik:</h2>
         <pre id="result" class="border p-3 bg-white"></pre>
     </div>
+
+    <script>
+    document.getElementById('affected-btn').addEventListener('click', () => {
+        window.location.href = '/reports/affected';
+    });
+    </script>
+
 </body>
 </html>
