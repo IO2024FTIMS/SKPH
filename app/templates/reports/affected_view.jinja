@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affected List</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-primary text-center">Lista Affected</h1>
+        <div class="text-center my-4">
+            <a href="{{ url_for('reports.affected_csv') }}" class="btn btn-success">Eksportuj CSV</a>
+            <a href="{{ url_for('reports.ui') }}" class="btn btn-secondary">Powrót do Reports UI</a>
+        </div>
+
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Needs</th>
+                    <th>Address (City)</th>
+                    <th>Address (Voivodeship)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aff in affected_list %}
+                <tr>
+                    <td>{{ aff.id }}</td>
+                    <td>{{ aff.first_name }}</td>
+                    <td>{{ aff.last_name }}</td>
+                    <td>{{ aff.needs }}</td>
+                    <td>{{ aff.address.city if aff.address else "" }}</td>
+                    <td>{{ aff.address.voivodeship if aff.address else "" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
