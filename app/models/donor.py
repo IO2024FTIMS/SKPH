@@ -5,7 +5,6 @@ from app.extensions import db
 
 
 class Donor(db.Model):
-
     donor_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     surname: Mapped[str]
@@ -19,7 +18,6 @@ class Donor(db.Model):
     donations_items: Mapped[list["DonationItem"]] = relationship(
         back_populates="donor", cascade="all, delete-orphan"
     )
-
 
     def request_confirmation(self, donation_id: int) -> str:
         """Request confirmation for a specific donation."""
