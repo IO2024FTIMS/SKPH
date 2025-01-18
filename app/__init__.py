@@ -14,6 +14,7 @@ from app.volunteers.routes import bp as volunteers_bp
 from app.donors.routes import bp as donors_bp
 from app.auth.routes import bp as auth_bp
 
+
 def create_app(config_class=Config):
     flask_app = Flask(__name__)
     flask_app.config.from_object(config_class)
@@ -49,7 +50,6 @@ def create_app(config_class=Config):
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
     flask_app.register_blueprint(donors_bp, url_prefix='/donors')
-
 
     @flask_app.route('/')
     def home():
