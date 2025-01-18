@@ -1,20 +1,21 @@
-from _datetime import datetime
+from datetime import date
 
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime
+from sqlalchemy import ForeignKey, DateTime
 
 from app import db
 from app.extensions import db
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class DonationMoney(db.Model):
 
-    donation_id: Mapped[int] = mapped_column(primary_key=True)
+    donationMoney_id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str]
-    donation_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    donation_date: Mapped[date] = date.today()
     donation_type: Mapped[str]
     cashAmount: Mapped[float]
-    donor_id: Mapped[int] = mapped_column(Integer, ForeignKey('donor.id'), nullable=False)
+    donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
+    donor: Mapped["Donor"] = relationship(back_populates="donations_money")
 
     def return_confirmation(self) -> str:
         """Return a confirmation message."""
@@ -24,12 +25,14 @@ class DonationMoney(db.Model):
         return f"<Donation(description={self.description}, amount={self.cashAmount})>"
 
 class DonationItem(db.Model):
-    donation_id: Mapped[int] = mapped_column(primary_key=True)
+    donationItem_id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str]
-    donation_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    donation_date: Mapped[date] = date.today()
     donation_type: Mapped[str]
     number: Mapped[float]
-    donor_id: Mapped[int] = mapped_column(Integer, ForeignKey('donor.id'), nullable=False)
+    donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
+    donor: Mapped["Donor"] = relationship(back_populates="donations_items")
+
 
 
     def return_confirmation(self) -> str:
