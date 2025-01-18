@@ -13,8 +13,6 @@ from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.donors.routes import bp as donors_bp
 from app.auth.routes import bp as auth_bp
-from app.models import donor, donation
-
 
 def create_app(config_class=Config):
     flask_app = Flask(__name__)
