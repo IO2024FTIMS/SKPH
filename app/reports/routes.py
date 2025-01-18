@@ -1,64 +1,110 @@
-from flask import Blueprint, render_template, request, Response, jsonify
+from flask import Blueprint, Response, render_template
+import csv
+import io
+
+from .chart_utils import create_bar_chart_base64
 from .report_service import ReportService
-from .report_generator import ReportGenerator
 from app.extensions import db
 from app.models.affected import Affected
-from .chart_utils import create_bar_chart_base64
+from app.models.volunteer import Volunteer
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 
 report_service = ReportService()
 
-@bp.route('/')
-def index():
-    return "We are in reports/"
-
-@bp.route('/all')
-def fetch_all():
-    reports = report_service.get_all_reports()
-    return render_template('reports/view.jinja', reports=reports)
-
-@bp.route('/generate', methods=['GET'])
-def generate_report():
-    new_report = report_service.generate_report()
-    return jsonify(new_report.to_dict()), 201
-
-@bp.route('/view', methods=['GET'])
-def view_reports():
-    reports = report_service.get_all_reports()
-    return jsonify([r.to_dict() for r in reports]), 200
-
-@bp.route('/export', methods=['GET'])
-def export_report():
-    report_id = request.args.get('report_id', type=int)
-    if not report_id:
-        return jsonify({"error": "Missing report_id parameter"}), 400
-
-    report = report_service.get_report_by_id(report_id)
-    if not report:
-        return jsonify({"error": "Report not found"}), 404
-
-    csv_data = ReportGenerator.to_csv(report)
-    return Response(
-        csv_data,
-        mimetype='text/csv',
-        headers={"Content-disposition": f"attachment; filename=report_{report_id}.csv"}
-    )
-
 @bp.route('/ui', methods=['GET'])
 def ui():
+    """
+    Strona główna z dwoma przyciskami:
+    - Raport Affected
+    - Raport Volunteer
+    """
     return render_template('reports/reports_ui.jinja')
 
-@bp.route('/affected', methods=['GET'])
-def show_affected():
-    affected_list = db.session.query(Affected).all()
-    return render_template('reports/affected_view.jinja', affected_list=affected_list)
-@bp.route('/affected/export', methods=['GET'])
-def affected_csv():
+
+# =================== RAPORT AFFECTED ===================
+
+@bp.route('/affected-report', methods=['GET'])
+def affected_report():
     affected_list = db.session.query(Affected).all()
 
-    import csv
-    import io
+    city_stats = report_service.stats_by_city()  # Affected wg miasta
+    voiv_stats = report_service.stats_by_voivodeship()  # wg województwa
+    needs_stats = report_service.stats_by_needs()  # wg needs
+
+    city_chart_b64 = create_bar_chart_base64(city_stats, "Affected wg Miasta")
+    voiv_chart_b64 = create_bar_chart_base64(voiv_stats, "Affected wg Województwa")
+    needs_chart_b64 = create_bar_chart_base64(needs_stats, "Affected wg Needs")
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8"/>
+      <title>Raport Affected</title>
+      <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    </head>
+    <body class="bg-light">
+      <div class="container mt-5">
+        <h1 class="text-primary text-center">Raport Affected</h1>
+        <p>Statystyki dotyczące poszkodowanych (Affected).</p>
+
+        <h2>1. Wykresy</h2>
+        <h3>1.1. Wg Miasta</h3>
+        <img src="data:image/png;base64,{city_chart_b64}" alt="Chart by city" />
+
+        <h3>1.2. Wg Województwa</h3>
+        <img src="data:image/png;base64,{voiv_chart_b64}" alt="Chart by voivodeship" />
+
+        <h3>1.3. Wg Needs</h3>
+        <img src="data:image/png;base64,{needs_chart_b64}" alt="Chart by needs" />
+
+        <hr/>
+        <h2>2. Lista Affected</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Imię</th>
+              <th>Nazwisko</th>
+              <th>Needs</th>
+              <th>Miasto</th>
+              <th>Województwo</th>
+            </tr>
+          </thead>
+          <tbody>
+    """
+    for aff in affected_list:
+        city = aff.address.city if aff.address else ""
+        voiv = aff.address.voivodeship if aff.address else ""
+        html += f"""
+            <tr>
+              <td>{aff.id}</td>
+              <td>{aff.first_name}</td>
+              <td>{aff.last_name}</td>
+              <td>{aff.needs or ""}</td>
+              <td>{city}</td>
+              <td>{voiv}</td>
+            </tr>
+        """
+
+    html += """
+          </tbody>
+        </table>
+        <div class="mt-4">
+          <a href="/reports/affected-report-csv" class="btn btn-success">Pobierz CSV</a>
+          <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
+        </div>
+      </div>
+    </body>
+    </html>
+    """
+    return html
+
+
+@bp.route('/affected-report-csv', methods=['GET'])
+def affected_report_csv():
+    affected_list = db.session.query(Affected).all()
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -68,12 +114,7 @@ def affected_csv():
         city = aff.address.city if aff.address else ""
         voiv = aff.address.voivodeship if aff.address else ""
         writer.writerow([
-            aff.id,
-            aff.first_name,
-            aff.last_name,
-            aff.needs or "",
-            city,
-            voiv
+            aff.id, aff.first_name, aff.last_name, aff.needs or "", city, voiv
         ])
 
     csv_data = output.getvalue()
@@ -82,111 +123,108 @@ def affected_csv():
     return Response(
         csv_data,
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=affected.csv"}
+        headers={"Content-disposition": "attachment; filename=affected_report.csv"}
     )
 
-@bp.route('/affected/detailed', methods=['GET'])
-def affected_detailed():
-    # 1. Pobieramy listy i statystyki
-    affected_list = db.session.query(Affected).all()
 
-    city_stats = report_service.stats_by_city()
-    voiv_stats = report_service.stats_by_voivodeship()
-    needs_stats = report_service.stats_by_needs()
+# =================== RAPORT VOLUNTEER ===================
 
-    # Nowe statystyki z Request
-    request_status_stats = report_service.stats_request_by_status()
-    request_needs_stats = report_service.stats_request_by_needs()
+@bp.route('/volunteer-report', methods=['GET'])
+def volunteer_report():
+    volunteer_list = report_service.get_all_volunteers()
 
-    # 2. Generujemy wykresy w base64
-    city_chart = create_bar_chart_base64(city_stats, "Poszkodowani wg Miasta")
-    voiv_chart = create_bar_chart_base64(voiv_stats, "Poszkodowani wg Województwa")
-    needs_chart = create_bar_chart_base64(needs_stats, "Rodzaj NEEDS (Affected)")
-    # Nowe wykresy
-    req_status_chart = create_bar_chart_base64(request_status_stats, "Requests wg Statusu")
-    req_needs_chart = create_bar_chart_base64(request_needs_stats, "Requests wg Needs")
+    city_stats = report_service.stats_by_city_volunteer()
+    tasks_stats = report_service.stats_volunteer_task_count()
 
-    # 3. Składamy HTML (rozbudowany przykład)
-    html_content = f"""
+    city_chart_b64 = create_bar_chart_base64(city_stats, "Volunteer wg Miasta")
+    tasks_chart_b64 = create_bar_chart_base64(tasks_stats, "Volunteer wg liczby zadań (Task)")
+
+    html = f"""
     <!DOCTYPE html>
-    <html lang="en">
+    <html>
     <head>
-        <meta charset="UTF-8"/>
-        <title>Raport Affected + Requests</title>
-        <link rel="stylesheet" type="text/css" href="../../static/style.css">
+      <meta charset="UTF-8"/>
+      <title>Raport Volunteer</title>
+      <link rel="stylesheet" type="text/css" href="../../static/style.css">
     </head>
     <body class="bg-light">
-        <div class="container mt-5">
-            <h1 class="text-primary text-center">Bogaty raport poszkodowanych i requestów</h1>
-            <p>
-                Ten raport prezentuje statystyki zarówno z tabeli <strong>Affected</strong>,
-                jak i <strong>Request</strong>.
-            </p>
+      <div class="container mt-5">
+        <h1 class="text-primary text-center">Raport Volunteer</h1>
+        <p>Statystyki wolontariuszy.</p>
 
-            <h2>1. Statystyki Affected</h2>
-            <h3>1.1. Liczba poszkodowanych wg Miasta</h3>
-            <img src="data:image/png;base64,{city_chart}" alt="Wykres wg miasta"/>
+        <h2>1. Wykresy</h2>
+        <h3>1.1. Wg Miasta</h3>
+        <img src="data:image/png;base64,{city_chart_b64}" alt="Volunteer by city" />
 
-            <h3>1.2. Liczba poszkodowanych wg Województwa</h3>
-            <img src="data:image/png;base64,{voiv_chart}" alt="Wykres wg województwa"/>
+        <h3>1.2. Wg liczby zadań</h3>
+        <img src="data:image/png;base64,{tasks_chart_b64}" alt="Volunteer tasks count" />
 
-            <h3>1.3. Rodzaje NEEDS (z Affected)</h3>
-            <img src="data:image/png;base64,{needs_chart}" alt="Wykres needs Affected"/>
-
-            <hr/>
-
-            <h2>2. Statystyki Request</h2>
-            <h3>2.1. Requests wg Statusu</h3>
-            <img src="data:image/png;base64,{req_status_chart}" alt="Wykres RequestStatus"/>
-
-            <h3>2.2. Requests wg Needs</h3>
-            <img src="data:image/png;base64,{req_needs_chart}" alt="Wykres Request.needs"/>
-
-            <hr/>
-
-            <h2>3. Szczegółowa lista poszkodowanych (Affected)</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Imię</th>
-                        <th>Nazwisko</th>
-                        <th>Needs</th>
-                        <th>Miasto</th>
-                        <th>Województwo</th>
-                        <th>Liczba Requestów</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <hr/>
+        <h2>2. Lista Volunteer</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Imię</th>
+              <th>Nazwisko</th>
+              <th>Email</th>
+              <th>Telefon</th>
+              <th>Miasto</th>
+              <th>Województwo</th>
+              <th>Liczba Tasków</th>
+            </tr>
+          </thead>
+          <tbody>
     """
-
-    for aff in affected_list:
-        city = aff.address.city if aff.address else ""
-        voiv = aff.address.voivodeship if aff.address else ""
-        # Liczba requestów
-        request_count = len(aff.requests) if aff.requests else 0
-        html_content += f"""
-                    <tr>
-                        <td>{aff.id}</td>
-                        <td>{aff.first_name}</td>
-                        <td>{aff.last_name}</td>
-                        <td>{aff.needs or ""}</td>
-                        <td>{city}</td>
-                        <td>{voiv}</td>
-                        <td>{request_count}</td>
-                    </tr>
+    for vol in volunteer_list:
+        city = vol.address.city if vol.address else ""
+        voiv = vol.address.voivodeship if vol.address else ""
+        tasks_count = len(vol.tasks) if vol.tasks else 0
+        html += f"""
+            <tr>
+              <td>{vol.id}</td>
+              <td>{vol.first_name}</td>
+              <td>{vol.last_name}</td>
+              <td>{vol.email}</td>
+              <td>{vol.phone}</td>
+              <td>{city}</td>
+              <td>{voiv}</td>
+              <td>{tasks_count}</td>
+            </tr>
         """
 
-    html_content += """
-                </tbody>
-            </table>
-
-            <hr/>
-            <a href="/reports/ui" class="btn btn-secondary">Powrót do Reports UI</a>
+    html += """
+          </tbody>
+        </table>
+        <div class="mt-4">
+          <a href="/reports/volunteer-report-csv" class="btn btn-success">Pobierz CSV</a>
+          <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
         </div>
+      </div>
     </body>
     </html>
     """
+    return html
 
-    return html_content
+@bp.route('/volunteer-report-csv', methods=['GET'])
+def volunteer_report_csv():
+    volunteer_list = report_service.get_all_volunteers()
 
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["ID", "First Name", "Last Name", "Email", "Phone", "City", "Voivodeship", "Tasks Count"])
+    for vol in volunteer_list:
+        city = vol.address.city if vol.address else ""
+        voiv = vol.address.voivodeship if vol.address else ""
+        tasks_count = len(vol.tasks) if vol.tasks else 0
+        writer.writerow([
+            vol.id, vol.first_name, vol.last_name, vol.email, vol.phone, city, voiv, tasks_count
+        ])
+    csv_data = output.getvalue()
+    output.close()
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=volunteer_report.csv"}
+    )

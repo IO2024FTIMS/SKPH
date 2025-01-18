@@ -1,39 +1,38 @@
-<!-- reports_ui.jinja -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports UI</title>
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-    <script src='../../static/reports/js/scriptUI.js' defer></script>
+  <meta charset="UTF-8">
+  <title>Reports UI</title>
+  <link rel="stylesheet" type="text/css" href="../../static/style.css">
 </head>
 <body class="bg-light">
-    <div class="container mt-5">
-        <h1 class="text-primary text-center">Reports User Interface</h1>
+  <div class="container mt-5">
+    <h1 class="text-primary text-center">Reports UI</h1>
 
-        <div class="button-container text-center mt-4">
-            <button id="generate-btn" class="btn btn-primary mx-2">Generuj raport (JSON)</button>
-            <button id="view-btn" class="btn btn-secondary mx-2">Pokaż raporty (JSON)</button>
-            <div class="d-inline-block mx-2">
-                <input type="number" id="report-id-input" class="form-control d-inline-block w-auto" placeholder="Report ID">
-            </div>
-            <button id="export-btn" class="btn btn-success mx-2">Pobierz CSV</button>
-            <button id="all-btn" class="btn btn-info mx-2">Przeglądaj raporty w HTML</button>
-
-            <button id="affected-btn" class="btn btn-warning mx-2">Raport Affected</button>
-            <button id="affected-detailed-btn" class="btn btn-dark mx-2">Raport Affected (szczegółowy)</button>
-        </div>
-
-        <h2 class="mt-5 text-dark">Wynik:</h2>
-        <pre id="result" class="border p-3 bg-white"></pre>
+    <div class="text-center mt-4">
+      <button id="affected-report-btn" class="btn btn-primary mx-3">
+        Generuj Raport Affected
+      </button>
+      <button id="volunteer-report-btn" class="btn btn-secondary mx-3">
+        Generuj Raport Volunteer
+      </button>
     </div>
 
-    <script>
-    document.getElementById('affected-btn').addEventListener('click', () => {
-        window.location.href = '/reports/affected';
-    });
-    </script>
+    <div class="mt-5">
+      <p class="text-center">
+        Po kliknięciu w przycisk zobaczysz stronę z wykresami i tabelą,
+        a na dole możliwość pobrania pliku CSV.
+      </p>
+    </div>
+  </div>
 
+  <script>
+    document.getElementById('affected-report-btn').addEventListener('click', () => {
+      window.location.href = '/reports/affected-report';
+    });
+    document.getElementById('volunteer-report-btn').addEventListener('click', () => {
+      window.location.href = '/reports/volunteer-report';
+    });
+  </script>
 </body>
 </html>

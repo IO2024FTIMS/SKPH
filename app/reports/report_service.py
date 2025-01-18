@@ -6,6 +6,8 @@ from app.models.affected import Affected
 from app.models import ResourceReport
 from app.models.request import Request
 from app.models.request import RequestStatus
+from app.models.volunteer import Volunteer
+from app.models.task import Task
 
 class ReportService:
     def __init__(self):
@@ -91,5 +93,25 @@ class ReportService:
             n = req.needs if req.needs else "No needs"
             data[n] = data.get(n, 0) + 1
         return data
+
+    def stats_by_city_volunteer(self):
+        data = {}
+        volunteers = db.session.query(Volunteer).all()
+        for vol in volunteers:
+            city = vol.address.city if vol.address else "Brak"
+            data[city] = data.get(city, 0) + 1
+        return data
+
+    def stats_volunteer_task_count(self):
+        data = {}
+        volunteers = db.session.query(Volunteer).all()
+        for vol in volunteers:
+            count_tasks = len(vol.tasks)
+            label = f"{count_tasks} zadań"
+            data[label] = data.get(label, 0) + 1
+        return data
+
+    def get_all_volunteers(self):
+        return db.session.query(Volunteer).all()
 
 
