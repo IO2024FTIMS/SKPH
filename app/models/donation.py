@@ -4,7 +4,6 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
-from app.models.donor import Donor
 
 
 class DonationMoney(db.Model):
@@ -14,7 +13,7 @@ class DonationMoney(db.Model):
     donation_type: Mapped[str]
     cashAmount: Mapped[float]
     donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
-    donor: Mapped["Donor"] = relationship(back_populates="donations_money")
+    donor: Mapped["Donor"] = relationship("Donor", back_populates="donations_money")
 
     def return_confirmation(self) -> str:
         """Return a confirmation message."""
