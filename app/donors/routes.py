@@ -1,7 +1,6 @@
-from datetime import date
-
 from flask import Blueprint, flash, redirect, render_template, url_for
 from werkzeug.security import generate_password_hash
+from datetime import date
 
 from app.extensions import db
 from app.models.donation import DonationItem, DonationMoney
