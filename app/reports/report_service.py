@@ -8,6 +8,8 @@ from app.models.request import Request
 from app.models.request import RequestStatus
 from app.models.volunteer import Volunteer
 from app.models.task import Task
+from app.models.donor import Donor
+from app.models.donation import DonationMoney, DonationItem
 
 class ReportService:
     def __init__(self):
@@ -113,5 +115,24 @@ class ReportService:
 
     def get_all_volunteers(self):
         return db.session.query(Volunteer).all()
+
+    def get_all_donors(self):
+        return db.session.query(Donor).all()
+
+    def stats_donation_type_count(self):
+        money_count = db.session.query(DonationMoney).count()
+        item_count = db.session.query(DonationItem).count()
+        return {
+            "Money donations": money_count,
+            "Item donations": item_count
+        }
+
+    def stats_donation_sums(self):
+        total_money = db.session.query(db.func.sum(DonationMoney.cashAmount)).scalar() or 0
+        total_items = db.session.query(db.func.sum(DonationItem.number)).scalar() or 0
+        return {
+            "Total money sum": float(total_money),
+            "Total item sum": float(total_items)
+        }
 
 
