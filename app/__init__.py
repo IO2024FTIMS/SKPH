@@ -1,6 +1,7 @@
 import os
 
-import os
+from config import Config
+
 
 from flask import Flask, render_template
 from flask_mailman import Mail
@@ -8,11 +9,7 @@ from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from config import Config
-
 from app.auth.user_service import init_login_manager
-from config import Config
-
 from app.auth.user_service import init_login_manager
 from app.extensions import babel, db, get_locale
 from app.reports.routes import bp as reports_bp
@@ -23,7 +20,6 @@ from app.auth.routes import bp as auth_bp
 from app.supply_chain.routes import bp as supply_chain_bp
 
 
-from config import Config
 
 
 def create_app(config_class=Config):
@@ -56,11 +52,10 @@ def create_app(config_class=Config):
     # Register blueprints here
     flask_app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    flask_app.register_blueprint(auth_bp, url_prefix='/auth')
-
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
+    
     flask_app.register_blueprint(donors_bp, url_prefix='/donors')
 
     flask_app.register_blueprint(supply_chain_bp, url_prefix='/supply_chain')
