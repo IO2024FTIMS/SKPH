@@ -16,6 +16,9 @@
       <button id="volunteer-report-btn" class="btn btn-secondary mx-3">
         Generuj Raport Volunteer
       </button>
+      <button id="donor-report-btn" class="btn btn-warning mx-3">
+        Generuj Raport Donor
+      </button>
     </div>
 
     <div class="mt-5">
@@ -32,6 +35,9 @@
     });
     document.getElementById('volunteer-report-btn').addEventListener('click', () => {
       window.location.href = '/reports/volunteer-report';
+    });
+    document.getElementById('donor-report-btn').addEventListener('click', () => {
+      window.location.href = '/reports/donor-report';
     });
   </script>
 </body>

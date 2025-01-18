@@ -228,3 +228,113 @@ def volunteer_report_csv():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=volunteer_report.csv"}
     )
+# =================== RAPORT DONOR ===================
+
+@bp.route('/donor-report', methods=['GET'])
+def donor_report():
+    donors = report_service.get_all_donors()
+
+    type_count_stats = report_service.stats_donation_type_count()
+    sums_stats = report_service.stats_donation_sums()
+
+    type_chart_b64 = create_bar_chart_base64(type_count_stats, "Donations: Money vs. Items")
+    sums_chart_b64 = create_bar_chart_base64(sums_stats, "Total sums: cashAmount vs. item number")
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8"/>
+      <title>Raport Donor</title>
+      <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    </head>
+    <body class="bg-light">
+      <div class="container mt-5">
+        <h1 class="text-primary text-center">Raport Donor</h1>
+        <p>Statystyki darczyńców (Donor) i ich darowizn (Money / Items).</p>
+
+        <h2>1. Wykresy</h2>
+        <h3>1.1. Liczba darowizn (Money vs. Item)</h3>
+        <img src="data:image/png;base64,{type_chart_b64}" alt="Money vs. Item" />
+
+        <h3>1.2. Łączna suma (pieniędzy vs. liczba przedmiotów)</h3>
+        <img src="data:image/png;base64,{sums_chart_b64}" alt="Sums chart" />
+
+        <hr/>
+        <h2>2. Lista Darczyńców (Donor)</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Donor ID</th>
+              <th>Imię</th>
+              <th>Nazwisko</th>
+              <th>Email</th>
+              <th>Telefon</th>
+              <th>Liczba darowizn pieniężnych</th>
+              <th>Liczba darowizn rzeczowych</th>
+            </tr>
+          </thead>
+          <tbody>
+    """
+    for donor in donors:
+        money_count = len(donor.donations_money) if donor.donations_money else 0
+        item_count = len(donor.donations_items) if donor.donations_items else 0
+        html_content += f"""
+            <tr>
+              <td>{donor.donor_id}</td>
+              <td>{donor.name}</td>
+              <td>{donor.surname}</td>
+              <td>{donor.email}</td>
+              <td>{donor.phone_number}</td>
+              <td>{money_count}</td>
+              <td>{item_count}</td>
+            </tr>
+        """
+
+    html_content += """
+          </tbody>
+        </table>
+        <div class="mt-4">
+          <a href="/reports/donor-report-csv" class="btn btn-success">Pobierz CSV</a>
+          <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
+        </div>
+      </div>
+    </body>
+    </html>
+    """
+    return html_content
+
+
+@bp.route('/donor-report-csv', methods=['GET'])
+def donor_report_csv():
+    donors = report_service.get_all_donors()
+    import csv
+    import io
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Donor ID", "Name", "Surname", "Email", "Phone number",
+                     "Money donations count", "Item donations count"])
+
+    for donor in donors:
+        money_count = len(donor.donations_money) if donor.donations_money else 0
+        item_count = len(donor.donations_items) if donor.donations_items else 0
+        writer.writerow([
+            donor.donor_id,
+            donor.name,
+            donor.surname,
+            donor.email,
+            donor.phone_number,
+            money_count,
+            item_count
+        ])
+
+    csv_data = output.getvalue()
+    output.close()
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=donor_report.csv"}
+    )
+
