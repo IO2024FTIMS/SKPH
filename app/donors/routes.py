@@ -1,6 +1,6 @@
+from datetime import date
 from flask import Blueprint, flash, redirect, render_template, url_for
 from werkzeug.security import generate_password_hash
-from datetime import date
 
 from app.extensions import db
 from app.models.donation import DonationItem, DonationMoney
@@ -11,6 +11,7 @@ bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
                static_folder='static',
                static_url_path='donors')
+
 
 @bp.route('/')
 def index():
@@ -35,8 +36,6 @@ def samples():
     db.session.commit()
     db.session.refresh(new_user)
 
-
-
     new_donor = Donor(
         name="John",
         surname="Doe",
@@ -47,7 +46,6 @@ def samples():
     db.session.add(new_donor)
     db.session.commit()
     db.session.refresh(new_donor)
-
 
     new_donation_money = DonationMoney(
         description="Charity Fundraiser",
@@ -69,7 +67,4 @@ def samples():
     db.session.add(new_donation_item)
     db.session.commit()
 
-
     return redirect(url_for('volunteers.index'))
-
-
