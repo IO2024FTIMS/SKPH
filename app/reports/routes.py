@@ -7,6 +7,7 @@ from .report_service import ReportService
 from app.extensions import db
 from app.models.affected import Affected
 from app.models.volunteer import Volunteer
+from flask import request
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 
@@ -337,4 +338,172 @@ def donor_report_csv():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=donor_report.csv"}
     )
+@bp.route('/single-donor-report', methods=['GET'])
+def single_donor_report():
+    donor_id = request.args.get('donor_id', type=int)
+    if not donor_id:
+        return "<h3>Brak parametru donor_id!</h3>", 400
 
+    from app.models.donor import Donor
+    donor = db.session.get(Donor, donor_id)
+    if not donor:
+        return f"<h3>Donor o ID={donor_id} nie istnieje!</h3>", 404
+
+    money_list = donor.donations_money
+    item_list = donor.donations_items
+
+    total_money_sum = sum(dm.cashAmount for dm in money_list)
+    total_item_sum = sum(di.number for di in item_list)
+    money_count = len(money_list)
+    item_count = len(item_list)
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8"/>
+      <title>Raport dla Donora ID={donor_id}</title>
+      <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    </head>
+    <body class="bg-light">
+      <div class="container mt-5">
+        <h1 class="text-primary">Raport dla Donora (ID={donor_id})</h1>
+        <p>
+          Imię i nazwisko: <strong>{donor.name} {donor.surname}</strong><br/>
+          Email: <strong>{donor.email}</strong><br/>
+          Telefon: <strong>{donor.phone_number}</strong><br/>
+        </p>
+
+        <h2>Statystyki darowizn</h2>
+        <ul>
+          <li>Liczba darowizn pieniężnych: <strong>{money_count}</strong></li>
+          <li>Liczba darowizn rzeczowych: <strong>{item_count}</strong></li>
+          <li>Łączna kwota darowizn pieniężnych: <strong>{total_money_sum}</strong></li>
+          <li>Łączna liczba rzeczy: <strong>{total_item_sum}</strong></li>
+        </ul>
+
+        <hr/>
+        <h3>Lista darowizn pieniężnych</h3>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Opis</th>
+              <th>Data</th>
+              <th>Kwota</th>
+            </tr>
+          </thead>
+          <tbody>
+    """
+    for dm in money_list:
+        html += f"""
+            <tr>
+              <td>{dm.donationMoney_id}</td>
+              <td>{dm.description}</td>
+              <td>{dm.donation_date}</td>
+              <td>{dm.cashAmount}</td>
+            </tr>
+        """
+
+    html += """
+          </tbody>
+        </table>
+
+        <hr/>
+        <h3>Lista darowizn rzeczowych</h3>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Opis</th>
+              <th>Data</th>
+              <th>Rodzaj</th>
+              <th>Liczba</th>
+            </tr>
+          </thead>
+          <tbody>
+    """
+    for di in item_list:
+        html += f"""
+            <tr>
+              <td>{di.donationItem_id}</td>
+              <td>{di.description}</td>
+              <td>{di.donation_date}</td>
+              <td>{di.donation_type}</td>
+              <td>{di.number}</td>
+            </tr>
+        """
+
+    html += f"""
+          </tbody>
+        </table>
+
+        <hr/>
+        <div class="mt-4">
+          <a href="/reports/single-donor-report-csv?donor_id={donor_id}" class="btn btn-success">
+            Pobierz CSV (ten donor)
+          </a>
+          <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
+        </div>
+      </div>
+    </body>
+    </html>
+    """
+    return html
+@bp.route('/single-donor-report-csv', methods=['GET'])
+def single_donor_report_csv():
+    donor_id = request.args.get('donor_id', type=int)
+    if not donor_id:
+        return "Brak parametru donor_id", 400
+
+    from app.models.donor import Donor, DonationMoney, DonationItem
+    donor = db.session.get(Donor, donor_id)
+    if not donor:
+        return f"Donor o ID={donor_id} nie istnieje!", 404
+
+    # Przygotowanie CSV
+    import csv
+    import io
+
+    output = io.StringIO()
+    fieldnames = [
+        "donation_kind",
+        "donation_id",
+        "description",
+        "donation_date",
+        "donation_type",
+        "amount"
+    ]
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+
+    for dm in donor.donations_money:
+        row = {
+            "donation_kind": "MONEY",
+            "donation_id": dm.donationMoney_id,
+            "description": dm.description,
+            "donation_date": dm.donation_date,
+            "donation_type": dm.donation_type,
+            "amount": dm.cashAmount
+        }
+        writer.writerow(row)
+
+    for di in donor.donations_items:
+        row = {
+            "donation_kind": "ITEM",
+            "donation_id": di.donationItem_id,
+            "description": di.description,
+            "donation_date": di.donation_date,
+            "donation_type": di.donation_type,
+            "amount": di.number
+        }
+        writer.writerow(row)
+
+    csv_data = output.getvalue()
+    output.close()
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={"Content-disposition": f"attachment; filename=donor_{donor_id}_report.csv"}
+    )
