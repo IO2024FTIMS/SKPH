@@ -1,0 +1,23 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+  <h1>{{ _("Tracking and managing resources module") }}</h1>
+  <table>
+    <tr>
+      <td>first name</td>
+      <td>last name</td>
+    </tr>
+    {% for volunteer in volunteers %}
+      <tr>
+        <td>{{ volunteer.first_name }}</td>
+        <td>{{ volunteer.last_name }}</td>8
+      </tr>
+
+    {% endfor %}
+  </table>
+
+</div>
+{% endblock %}

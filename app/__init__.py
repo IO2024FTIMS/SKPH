@@ -12,6 +12,7 @@ from app.extensions import babel, db, get_locale
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.auth.routes import bp as auth_bp
+from app.supply_chain.routes import bp as supply_chain_bp
 
 
 def create_app(config_class=Config):
@@ -47,6 +48,8 @@ def create_app(config_class=Config):
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
+
+    flask_app.register_blueprint(supply_chain_bp, url_prefix='/supply_chain')
 
     @flask_app.route('/')
     def home():
