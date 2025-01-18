@@ -2,10 +2,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db
-from app.models.donor import DonationItem,DonationMoney
-
-if TYPE_CHECKING:
-    from app.models.donation import DonationMoney, DonationItem
+from app.models.donation import DonationMoney, DonationItem
 
 
 class Donor(db.Model):
