@@ -47,7 +47,14 @@
             </div>
           </li>
         </ul>
-        <button type="button" class="btn btn-primary btn-sm">{{ _("Login") }}</button>
+        {% if current_user.is_authenticated %}
+          <div class="navbar-text mr-3">
+            {{ current_user.email }} ({{ current_user.type }})
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ url_for('auth.logout') }}'">{{ _('Logout') }}</button>
+        {% else %}
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ url_for('auth.login') }}'">{{ _('Login') }}</button>
+        {% endif %}
       </div>
     </nav>
   </header>
