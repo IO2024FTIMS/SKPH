@@ -5,6 +5,7 @@ from app.extensions import db
 
 
 class Donor(db.Model):
+
     donor_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     surname: Mapped[str]

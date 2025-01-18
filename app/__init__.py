@@ -34,7 +34,7 @@ def create_app(config_class=Config):
     mail = Mail(flask_app)
 
     flask_app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
-    flask_app.config["MAIL_PORT"] = (os.getenv("MAIL_PORT"))
+    flask_app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
     flask_app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL") == 'True'
     flask_app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == 'True'
     flask_app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")

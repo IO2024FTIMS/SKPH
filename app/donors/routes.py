@@ -1,17 +1,12 @@
 from datetime import date
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from werkzeug.security import generate_password_hash
 
 from app.extensions import db
-from app.models.address import Address
-from app.models.donation import DonationItem,DonationMoney
+from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
-from app.models.evaluation import Evaluation
-from app.models.task import Task
 from app.models.user import User
-from app.models.volunteer import Volunteer
-
 
 bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
