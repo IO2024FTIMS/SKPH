@@ -5,15 +5,22 @@
 {% block content %}
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
+  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.initialize') }}">{{ _("Add sample data") }}</a></p>
   <table>
     <tr>
-      <td>first name</td>
-      <td>last name</td>
+      <td>Lp</td>
+      <td>Resource type</td>
+      <td>Value</td>
+      <td>Location</td>
+
     </tr>
-    {% for volunteer in volunteers %}
+    {% for resource in resources %}
+
       <tr>
-        <td>{{ volunteer.first_name }}</td>
-        <td>{{ volunteer.last_name }}</td>8
+        <td>{{ loop.index }}</td>
+        <td>{{ resource.donation_type }}</td>
+        <td>{{ resource.cashAmount }}</td>
+        <td>{{ loop.index }}</td>
       </tr>
 
     {% endfor %}

@@ -6,15 +6,26 @@ from app.models.volunteer import Volunteer
 from app.models.organization import Organization
 from app.models.address import Address
 from app.models.affected import Affected
+from app.models.donation import DonationItem
+from app.models.donation import DonationMoney
 
+from app.supply_chain.resource_manager import ResourceManager
 
 bp = Blueprint('supply_chain', __name__, 
                template_folder='../templates/supply_chain',
                static_folder='static',
                static_url_path='supply_chain')
 
+resource_manager = ResourceManager()
+    
 
 @bp.route('/')
 def index():
     volunteers = db.session.query(Volunteer)
-    return render_template('supply_chain.jinja', volunteers=volunteers)
+
+    return render_template('supply_chain.jinja', resources=resource_manager.get_donation_money())
+
+@bp.route('/initialize-db')
+def initialize():
+    resource_manager.initialize_resources()
+    return render_template('supply_chain.jinja', resources=resource_manager.get_donation_money())
