@@ -17,7 +17,9 @@ class Volunteer(db.Model):
 
     tasks = relationship('Task', back_populates='volunteer')
     campaigns: Mapped[list['OrganizationCharityCampaign']] = (
-        relationship('OrganizationCharityCampaign', secondary=volunteer_campaign_association, back_populates='volunteers')
+        relationship('OrganizationCharityCampaign',
+                     secondary=volunteer_campaign_association,
+                     back_populates='volunteers')
     )
 
     def __repr__(self):
