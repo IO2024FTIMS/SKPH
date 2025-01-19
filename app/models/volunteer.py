@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
+from .charity_campaign import volunteer_campaign_association
 
 
 class Volunteer(db.Model):
@@ -12,10 +13,10 @@ class Volunteer(db.Model):
     phone: Mapped[str] = mapped_column(unique=True)
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
+    user_id = mapped_column(ForeignKey('users.id'))
 
     tasks = relationship('Task', back_populates='volunteer')
-
-    user_id = mapped_column(ForeignKey('users.id'))
+    campaigns: Mapped[list['OrganizationCharityCampaign']] = relationship('OrganizationCharityCampaign', secondary=volunteer_campaign_association, back_populates='volunteers')
 
     def __repr__(self):
         return f'Volunteer:(id={self.id!r}, first_name={self.first_name!r}, last_name={self.last_name!r}\

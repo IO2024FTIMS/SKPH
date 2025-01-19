@@ -1,0 +1,12 @@
+{% extends "base.jinja" %}
+
+{% block title %}Charity Campaigns{% endblock %}
+
+{% block content %}
+    <h1>Charity Campaigns</h1>
+    <ul>
+        {% for campaign in charity_campaigns %}
+            <li>{{ campaign.name }}: {{ campaign.description }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
