@@ -1,0 +1,41 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("All Requests") }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>{{ _("All Requests") }}</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Affected</th>
+        <th>Needs</th>
+        <th scope="col">Address ID</th>
+        <th scope="col">Street</th>
+        <th scope="col">Street number</th>
+        <th scope="col">City</th>
+        <th scope="col">Voivodeship</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for request in requests %}
+      <tr>
+        <td>{{ request.id }}</td>
+        <td>{{ request.name }}</td>
+        <td>{{ request.status.value }}</td>
+        <td>{{ request.affected.first_name }} {{ request.affected.last_name }}</td>
+        <td>{{ request.needs }}</td>
+        <td>{{ request.req_address_id }}</td>
+        <td>{{ request.req_address.street }}</td>
+        <td>{{ request.req_address.street_number}}</td>
+        <td>{{ request.req_address.city}}</td>
+        <td>{{ request.req_address.voivodeship}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -18,8 +18,7 @@ from app.auth.routes import bp as auth_bp
 from app.donors.routes import bp as donors_bp
 from app.auth.routes import bp as auth_bp
 from app.supply_chain.routes import bp as supply_chain_bp
-
-
+from app.affected.routes import bp as affected_bp
 
 
 def create_app(config_class=Config):
@@ -60,6 +59,7 @@ def create_app(config_class=Config):
 
     flask_app.register_blueprint(supply_chain_bp, url_prefix='/supply_chain')
 
+    flask_app.register_blueprint(affected_bp, url_prefix='/affected')
 
     @flask_app.route('/')
     def home():

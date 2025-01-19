@@ -1,0 +1,42 @@
+{% extends "base.jinja" %}
+
+{% block title %}Affected List{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+  <div>
+    <a href="{{ url_for('affected.index') }}" class="btn btn-secondary">Back</a>
+  </div>
+  <hr class="my-4"/>
+  <h1>Affected List</h1>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Needs</th>
+        <th scope="col">Address ID</th>
+        <th scope="col">Street</th>
+        <th scope="col">Street number</th>
+        <th scope="col">City</th>
+        <th scope="col">Voivodeship</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for affected in affected %}
+      <tr>
+        <td>{{ affected.id }}</td>
+        <td>{{ affected.first_name }}</td>
+        <td>{{ affected.last_name }}</td>
+        <td>{{ affected.needs }}</td>>
+        <td>{{ affected.address_id }}</td>
+        <td>{{ affected.address.street }}</td>
+        <td>{{ affected.address.street_number}}</td>
+        <td>{{ affected.address.city}}</td>
+        <td>{{ affected.address.voivodeship}}</td>
+      </tr>
+      {% endfor %}
+  </table>
+</div>
+{% endblock %}
