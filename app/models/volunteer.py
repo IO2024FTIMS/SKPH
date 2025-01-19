@@ -2,7 +2,9 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
-from .charity_campaign import volunteer_campaign_association
+
+from .charity_campaign import (OrganizationCharityCampaign,
+                               volunteer_campaign_association)
 
 
 class Volunteer(db.Model):

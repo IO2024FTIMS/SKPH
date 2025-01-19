@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
+from app.models.volunteer import Volunteer
 
 volunteer_campaign_association = Table(
     'volunteer_campaign_association',
