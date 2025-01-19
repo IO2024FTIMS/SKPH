@@ -1,7 +1,6 @@
-from re import S
 from app.extensions import db
 
-from sqlalchemy import ForeignKey, Table, null
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 volunteer_campaign_association = Table(

@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
-from app import organization
 from app.extensions import db
-from app.models import charity_campaign
 from app.models.address import Address
 from app.models.authorities import Authorities
 from app.models.charity_campaign import CharityCampaign, OrganizationCharityCampaign
