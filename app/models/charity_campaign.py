@@ -1,7 +1,7 @@
-from app.extensions import db
-
 from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.extensions import db
 
 volunteer_campaign_association = Table(
     'volunteer_campaign_association',
@@ -28,4 +28,6 @@ class OrganizationCharityCampaign(db.Model):
     organization = relationship('Organization')
     charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('charity_campaign.id'), nullable=False)
     organization_id: Mapped[int] = mapped_column(ForeignKey('organization.id'), nullable=False)
-    volunteers: Mapped[list['Volunteer']] = relationship('Volunteer', secondary=volunteer_campaign_association, back_populates='campaigns')
+    volunteers: Mapped[list['Volunteer']] = (
+        relationship('Volunteer', secondary=volunteer_campaign_association, back_populates='campaigns')
+    )
