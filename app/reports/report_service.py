@@ -10,6 +10,8 @@ from app.models.volunteer import Volunteer
 from app.models.task import Task
 from app.models.donor import Donor
 from app.models.donation import DonationMoney, DonationItem
+from app.models.organization import Organization
+from app.models.charity_campaign import OrganizationCharityCampaign
 
 class ReportService:
     def __init__(self):
@@ -135,4 +137,33 @@ class ReportService:
             "Total item sum": float(total_items)
         }
 
+    def stats_organization_approval(self):
+        approved_count = db.session.query(Organization).filter_by(approved=True).count()
+        not_approved_count = db.session.query(Organization).filter_by(approved=False).count()
+        return {
+            "Approved": approved_count,
+            "Not approved": not_approved_count
+        }
 
+    def get_all_organizations(self):
+        return db.session.query(Organization).all()
+
+    def count_campaigns_per_organization(self, org: Organization) -> int:
+        return db.session.query(OrganizationCharityCampaign).filter_by(organization_id=org.id).count()
+
+    def count_volunteers_per_organization(self, org: Organization) -> int:
+        org_campaigns = db.session.query(OrganizationCharityCampaign).filter_by(organization_id=org.id).all()
+
+        volunteers_set = set()
+        for oc in org_campaigns:
+            for vol in oc.volunteers:
+                volunteers_set.add(vol.id)
+
+        return len(volunteers_set)
+
+    def get_campaigns_for_organization(self, org: Organization):
+        return (
+            db.session.query(OrganizationCharityCampaign)
+            .filter_by(organization_id=org.id)
+            .all()
+        )

@@ -7,6 +7,7 @@ from .report_service import ReportService
 from app.extensions import db
 from app.models.affected import Affected
 from app.models.volunteer import Volunteer
+from app.models.charity_campaign import OrganizationCharityCampaign
 from flask import request
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
@@ -506,4 +507,133 @@ def single_donor_report_csv():
         csv_data,
         mimetype="text/csv",
         headers={"Content-disposition": f"attachment; filename=donor_{donor_id}_report.csv"}
+    )
+# =================== RAPORT ORGANIZATION===================
+@bp.route('/organization-report', methods=['GET'])
+def organization_report():
+
+    approval_stats = report_service.stats_organization_approval()
+    approval_chart_b64 = create_bar_chart_base64(
+        approval_stats,
+        "Organization: Approved vs. Not Approved"
+    )
+
+    org_list = report_service.get_all_organizations()
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8"/>
+      <title>Raport Organization</title>
+      <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    </head>
+    <body class="bg-light">
+      <div class="container mt-5">
+        <h1 class="text-primary text-center">Raport Organization (z kampaniami)</h1>
+        <p>Statystyki dotyczące organizacji i ich kampanii.</p>
+
+        <h2>1. Wykres: Approved vs. Not Approved</h2>
+        <img src="data:image/png;base64,{approval_chart_b64}" alt="Wykres approval" />
+
+        <hr/>
+        <h2>2. Lista Organization</h2>
+        <p>Każda organizacja ma poniżej tabelę z kampaniami i liczbą wolontariuszy w danej kampanii.</p>
+    """
+
+    for org in org_list:
+        camp_count = report_service.count_campaigns_per_organization(org)
+        vol_count = report_service.count_volunteers_per_organization(org)
+
+        html += f"""
+        <div class="bg-white border p-3 mb-4">
+          <h3>Organizacja: {org.organization_name or ""} (ID={org.id})</h3>
+          <p><strong>Opis:</strong> {org.description or ""}</p>
+          <p><strong>Approved?</strong> {org.approved}</p>
+          <p><strong>Liczba kampanii:</strong> {camp_count}, 
+             <strong>Wolontariuszy (unikalnych):</strong> {vol_count}</p>
+        """
+
+        org_campaigns = (
+            db.session.query(OrganizationCharityCampaign)
+            .filter_by(organization_id=org.id)
+            .all()
+        )
+
+        html += """
+          <h4>Kampanie tej organizacji:</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Campaign ID</th>
+                <th>Nazwa kampanii</th>
+                <th>Opis kampanii (z CharityCampaign)</th>
+                <th>Liczba wolontariuszy w tej kampanii</th>
+              </tr>
+            </thead>
+            <tbody>
+        """
+
+        for oc in org_campaigns:
+            c = oc.charity_campaign
+            volunteers_count = len(oc.volunteers)
+            camp_name = c.name if c else "Brak nazwy"
+            camp_desc = c.description if c else "Brak opisu"
+
+            html += f"""
+              <tr>
+                <td>{oc.id}</td>
+                <td>{camp_name}</td>
+                <td>{camp_desc}</td>
+                <td>{volunteers_count}</td>
+              </tr>
+            """
+
+        html += """
+            </tbody>
+          </table>
+        </div>
+        """
+
+    html += """
+        <div class="mt-4">
+          <a href="/reports/organization-report-csv" class="btn btn-success">Pobierz CSV</a>
+          <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
+        </div>
+      </div> <!-- container -->
+    </body>
+    </html>
+    """
+    return html
+
+
+@bp.route('/organization-report-csv', methods=['GET'])
+def organization_report_csv():
+    import csv
+    import io
+    org_list = report_service.get_all_organizations()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["ID", "Name", "Description", "Approved?", "Campaigns Count", "Volunteers Count"])
+
+    for org in org_list:
+        camp_count = report_service.count_campaigns_per_organization(org)
+        vol_count = report_service.count_volunteers_per_organization(org)
+        writer.writerow([
+            org.id,
+            org.organization_name or "",
+            org.description or "",
+            org.approved,
+            camp_count,
+            vol_count
+        ])
+
+    csv_data = output.getvalue()
+    output.close()
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=organization_report.csv"}
     )
