@@ -51,12 +51,21 @@ def add_sample_organization_charity_campaign():
     o1 = Organization(organization_name='Organization', description='desc', approved=True, address=a1)
     sample_organization_campaign = OrganizationCharityCampaign(organization=o1, charity_campaign=sample_campaign)
 
-    v1 = Volunteer(first_name='John', last_name='Black', email='jblack@mail.com', phone='111111111')
-    aa1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
+    v1 = Volunteer(first_name='Michael', last_name='Johnson', email='mjohnson@mail.com', phone='957485273')
+    aa1 = Address(street='Główna', street_number='4d', city='Gdańsk', voivodeship='Pomorskie')
     v1.address = aa1
-    sample_organization_campaign.volunteers.append(v1)
 
-    db.session.add(v1)
+    v2 = Volunteer(first_name='Jane', last_name='Doe', email='jdoe@mail.com', phone='823903283')
+    aa2 = Address(street='Wiejska', street_number='2b', city='Warszawa', voivodeship='Mazowieckie')
+    v2.address = aa2
+
+    v3 = Volunteer(first_name='Alice', last_name='Smith', email='asmith@mail.com', phone='758292375')
+    aa3 = Address(street='Krakowska', street_number='3c', city='Kraków', voivodeship='Małopolskie')
+    v3.address = aa3
+
+    sample_organization_campaign.volunteers.extend([v1, v2, v3])
+
+    db.session.add_all([v1, v2, v3])
     db.session.add(sample_organization_campaign)
     db.session.commit()
     return redirect(url_for('organization.list_organization_charity_campaigns'))
