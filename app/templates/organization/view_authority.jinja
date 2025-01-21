@@ -7,23 +7,20 @@
     <h1>Authorities</h1>
     <table class="table table-hover">
         <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Approved</th>
-        </tr>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Approved</th>
+            </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>{{ authorities.id }}</td>
-            <td>{{ authorities.name }}</td>
-            <td>{{ authorities.phone}}</td>
-            <td>{{ authorities.approved }}</td>
-            <td>
-            {# <a class="btn btn-primary btn-sm" href="{{ url_for('organization.view_authority', authorities=campaign.authority) }}">{{_("View Authority") }}</a> #}
-            </td>
-        </tr>
+            <tr>
+                <td>{{ authorities.id }}</td>
+                <td>{{ authorities.name }}</td>
+                <td>{{ authorities.phone}}</td>
+                <td>{{ authorities.approved }}</td>
+            </tr>
     </table>
 </div>
 {% endblock %}

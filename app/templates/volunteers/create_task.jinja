@@ -19,12 +19,13 @@
           </div>
           <div>
             <label for="volunteer_id">Volunteer:</label>
-            <select id="volunteer_id" name="volunteer_id" required>
+            <select class="form-control" id="volunteer_id" name="volunteer_id" required>
               {% for volunteer in volunteers %}
               <option value="{{ volunteer.id }}">{{ volunteer.first_name }} {{ volunteer.last_name }}
               </option>
               {% endfor %}
             </select>
+            <br>
           </div>
           <div>
             <button type="submit" class="btn btn-primary">Create task</button>

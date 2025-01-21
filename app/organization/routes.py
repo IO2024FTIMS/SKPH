@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, url_for, request
 
 from app.extensions import db
 from app.models.address import Address
@@ -94,3 +94,34 @@ def list_volunteers(charity_campaign_id):
     campaign = db.session.get(OrganizationCharityCampaign, charity_campaign_id)
     volunteers = campaign.volunteers
     return render_template('list_volunteers.jinja', volunteers=volunteers)
+
+
+@bp.route('/create_charity_campaign', methods=['GET', 'POST'])
+def create_charity_campaign():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        authority_id = request.form['authority_id']
+        authority = db.session.get(Authorities, authority_id)
+        new_campaign = CharityCampaign(name=name, description=description, authority=authority)
+        db.session.add(new_campaign)
+        db.session.commit()
+        return redirect(url_for('organization.list_charity_campaigns'))
+    authorities = db.session.scalars(db.select(Authorities)).all()
+    return render_template('create_charity_campaign.jinja', authorities=authorities)
+
+
+@bp.route('/sign_to_charity_campaign', methods=['GET', 'POST'])
+def sign_to_charity_campaign():
+    if request.method == 'POST':
+        organization_id = request.form['organization_id']
+        charity_campaign_id = request.form['charity_campaign_id']
+        organization = db.session.get(Organization, organization_id)
+        charity_campaign = db.session.get(CharityCampaign, charity_campaign_id)
+        new_organization_campaign = OrganizationCharityCampaign(organization=organization, charity_campaign=charity_campaign)
+        db.session.add(new_organization_campaign)
+        db.session.commit()
+        return redirect(url_for('organization.list_organization_charity_campaigns'))
+    organizations = db.session.scalars(db.select(Organization)).all()
+    charity_campaigns = db.session.scalars(db.select(CharityCampaign)).all()
+    return render_template('sign_to_charity_campaign.jinja', organizations=organizations, charity_campaigns=charity_campaigns)

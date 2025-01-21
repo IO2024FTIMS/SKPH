@@ -8,10 +8,18 @@
         <div class="col-md-6 text-center">
             <h1>Organization Main Page</h1>
             <div class="btn-group-vertical mt-4">
-                <a href="{{ url_for('organization.list_charity_campaigns') }}" class="btn btn-primary mb-2">List Charity Campaigns</a>
-                <a href="{{ url_for('organization.list_organization_charity_campaigns') }}" class="btn btn-primary mb-2">List Organization Charity Campaigns</a>
-                <a href="{{ url_for('organization.add_sample_charity_campaign') }}" class="btn btn-primary mb-2">Add Sample Charity Campaign</a>
-                <a href="{{ url_for('organization.add_sample_organization_charity_campaign') }}" class="btn btn-primary mb-2">Add Sample Organization Charity Campaign</a>
+                <a href="{{ url_for('organization.list_charity_campaigns') }}" class="btn btn-primary mb-2">List Charity
+                    Campaigns</a>
+                <a href="{{ url_for('organization.list_organization_charity_campaigns') }}"
+                    class="btn btn-primary mb-2">List Organization Charity Campaigns</a>
+                <a href="{{ url_for('organization.add_sample_charity_campaign') }}" class="btn btn-primary mb-2">Add
+                    Sample Charity Campaign</a>
+                <a href="{{ url_for('organization.add_sample_organization_charity_campaign') }}"
+                    class="btn btn-primary mb-2">Add Sample Organization Charity Campaign</a>
+                <a href="{{ url_for('organization.create_charity_campaign') }}" class="btn btn-primary mb-2">Create
+                    Charity Campaign</a>
+                <a href="{{ url_for('organization.sign_to_charity_campaign') }}" class="btn btn-primary mb-2">Sign to
+                    Charity Campaign</a>
             </div>
         </div>
     </div>
