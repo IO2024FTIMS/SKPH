@@ -134,7 +134,8 @@
     {% if user_type == 'organization' %}
     <div class="form-group">
       <label for="organization_name">{{ _("Organization Name") }}</label>
-      {{ form.organization_name(class="form-control", placeholder=_("Enter your organization name"), id="organization_name") }}
+      {{ form.organization_name(class="form-control", placeholder=_("Enter your organization name"),
+      id="organization_name") }}
       {% if form.organization_name.errors %}
       <div class="text-danger">
         {{ form.organization_name.errors[0] }}
@@ -143,7 +144,8 @@
     </div>
     <div class="form-group">
       <label for="description">{{ _("Description") }}</label>
-      {{ form.description(class="form-control", placeholder=_("Enter a description of your organization"), id="description") }}
+      {{ form.description(class="form-control", placeholder=_("Enter a description of your organization"),
+      id="description") }}
       {% if form.description.errors %}
       <div class="text-danger">
         {{ form.description.errors[0] }}
@@ -263,7 +265,7 @@
       {% endif %}
     </div>
     {% endif %}
-      <!-- Additional Fields for Authorities -->
+    <!-- Additional Fields for Authorities -->
     {% if user_type == 'authorities' %}
     <div class="form-group">
       <label for="name">{{ _("Name") }}</label>
