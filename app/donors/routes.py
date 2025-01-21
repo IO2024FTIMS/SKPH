@@ -30,10 +30,10 @@ def create_donation():
     donors = db.session.scalars(db.select(Donor))
     if request.method == 'POST':
         description = request.form['description']
-        type = request.form['donation_type']
+        type_d = request.form['donation_type']
         donor_id = request.form['donor_id']
         amount = request.form['Amount']
-        if type == 'money':
+        if type_d == 'money':
             new_donation_money = DonationMoney(
                 description=description,
                 donation_date=date.today(),
@@ -46,7 +46,7 @@ def create_donation():
             flash('money donated with id ' + str(new_donation_money.donationMoney_id))
             del new_donation_money
 
-        if type == 'item':
+        if type_d == 'item':
             new_donation_item = DonationItem(
                 description=description,
                 donation_date=date.today(),
@@ -66,17 +66,17 @@ def create_donation():
 
 @bp.route('/donations/<int:donor_id>')
 def list_donations(donor_id):
-    donationsMoney = db.session.scalars(
+    donations_money = db.session.scalars(
         db.select(DonationMoney).where(DonationMoney.donor_id == donor_id)
     )
-    donationsItems = db.session.scalars(
+    donations_items = db.session.scalars(
         db.select(DonationItem).where(DonationItem.donor_id == donor_id)
     )
     donor = db.session.get(Donor, donor_id)
     if Donor is None:
         return 'donor not found', 404
-    return render_template('donations.jinja', donationsMoney=donationsMoney.all(), donor=donor,
-                           donationsItems=donationsItems.all())
+    return render_template('donations.jinja', donations_money=donations_money.all(), donor=donor,
+                           donations_items=donations_items.all())
 
 
 @bp.route('/samples', methods=['POST'])

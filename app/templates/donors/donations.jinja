@@ -18,14 +18,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for donation in donationsMoney %}
+      {% for donation in donations_money %}
       <tr>
         <td>{{ donation.description }}</td>
         <td>{{ donation.cashAmount }}</td>
        <td></td>
       </tr>
       {% endfor %}
-  {% for donation in donationsItems %}
+  {% for donation in donations_items %}
       <tr>
         <td>{{ donation.description }}</td>
            <td></td>
