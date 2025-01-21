@@ -5,25 +5,66 @@
 {% block content %}
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
-  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.initialize') }}">{{ _("Add sample data") }}</a></p>
-  <table>
+  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.add_data') }}">{{ _("Add sample data") }}</a></p>
+
+
+  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.truncate') }}">{{ _("Remove sample data") }}</a></p>
+    <table>
+    <tr>
+      <th>Charity campagin name: {{ charity_campaign.name }}</th>
+    </tr>
+    <tr>
+      <th>Avalible resources:</th>
+    </tr>
+
+    {% if item_donations is none %}
+    </table>
+    <p>Could not find any items</p>
+
+    {% else %}
     <tr>
       <td>Lp</td>
       <td>Resource type</td>
-      <td>Value</td>
-      <td>Location</td>
-
+      <td>Number</td>
+      <td>description</td>
     </tr>
-    {% for resource in resources %}
+    {% for donation in item_donations %}
 
       <tr>
         <td>{{ loop.index }}</td>
-        <td>{{ resource.donation_type }}</td>
-        <td>{{ resource.cashAmount }}</td>
-        <td>{{ loop.index }}</td>
+        <td>{{ donation.donation_type }}</td>
+        <td>{{ donation.number }}</td>
+        <td>{{ donation.description }}</td>
+        <td><a href="{{ url_for('supply_chain.manage_resource', id=donation.donationItem_id ) }}"><input type="button" value="Manage"/></a></td>
       </tr>
 
     {% endfor %}
+  </table>
+    {% endif %}
+
+  <table>
+    <tr>
+      <th>Assigned resources:</th>
+    </tr>
+  </table>
+
+
+  <table>
+    <tr>
+      <th>Avalible money:</th>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>Volunteers:</th>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>Current requests: </th>
+    </tr>
   </table>
 
 </div>

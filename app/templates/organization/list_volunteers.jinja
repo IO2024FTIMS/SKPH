@@ -1,0 +1,20 @@
+{% extends "base.jinja" %}
+
+{% block title %}List of Volunteers{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>List of Volunteers</h1>
+            <ul class="list-group">
+                {% for volunteer in volunteers %}
+                    <li class="list-group-item">
+                        {{ volunteer.first_name }} {{ volunteer.last_name }} - {{ volunteer.email }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

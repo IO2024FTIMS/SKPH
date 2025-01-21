@@ -1,0 +1,22 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+  <h1>{{ _("Tracking and managing resources module") }}</h1>
+<h2>Manage resource panel</h2>
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Amount</th>
+    </tr>
+    <tr>
+        <td>{{ resource_type.type }}</td>
+        <td>{{ resource.amount }}</td>
+    </tr>
+
+</table>
+</div>
+
+{% endblock %}
