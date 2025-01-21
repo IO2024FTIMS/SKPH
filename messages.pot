@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2024 ORGANIZATION
+# Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-12-06 20:31+0100\n"
+"POT-Creation-Date: 2025-01-21 16:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:7 app/templates/index.jinja:3
 msgid "Crisis Management System"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:16
 msgid "SKPH"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:25
 msgid "Home"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:30
 msgid "Crises"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:33
 msgid "Organizations"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:36
 msgid "About"
 msgstr ""
 
-#: app/templates/base.jinja
+#: app/templates/base.jinja:50
 msgid "Login"
 msgstr ""
+
+#: app/templates/index.jinja:7
+msgid "System zarządzania kryzysowego"
+msgstr ""
+
+#: app/templates/index.jinja:18 app/templates/volunteers/volunteers.jinja:3
+#: app/templates/volunteers/volunteers.jinja:7
+msgid "Volunteers Module"
+msgstr ""
+
+#: app/templates/volunteers/view.jinja:42
+msgid "View Tasks"
+msgstr ""
+
+#: app/templates/volunteers/volunteers.jinja:12
+msgid "Add Sample Data"
+msgstr ""
+
+#: app/templates/volunteers/volunteers.jinja:15
+msgid "Sample Data Added"
+msgstr ""
+
+#: app/templates/volunteers/volunteers.jinja:19
+msgid "View All Volunteers"
+msgstr ""
+
+#: app/templates/volunteers/volunteers.jinja:20
+msgid "Create Task"
+msgstr ""
+

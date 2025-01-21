@@ -1,0 +1,47 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+    <div id="map" style="width: 100%; height: 600px;"></div>
+
+    <script>
+        // Inicjalizacja mapy (domyślne współrzędne centrum)
+        var map = L.map('map').setView([51.74708, 19.45404], 13);
+
+        // Warstwa z mapą (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Dodawanie punktów POI z bazy danych
+        {% for poi in pois %}
+            L.marker([{{ poi.coordinates.x }}, {{ poi.coordinates.y }}]).addTo(map)
+                .bindPopup("{{ poi.name }}");
+        {% endfor %}
+
+        // Dodawanie stref zagrożenia
+        {% for area in danger_areas %}
+            L.polygon(
+                {{ area.coordinates | tojson }},
+                {
+                    color: 'red',
+                    fillColor: 'red',
+                    fillOpacity: 0.5
+                }
+            ).addTo(map)
+            .bindPopup("{{ area.name }}");
+        {% endfor %}
+
+        // Dodawanie stref pomocy
+        {% for area in relief_areas %}
+            L.polygon(
+                {{ area.coordinates | tojson }},
+                {
+                    color: 'green',
+                    fillColor: 'green',
+                    fillOpacity: 0.5
+                }
+            ).addTo(map)
+            .bindPopup("{{ area.name }}");
+        {% endfor %}
+    </script>
+{% endblock %}
