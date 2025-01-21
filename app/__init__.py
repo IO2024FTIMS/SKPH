@@ -34,13 +34,13 @@ def create_app(config_class=Config):
     # Initialize flask_mailman
     mail = Mail(flask_app)
 
-    # flask_app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
-    # flask_app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
-    # flask_app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL") == 'True'
-    # flask_app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == 'True'
-    # flask_app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-    # flask_app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-    # flask_app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+    flask_app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+    flask_app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
+    flask_app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL") == 'True'
+    flask_app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == 'True'
+    flask_app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+    flask_app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+    flask_app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
 
     mail.init_app(flask_app)
 

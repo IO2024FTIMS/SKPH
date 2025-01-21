@@ -96,7 +96,7 @@ def create_request(affected_id):
         voivodeship = request.form['voivodeship']
 
         # Validation
-        if not name or not needs or not street or not street_number or not city or not voivodeship:
+        if not all([name, needs, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.create_request', affected_id=affected_id))
 
         # Create new address
@@ -175,7 +175,7 @@ def edit_request(request_id):
         voivodeship = request.form.get('voivodeship')
 
         # Walidacja
-        if not name or not needs or not street or not street_number or not city or not voivodeship:
+        if not all([name, needs, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.edit_request', request_id=request_id))
 
         # Aktualizacja danych
