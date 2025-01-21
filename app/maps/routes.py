@@ -18,7 +18,7 @@ bp = Blueprint('maps', __name__,
 
 @bp.route('/')
 def index():
-    TEST()
+    # TEST()
 
     # Filtrowanie po statusie jako boolean
     pois = POI.query.filter_by(status=True).all()
