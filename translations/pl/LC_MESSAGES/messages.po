@@ -19,6 +19,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
+#: app/models/request.py:11
+msgid "Pending"
+msgstr "Oczekujące"
+
+#: app/models/request.py:12 app/templates/auth/manage_users.jinja:27
+#: app/templates/auth/manage_users.jinja:72
+msgid "Approved"
+msgstr "Przyjęte"
+
+#: app/models/request.py:13
+msgid "Not approved"
+msgstr "Odrzucone"
+
+#: app/models/request.py:14
+msgid "Completed"
+msgstr "Zakończone"
+
 #: app/templates/base.jinja:7 app/templates/index.jinja:3
 msgid "Crisis Management System"
 msgstr ""
@@ -60,6 +77,288 @@ msgstr "Moduł Wolontariuszy"
 #: app/templates/index.jinja:20
 msgid "Organizations Module"
 msgstr "Moduł Organizacji"
+
+#: app/templates/affected/affected.jinja:3
+#: app/templates/affected/affected.jinja:7 app/templates/index.jinja:21
+msgid "Affected Module"
+msgstr "Moduł poszkodowanych"
+
+#: app/templates/affected/affected.jinja:12
+#: app/templates/volunteers/volunteers.jinja:12
+msgid "Add Sample Data"
+msgstr "Dodaj dane przykładowe"
+
+#: app/templates/affected/affected.jinja:15
+#: app/templates/volunteers/volunteers.jinja:15
+msgid "Sample Data Added"
+msgstr "Dodano dane przykładowe"
+
+#: app/templates/affected/affected.jinja:19
+msgid "View All Affected"
+msgstr "Pokaż wszystkich poszkodowanych"
+
+#: app/templates/affected/affected.jinja:20
+msgid "View All Requests"
+msgstr "Pokaż wszystkie zgłoszenia"
+
+#: app/templates/affected/affected_details.jinja:3
+msgid "Affected Details"
+msgstr "Detale o poszkodowanym"
+
+#: app/templates/affected/affected_details.jinja:13
+msgid "Personal Information"
+msgstr "Personalne informacje"
+
+#: app/templates/affected/affected_details.jinja:15
+msgid "First Name:"
+msgstr "Imię:"
+
+#: app/templates/affected/affected_details.jinja:16
+msgid "Last Name:"
+msgstr "Nazwisko:"
+
+#: app/templates/affected/affected_details.jinja:17
+#: app/templates/affected/create_request.jinja:21
+#: app/templates/affected/edit_request.jinja:21
+msgid "Needs:"
+msgstr "Zapotrzebowania:"
+
+#: app/templates/affected/affected_details.jinja:18
+msgid "Address:"
+msgstr "Adres:"
+
+#: app/templates/affected/affected_details.jinja:24
+msgid "Requests"
+msgstr "Zgłoszenia"
+
+#: app/templates/affected/affected_details.jinja:29
+#: app/templates/affected/create_request.jinja:17
+#: app/templates/affected/edit_request.jinja:17
+msgid "Request Name"
+msgstr "Nazwa zgłoszenia"
+
+#: app/templates/affected/affected_details.jinja:30
+#: app/templates/affected/all_requests.jinja:13
+#: app/templates/affected/update_request_status.jinja:10
+msgid "Status"
+msgstr "Status"
+
+#: app/templates/affected/affected_details.jinja:31
+#: app/templates/affected/all.jinja:18
+#: app/templates/affected/all_requests.jinja:15
+#: app/templates/auth/register.jinja:221
+msgid "Needs"
+msgstr "Zapotrzebowania"
+
+#: app/templates/affected/affected_details.jinja:32
+#: app/templates/affected/edit_request.jinja:25
+msgid "Address"
+msgstr "Adres"
+
+#: app/templates/affected/affected_details.jinja:33
+#: app/templates/affected/all.jinja:24
+#: app/templates/affected/all_requests.jinja:21
+#: app/templates/auth/approve_organizations.jinja:16
+#: app/templates/auth/manage_users.jinja:17
+#: app/templates/auth/manage_users.jinja:61
+#, fuzzy
+msgid "Actions"
+msgstr "Organizacje"
+
+#: app/templates/affected/affected_details.jinja:47
+msgid "Edit"
+msgstr "Edytuj"
+
+#: app/templates/affected/affected_details.jinja:51
+msgid "Are you sure you want to delete this request?"
+msgstr "Czy napewno chcesz usunąć to zgłoszenie?"
+
+#: app/templates/affected/affected_details.jinja:52
+msgid "Delete"
+msgstr "Usuń"
+
+#: app/templates/affected/affected_details.jinja:55
+msgid "Not Editable"
+msgstr "Nie można edytować"
+
+#: app/templates/affected/affected_details.jinja:63
+msgid "No requests found."
+msgstr "Nie znaleziono zgłoszeń"
+
+#: app/templates/affected/affected_details.jinja:71
+msgid "Create Request for"
+msgstr "Utwórz zgłoszenie dla"
+
+#: app/templates/affected/all.jinja:3 app/templates/affected/all.jinja:11
+msgid "Affected List"
+msgstr "Lista poszkodowanych"
+
+#: app/templates/affected/all.jinja:8
+msgid "Back"
+msgstr "Z powrotem"
+
+#: app/templates/affected/all.jinja:15
+#: app/templates/affected/all_requests.jinja:11
+msgid "ID"
+msgstr ""
+
+#: app/templates/affected/all.jinja:16 app/templates/auth/register.jinja:47
+#: app/templates/auth/register.jinja:69 app/templates/auth/register.jinja:203
+msgid "First Name"
+msgstr "Imię"
+
+#: app/templates/affected/all.jinja:17 app/templates/auth/register.jinja:56
+#: app/templates/auth/register.jinja:78 app/templates/auth/register.jinja:212
+msgid "Last Name"
+msgstr "Nazwisko"
+
+#: app/templates/affected/all.jinja:19
+#: app/templates/affected/all_requests.jinja:16
+msgid "Address ID"
+msgstr ""
+
+#: app/templates/affected/all.jinja:20
+#: app/templates/affected/all_requests.jinja:17
+#: app/templates/affected/create_request.jinja:27
+#: app/templates/affected/edit_request.jinja:28
+#: app/templates/auth/register.jinja:96 app/templates/auth/register.jinja:163
+#: app/templates/auth/register.jinja:230 app/templates/auth/register.jinja:287
+msgid "Street"
+msgstr "Ulica"
+
+#: app/templates/affected/all.jinja:21
+msgid "Street number"
+msgstr "Numer"
+
+#: app/templates/affected/all.jinja:22
+#: app/templates/affected/all_requests.jinja:19
+#: app/templates/affected/create_request.jinja:37
+#: app/templates/affected/edit_request.jinja:38
+#: app/templates/auth/register.jinja:114 app/templates/auth/register.jinja:181
+#: app/templates/auth/register.jinja:248 app/templates/auth/register.jinja:305
+msgid "City"
+msgstr "Miasto"
+
+#: app/templates/affected/all.jinja:23
+#: app/templates/affected/all_requests.jinja:20
+#: app/templates/affected/create_request.jinja:42
+#: app/templates/affected/edit_request.jinja:43
+#: app/templates/auth/register.jinja:123 app/templates/auth/register.jinja:190
+#: app/templates/auth/register.jinja:257 app/templates/auth/register.jinja:314
+msgid "Voivodeship"
+msgstr "Województwo"
+
+#: app/templates/affected/all.jinja:40
+msgid "View Details"
+msgstr "Pokaż informacje"
+
+#: app/templates/affected/all_requests.jinja:3
+#: app/templates/affected/all_requests.jinja:7
+msgid "All Requests"
+msgstr "Wszystkie zgłoszenia"
+
+#: app/templates/affected/all_requests.jinja:12
+#: app/templates/auth/approve_organizations.jinja:13
+#: app/templates/auth/register.jinja:269
+msgid "Name"
+msgstr "Nazwa"
+
+#: app/templates/affected/all_requests.jinja:14
+msgid "Affected"
+msgstr "Poszkodowany"
+
+#: app/templates/affected/all_requests.jinja:18
+#: app/templates/affected/create_request.jinja:32
+#: app/templates/affected/edit_request.jinja:33
+#: app/templates/auth/register.jinja:105 app/templates/auth/register.jinja:172
+#: app/templates/auth/register.jinja:239 app/templates/auth/register.jinja:296
+msgid "Street Number"
+msgstr "Numer"
+
+#: app/templates/affected/all_requests.jinja:39
+msgid "Update Status"
+msgstr "Zaktualizuj status zgłoszenia"
+
+#: app/templates/affected/create_request.jinja:3
+#: app/templates/affected/create_request.jinja:46
+msgid "Create Request"
+msgstr "Utwórz zgłoszenie"
+
+#: app/templates/affected/create_request.jinja:8
+msgid "Create a New Request for"
+msgstr "Utwórz nowe zgłoszenie dla"
+
+#: app/templates/affected/create_request.jinja:16
+#: app/templates/affected/edit_request.jinja:16
+msgid "Request Name:"
+msgstr "Nazwa zgłoszenia"
+
+#: app/templates/affected/create_request.jinja:22
+#: app/templates/affected/edit_request.jinja:22
+msgid "Describe the needs"
+msgstr "Opisz potrzeby"
+
+#: app/templates/affected/create_request.jinja:26
+#: app/templates/affected/edit_request.jinja:27
+msgid "Street:"
+msgstr "Ulica"
+
+#: app/templates/affected/create_request.jinja:31
+#: app/templates/affected/edit_request.jinja:32
+msgid "Street Number:"
+msgstr "Numer"
+
+#: app/templates/affected/create_request.jinja:36
+#: app/templates/affected/edit_request.jinja:37
+msgid "City:"
+msgstr "Miasto"
+
+#: app/templates/affected/create_request.jinja:41
+#: app/templates/affected/edit_request.jinja:42
+msgid "Voivodeship:"
+msgstr "Województwo"
+
+#: app/templates/affected/edit_request.jinja:3
+msgid "Edit Request"
+msgstr "Zaktualizuj zgłoszenie"
+
+#: app/templates/affected/edit_request.jinja:8
+msgid "Edit Request for"
+msgstr ""
+
+#: app/templates/affected/edit_request.jinja:47
+msgid "Update Request"
+msgstr "Zaktualizuj zgłoszenie"
+
+#: app/templates/affected/edit_request.jinja:53
+msgid "Back to Details"
+msgstr "Powrót do informacji"
+
+#: app/templates/affected/select_affected.jinja:3
+#: app/templates/affected/select_affected.jinja:9
+msgid "Select Affected"
+msgstr "Wybierz Poszkodowanego"
+
+#: app/templates/affected/select_affected.jinja:13
+msgid "Choose Affected:"
+msgstr "Wybierz Poszkodowanego:"
+
+#: app/templates/affected/select_affected.jinja:21
+msgid "Continue"
+msgstr "Kontynuuj"
+
+#: app/templates/affected/update_request_status.jinja:3
+#: app/templates/affected/update_request_status.jinja:7
+msgid "Update Request Status"
+msgstr "Zaktualizuj status zgłoszenie"
+
+#: app/templates/affected/update_request_status.jinja:19
+msgid "Update"
+msgstr "Zaktualizuj"
+
+#: app/templates/affected/update_request_status.jinja:20
+msgid "Cancel"
+msgstr "Anuluj"
 
 #: app/templates/auth/approve_organizations.jinja:3
 #: app/templates/auth/approve_organizations.jinja:7

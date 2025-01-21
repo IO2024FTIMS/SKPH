@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="jumbotron">
-  <h1 class="display-3">{{ _("System zarządzania kryzysowego") }}</h1>
+  <h1 class="display-3">{{ _("Crisis Management System") }}</h1>
   <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
     featured content or information.</p>
   <hr class="my-4">
@@ -13,11 +13,15 @@
     <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
   </p>
   <hr class="my-4">
-  <h3>Modules</h3>
+  <h3>{{ _("Modules") }}</h3>
   <div class="d-flex flex-column">
     <a class="btn btn-primary btn-lg" href="{{ url_for('volunteers.index') }}">{{ _("Volunteers Module") }}</a>
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('organization.index') }}">{{ _("Organizations Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('affected.index') }}">{{ _("Affected Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('donors.index') }}">{{ _("Donors Module") }}</a>
   </div>
 </div>
 {% endblock %}
