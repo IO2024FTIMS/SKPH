@@ -7,7 +7,7 @@
   <div>
     <a href="{{ url_for('volunteers.index') }}" class="btn btn-secondary">Back</a>
   </div>
-  <hr class="my-4"/>
+  <hr class="my-4" />
   <h1>Volunteer List</h1>
   <table class="table table-hover">
     <thead>
@@ -39,7 +39,8 @@
         <td>{{ volunteer.address.city}}</td>
         <td>{{ volunteer.address.voivodeship}}</td>
         <td>
-          <a class="btn btn-primary btn-sm" href="{{ url_for('volunteers.list_tasks', volunteer_id=volunteer.id) }}">{{_("View Tasks") }}</a>
+          <a class="btn btn-primary btn-sm"
+            href="{{ url_for('volunteers.list_tasks', volunteer_id=volunteer.id) }}">{{_("View Tasks") }}</a>
         </td>
       </tr>
       {% endfor %}
