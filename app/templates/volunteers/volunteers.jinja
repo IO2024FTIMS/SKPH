@@ -1,4 +1,4 @@
-{% extends "donors/base.jinja" %}
+{% extends "base.jinja" %}
 
 {% block title %}{{ _("Volunteers Module") }}{% endblock %}
 
@@ -16,7 +16,8 @@
       {% endif %}
     </div>
     <hr class="my-4" />
-    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('volunteers.fetch_all') }}">{{ _("View All Volunteers") }}</a>
+    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('volunteers.fetch_all') }}">{{ _("View All Volunteers")
+      }}</a>
     <a class="btn btn-primary w-100 mb-2" href="{{ url_for('volunteers.create_task') }}">{{ _("Create Task") }}</a>
   </div>
 </div>
