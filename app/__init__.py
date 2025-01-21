@@ -4,18 +4,15 @@ from flask import Flask, render_template
 from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from flask_socketio import SocketIO
 
-from config import Config
-
+from app.auth.routes import bp as auth_bp
 from app.auth.user_service import init_login_manager
+from app.communication.routes import bp as chat_bp
 from app.extensions import babel, db, get_locale
+from app.organization.routes import bp as organization_bp
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
-from app.auth.routes import bp as auth_bp
-from app.communication.routes import bp as chat_bp
-from app.organization.routes import bp as organization_bp
-
+from config import Config
 
 
 def create_app(config_class=Config):
@@ -53,11 +50,10 @@ def create_app(config_class=Config):
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
-    flask_app.register_blueprint(chat_bp, urfl_url_prefix="/communication")
+    flask_app.register_blueprint(chat_bp, url_prefix="/communication")
 
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
 
-    
     @flask_app.route('/')
     def home():
         return render_template('index.jinja')
