@@ -98,7 +98,6 @@ def create_request(affected_id):
 
         # Validation
         if not name or not needs or not street or not street_number or not city or not voivodeship:
-            flash('All fields are required.', 'error')
             return redirect(url_for('affected.create_request', affected_id=affected_id))
 
         # Create new address
@@ -122,8 +121,6 @@ def create_request(affected_id):
         db.session.add(new_request)
         db.session.commit()
 
-        flash('Request created successfully!', 'success')
-        # Redirect to the affected_details page for the specific affected
         return redirect(url_for('affected.affected_details', affected_id=affected_id))
 
     return render_template('create_request.jinja', affected=affected)
@@ -151,13 +148,11 @@ def update_request_status(request_id):
     if request.method == 'POST':
         new_status = request.form.get('status')
         if new_status not in RequestStatus.__members__:
-            flash('Invalid status selected!', 'error')
             return redirect(url_for('affected.update_request_status', request_id=request_id))
 
         request_obj.status = RequestStatus[new_status]
         db.session.commit()
 
-        flash('Status of request has been updated', 'success')
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     return render_template('update_request_status.jinja', request=request_obj, statuses=RequestStatus)
@@ -168,7 +163,6 @@ def edit_request(request_id):
 
     # Tylko requesty w statusie PENDING mogą być edytowane
     if request_obj.status != RequestStatus.PENDING:
-        flash('Only requests with PENDING status can be edited.', 'error')
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     if request.method == 'POST':
@@ -181,7 +175,6 @@ def edit_request(request_id):
 
         # Walidacja
         if not name or not needs or not street or not street_number or not city or not voivodeship:
-            flash('All fields are required.', 'error')
             return redirect(url_for('affected.edit_request', request_id=request_id))
 
         # Aktualizacja danych
@@ -194,7 +187,6 @@ def edit_request(request_id):
 
         db.session.commit()
 
-        flash('Request updated successfully!', 'success')
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     return render_template('edit_request.jinja', request=request_obj)
@@ -205,7 +197,6 @@ def delete_request(request_id):
 
     # Only delete requests with the PENDING status
     if request_obj.status != RequestStatus.PENDING:
-        flash('Only requests with PENDING status can be deleted.', 'error')
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     # Delete the request and its associated address
@@ -214,5 +205,4 @@ def delete_request(request_id):
     db.session.delete(request_obj)  # Then delete the request
     db.session.commit()
 
-    flash('Request deleted successfully!', 'success')
     return redirect(url_for('affected.affected_details', affected_id=affected_id))

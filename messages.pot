@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-21 19:32+0100\n"
+"POT-Creation-Date: 2025-01-21 19:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,23 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
+
+#: app/models/request.py:11
+msgid "Pending"
+msgstr ""
+
+#: app/models/request.py:12 app/templates/auth/manage_users.jinja:27
+#: app/templates/auth/manage_users.jinja:72
+msgid "Approved"
+msgstr ""
+
+#: app/models/request.py:13
+msgid "Not approved"
+msgstr ""
+
+#: app/models/request.py:14
+msgid "Completed"
+msgstr ""
 
 #: app/templates/base.jinja:7 app/templates/index.jinja:3
 msgid "Crisis Management System"
@@ -429,11 +446,6 @@ msgstr ""
 #: app/templates/auth/manage_users.jinja:16
 #: app/templates/auth/manage_users.jinja:60
 msgid "Approval Status"
-msgstr ""
-
-#: app/templates/auth/manage_users.jinja:27
-#: app/templates/auth/manage_users.jinja:72
-msgid "Approved"
 msgstr ""
 
 #: app/templates/auth/manage_users.jinja:29

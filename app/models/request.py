@@ -5,12 +5,13 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Enum as SQLEnum
 from app.extensions import db
+from flask_babel import lazy_gettext as _
 
 class RequestStatus(Enum):
-    PENDING = "Pending"
-    APPROVED = "Approved"
-    REJECTED = "Rejected"
-    COMPLETED = "Completed"
+    PENDING = _("Pending")
+    APPROVED = _("Approved")
+    REJECTED = _("Not approved")
+    COMPLETED = _("Completed")
 
 class Request(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
