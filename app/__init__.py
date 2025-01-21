@@ -12,6 +12,7 @@ from app.extensions import babel, db, get_locale
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.auth.routes import bp as auth_bp
+from app.organization.routes import bp as organization_bp
 
 
 def create_app(config_class=Config):
@@ -23,6 +24,7 @@ def create_app(config_class=Config):
     babel.init_app(flask_app, locale_selector=get_locale)
 
     with flask_app.app_context():
+        db.drop_all()
         db.create_all()
 
     # Initialize login manager
@@ -47,6 +49,8 @@ def create_app(config_class=Config):
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
+
+    flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
 
     @flask_app.route('/')
     def home():
