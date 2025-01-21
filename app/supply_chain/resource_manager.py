@@ -2,7 +2,7 @@ from app.extensions import db
 
 from datetime import datetime
 
-
+from app.models.item_stock import ItemStock
 from app.models.volunteer import Volunteer
 from app.models.organization import Organization
 from app.models.address import Address
@@ -25,6 +25,11 @@ class ResourceManager:
     def get_all_donations_for_campagin(self, charity_campaign):
         item_donations = db.session.query(DonationItem).join(CharityCampaign) \
         .filter(DonationItem.charity_campaign_id == charity_campaign.id) \
+        .all()
+        return item_donations
+    def get_all_stock_for_campaign(self, charity_campaign):
+        item_donations = db.session.query(ItemStock).join(CharityCampaign) \
+        .filter(ItemStock.campaign_id == charity_campaign.id) \
         .all()
         return item_donations
 

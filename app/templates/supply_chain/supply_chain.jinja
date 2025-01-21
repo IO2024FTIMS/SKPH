@@ -32,10 +32,9 @@
 
       <tr>
         <td>{{ loop.index }}</td>
-        <td>{{ donation.donation_type }}</td>
-        <td>{{ donation.number }}</td>
-        <td>{{ donation.description }}</td>
-        <td><a href="{{ url_for('supply_chain.manage_resource', id=donation.donationItem_id ) }}"><input type="button" value="Manage"/></a></td>
+        <td>{{ donation.type }}</td>
+        <td>{{ donation.amount }}</td>
+        <td><a href="{{ url_for('supply_chain.manage_resource', id=donation.id ) }}"><input type="button" value="Manage"/></a></td>
       </tr>
 
     {% endfor %}
@@ -59,6 +58,12 @@
     <tr>
       <th>Volunteers:</th>
     </tr>
+      {% for volunteer in volunteers %}
+          <tr>
+          <td>{{ volunteer.first_name }}</td>
+          <td>{{ volunteer.last_name }}</td>
+          </tr>
+      {% endfor %}
   </table>
 
   <table>

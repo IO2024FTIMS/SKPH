@@ -1,5 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
+from sqlalchemy import text
+
 from datetime import datetime
 
 from app.extensions import db
@@ -37,9 +39,15 @@ def index():
         return render_template('supply_chain.jinja',
                                charity_campaign = None,
                                item_donations = None)
+    # charity_campaign = charity_campaign[0]
+    query = text('''select ist.id, dt.type, ist.amount  from item_stock ist
+        join donation_type dt on ist.item_type_id = dt.id''')
+
+    item_donations = db.session.execute(query).mappings().all()
     charity_campaign = charity_campaign[0]
+
     return render_template('supply_chain.jinja', 
-                           item_donations=resource_manager.get_all_donations_for_campagin(charity_campaign=charity_campaign),
+                           item_donations=item_donations,
                            charity_campaign=charity_campaign)
 
 
@@ -52,13 +60,16 @@ def truncate():
 
 @bp.route('/resource/<int:id>')
 def manage_resource(id):
-    resource = db.session.get(ItemStock, id)
-    print('resource: ')
-    print(resource)
-    resource_type = db.session.get(DonationType, resource.item_type_id)
-    return render_template('manage_resource.jinja',
-                           resource=resource,
-                           resource_type=resource_type)
+    if request.method =='GET':
+        resource = db.session.get(ItemStock, id)
+        print('resource: ')
+        print(resource)
+        resource_type = db.session.get(DonationType, resource.item_type_id)
+        return render_template('manage_resource.jinja',
+                               resource=resource,
+                               resource_type=resource_type,
+                               affecteds = db.session.query(Affected).all())
+    return redirect('/supply_chain')
 
 @bp.route('/add-data')
 def add_data():
@@ -88,16 +99,16 @@ def add_data():
     if len(address_result) != 0:
         db.session.rollback()
         charity_campaign = db.session.query(CharityCampaign).all()
-        print(len(charity_campaign))
-        print(db.session.query(Address))
         if len(charity_campaign) == 0:
             return render_template('supply_chain.jinja', 
                             item_donations=None,
                             charity_campaign=None)
         else: 
             charity_campaign = charity_campaign[0]
+            query = text('select ist.id, dt.type, ist.amount  from item_stock ist join donation_type dt on ist.item_type_id = dt.id')
+            item_donations = db.session.execute(query).mappings().all()
             return render_template('supply_chain.jinja', 
-                            item_donations=resource_manager.get_all_donations_for_campagin(charity_campaign=charity_campaign),
+                            item_donations=item_donations,
                             charity_campaign=charity_campaign)
     else: 
 

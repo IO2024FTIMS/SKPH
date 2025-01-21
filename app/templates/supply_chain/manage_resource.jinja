@@ -15,7 +15,29 @@
         <td>{{ resource_type.type }}</td>
         <td>{{ resource.amount }}</td>
     </tr>
-
+</table>
+<table>
+    <tr>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Last name</th>
+        <th>Needs</th>
+        <th>Assign</th>
+    </tr>
+    <form method="post" action="{ url_for('supply_chain.') }}">
+        {% for affected in affecteds %}
+            <tr>
+                <td>{{  loop.index }}</td>
+                <td>{{ affected.first_name }}</td>
+                <td>{{ affected.last_name }}</td>
+                <td>{{ affected.needs }}</td>
+                <td>
+                    <input type="Number" value="0" id="{{ affected.id }}" min="0" max="{{ resource.amount }}">
+                </td>
+            </tr>
+        {% endfor %}
+        <input type="Submit">
+    </form>
 </table>
 </div>
 
