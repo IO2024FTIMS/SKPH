@@ -118,10 +118,13 @@ def sign_to_charity_campaign():
         charity_campaign_id = request.form['charity_campaign_id']
         organization = db.session.get(Organization, organization_id)
         charity_campaign = db.session.get(CharityCampaign, charity_campaign_id)
-        new_organization_campaign = OrganizationCharityCampaign(organization=organization, charity_campaign=charity_campaign)
+        new_organization_campaign = OrganizationCharityCampaign(organization=organization,
+                                                                charity_campaign=charity_campaign)
         db.session.add(new_organization_campaign)
         db.session.commit()
         return redirect(url_for('organization.list_organization_charity_campaigns'))
     organizations = db.session.scalars(db.select(Organization)).all()
     charity_campaigns = db.session.scalars(db.select(CharityCampaign)).all()
-    return render_template('sign_to_charity_campaign.jinja', organizations=organizations, charity_campaigns=charity_campaigns)
+    return render_template('sign_to_charity_campaign.jinja',
+                           organizations=organizations,
+                           charity_campaigns=charity_campaigns)
