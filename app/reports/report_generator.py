@@ -2,6 +2,7 @@ import csv
 import io
 import json
 
+
 class ReportGenerator:
     @staticmethod
     def to_json(report):
