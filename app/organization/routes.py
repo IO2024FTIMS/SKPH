@@ -56,7 +56,8 @@ def add_sample_organization_charity_campaign():
                                     Ratujemy życie i zdrowie, które wyceniono na kwoty\
                                     niemożliwe do osiągnięcia przez Potrzebujących.',
                                  approved=True, address=address1)
-    sample_organization_campaign = OrganizationCharityCampaign(organization=organization1, charity_campaign=sample_campaign)
+    sample_organization_campaign = OrganizationCharityCampaign(organization=organization1,
+                                                               charity_campaign=sample_campaign)
 
     volunteer1 = Volunteer(first_name='Michael', last_name='Johnson', email='mjohnson@mail.com', phone='957485273')
     address2 = Address(street='Główna', street_number='4d', city='Gdańsk', voivodeship='Pomorskie')
@@ -149,7 +150,8 @@ def volunteer_sign_to_charity_campaign():
         if organization_campaign and volunteer:
             organization_campaign.volunteers.append(volunteer)
             db.session.commit()
-            return redirect(url_for('organization.list_volunteers', charity_campaign_id=organization_charity_campaign_id))
+            return redirect(url_for('organization.list_volunteers',
+                                    charity_campaign_id=organization_charity_campaign_id))
 
     volunteers = db.session.scalars(db.select(Volunteer)).all()
     organization_charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
@@ -170,7 +172,9 @@ def create_task(organization_charity_campaign_id):
         db.session.commit()
         return redirect(url_for('ogranization.list_volunteers', charity_campaign_id=organization_charity_campaign_id))
     organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
-    return render_template('create_task_campaign.jinja', volunteers=organization_campaign.volunteers, campaign=organization_campaign)
+    return render_template('create_task_campaign.jinja',
+                           volunteers=organization_campaign.volunteers,
+                           campaign=organization_campaign)
 
 
 @bp.route('/charity_campaign/<int:charity_campaign_id>/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])
