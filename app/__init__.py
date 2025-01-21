@@ -1,9 +1,11 @@
+import json
+
 from flask import Flask, render_template
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import babel, db, get_locale
-from app.models.map import Coordinates, POI
+from app.models.map import Coordinates, POI, DangerArea, ReliefArea
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.maps.routes import bp as maps_bp
@@ -22,7 +24,8 @@ def create_app(config_class=Config):
     with flask_app.app_context():
         db.drop_all()
         db.create_all()
-        # Tmp do sprawdzenia jak bym zapomniał to usuncie
+
+        # Dodawanie punktów POI
         coord1 = Coordinates(x=51.74708, y=19.45404)
         coord2 = Coordinates(x=51.74800, y=19.45500)
         db.session.add(coord1)
@@ -33,9 +36,35 @@ def create_app(config_class=Config):
         db.session.add(poi1)
         db.session.add(poi2)
 
-        db.session.commit()
+        # Dodanie pięciokątnej strefy zagrożenia
+        pentagon_coords = [
+            [51.7475, 19.4530],
+            [51.7480, 19.4535],
+            [51.7485, 19.4545],
+            [51.7475, 19.4550],
+            [51.7470, 19.4540]
+        ]
+        danger_area = DangerArea(name="Pentagon Danger Zone",
+                                 coordinates=pentagon_coords, status="active")
+        db.session.add(danger_area)
 
-        print("Sample data added successfully!")
+        # Dodanie dziewięciokątnej strefy pomocy
+        nonagon_coords = [
+            [51.7465, 19.4525],
+            [51.7470, 19.4530],
+            [51.7475, 19.4535],
+            [51.7480, 19.4540],
+            [51.7485, 19.4545],
+            [51.7480, 19.4550],
+            [51.7475, 19.4555],
+            [51.7470, 19.4550],
+            [51.7465, 19.4545]
+        ]
+        relief_area = ReliefArea(name="Nonagon Relief Zone",
+                                 coordinates=nonagon_coords, status="open")
+        db.session.add(relief_area)
+
+        db.session.commit()
 
     # Register blueprints here
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')

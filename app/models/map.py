@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from app.extensions import db
 
@@ -34,10 +34,9 @@ class DangerArea(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     status = Column(String)
-    coordinates_id = Column(Integer, ForeignKey('coordinates.id'))
-    coordinates = relationship('Coordinates', backref='danger_area')  # use coordinates_id as foreign key
+    coordinates = Column(JSON)  # Przechowuje listę współrzędnych
 
-    def __init__(self, name: str, coordinates: Coordinates, status: str):
+    def __init__(self, name: str, coordinates: list, status: str):
         self.name = name
         self.coordinates = coordinates
         self.status = status
@@ -50,10 +49,9 @@ class ReliefArea(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     status = Column(String)
-    coordinates_id = Column(Integer, ForeignKey('coordinates.id'))
-    coordinates = relationship('Coordinates', backref='relief_area')  # use coordinates_id as foreign key
+    coordinates = Column(JSON)  # Przechowuje listę współrzędnych
 
-    def __init__(self, name: str, coordinates: Coordinates, status: str):
+    def __init__(self, name: str, coordinates: list, status: str):
         self.name = name
         self.coordinates = coordinates
         self.status = status
