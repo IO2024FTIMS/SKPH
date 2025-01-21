@@ -48,7 +48,8 @@ def index():
 
     return render_template('supply_chain.jinja', 
                            item_donations=item_donations,
-                           charity_campaign=charity_campaign)
+                           charity_campaign=charity_campaign,
+                           volunteers=db.session.query(Volunteer).all())
 
 
 @bp.route('/truncate')
@@ -58,10 +59,10 @@ def truncate():
     print('what: ')
     return redirect('/supply_chain')
 
-@bp.route('/resource/<int:id>')
+@bp.route('/resource/<int:id>', methods=['GET', 'POST'])
 def manage_resource(id):
+    resource = db.session.get(ItemStock, id)
     if request.method =='GET':
-        resource = db.session.get(ItemStock, id)
         print('resource: ')
         print(resource)
         resource_type = db.session.get(DonationType, resource.item_type_id)
@@ -69,7 +70,18 @@ def manage_resource(id):
                                resource=resource,
                                resource_type=resource_type,
                                affecteds = db.session.query(Affected).all())
-    return redirect('/supply_chain')
+    if request.method =='POST':
+        affected_assigned_resources = {}
+        resouce_use_amount =0
+        for i in db.session.query(Affected).all():
+            if int(request.form[i.id]) > 0:
+                affected_assigned_resources[i.id] = int(request.form[i.id])
+                resouce_use_amount+=int(request.form[i.id])
+        print(resource.id)
+        resource_manager.assign_resources_to_affected(affected_assigned_resources,resouce_use_amount, resource)
+        return redirect('/')
+
+
 
 @bp.route('/add-data')
 def add_data():
@@ -150,6 +162,7 @@ def add_data():
             active=True,
             type="organization"
         )
+
 
         db.session.add(user1)
         db.session.add(user2)
@@ -247,6 +260,8 @@ def add_data():
         stock_2 = ItemStock(item_type_id=donation_item2.donation_type_id,
                              campaign_id=donation_item2.charity_campaign_id,
                              amount=donation_item2.amount)
+
+
 
         db.session.add(donation_item1)
         db.session.add(donation_item2)

@@ -5,7 +5,6 @@ from config import Config
 
 from flask import Flask, render_template
 from flask_mailman import Mail
-from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -31,7 +30,11 @@ def create_app(config_class=Config):
     babel.init_app(flask_app, locale_selector=get_locale)
 
     with flask_app.app_context():
+        # Reflect the database schema
+        db.reflect()
+        # Drop all tables
         db.drop_all()
+        # Create all tables
         db.create_all()
 
     # Initialize login manager
@@ -41,7 +44,7 @@ def create_app(config_class=Config):
     mail = Mail(flask_app)
 
     flask_app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
-    flask_app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT"))
+    flask_app.config["MAIL_PORT"] = 123456
     flask_app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL") == 'True'
     flask_app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == 'True'
     flask_app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
@@ -52,17 +55,11 @@ def create_app(config_class=Config):
 
     # Register blueprints here
     flask_app.register_blueprint(auth_bp, url_prefix='/auth')
-
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
-
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
-    
     flask_app.register_blueprint(donors_bp, url_prefix='/donors')
-
     flask_app.register_blueprint(supply_chain_bp, url_prefix='/supply_chain')
-
     flask_app.register_blueprint(affected_bp, url_prefix='/affected')
-
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
 
     @flask_app.route('/')
