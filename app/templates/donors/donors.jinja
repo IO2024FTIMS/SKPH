@@ -1,19 +1,23 @@
 {% extends "base.jinja" %}
 
-{% block title %}{{ _("Crisis Management System") }}{% endblock %}
+{% block title %}{{ _("Donors Module") }}{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-  <h1 class="display-3">{{ _("System zarządzania kryzysowego") }}</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-    featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-  </p>
-  <hr class="my-4">
-  <h3>Modules</h3>
-
+<div class="container-fluid mt-4">
+  <h1>{{ _("Donors Module") }}</h1>
+  <div class="d-flex flex-column align-items-stretch">
+    <div class="mb-2">
+      {% if not samples_added %}
+      <form action="{{ url_for('donors.donor_samples') }}" method="post" class="d-flex w-100">
+        <button class="btn btn-primary w-100">{{ _("Add Sample Data") }}</button>
+      </form>
+      {% else %}
+      <button class="btn btn-secondary w-100" disabled>{{ _("Sample Data Added") }}</button>
+      {% endif %}
+    </div>
+    <hr class="my-d" />
+    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('donors.fetch_donors') }}">{{ _("View All Donors") }}</a>
+    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('donors.create_donation') }}">{{ _("Create donation") }}</a>
+  </div>
 </div>
 {% endblock %}
