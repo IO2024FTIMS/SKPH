@@ -55,7 +55,6 @@ def create_app(config_class=Config):
 
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
 
-
     @flask_app.route('/')
     def home():
         return render_template('index.jinja')

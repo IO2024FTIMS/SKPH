@@ -1,16 +1,16 @@
 from enum import Enum
-from xmlrpc.client import DateTime
-
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Enum as SQLEnum
 from app.extensions import db
+
 
 class RequestStatus(Enum):
     PENDING = "Pending"
     APPROVED = "Approved"
     REJECTED = "Rejected"
     COMPLETED = "Completed"
+
 
 class Request(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

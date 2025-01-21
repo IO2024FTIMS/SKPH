@@ -6,12 +6,12 @@ from .chart_utils import create_bar_chart_base64
 from .report_service import ReportService
 from app.extensions import db
 from app.models.affected import Affected
-from app.models.volunteer import Volunteer
 from flask import request
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 
 report_service = ReportService()
+
 
 @bp.route('/ui', methods=['GET'])
 def ui():
@@ -207,6 +207,7 @@ def volunteer_report():
     """
     return html
 
+
 @bp.route('/volunteer-report-csv', methods=['GET'])
 def volunteer_report_csv():
     volunteer_list = report_service.get_all_volunteers()
@@ -230,6 +231,7 @@ def volunteer_report_csv():
         headers={"Content-disposition": "attachment; filename=volunteer_report.csv"}
     )
 # =================== RAPORT DONOR ===================
+
 
 @bp.route('/donor-report', methods=['GET'])
 def donor_report():
@@ -338,6 +340,8 @@ def donor_report_csv():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=donor_report.csv"}
     )
+
+
 @bp.route('/single-donor-report', methods=['GET'])
 def single_donor_report():
     donor_id = request.args.get('donor_id', type=int)
@@ -450,13 +454,15 @@ def single_donor_report():
     </html>
     """
     return html
+
+
 @bp.route('/single-donor-report-csv', methods=['GET'])
 def single_donor_report_csv():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
         return "Brak parametru donor_id", 400
 
-    from app.models.donor import Donor, DonationMoney, DonationItem
+    from app.models.donor import Donor
     donor = db.session.get(Donor, donor_id)
     if not donor:
         return f"Donor o ID={donor_id} nie istnieje!", 404

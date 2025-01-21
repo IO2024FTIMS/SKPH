@@ -1,15 +1,14 @@
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
 
 from app.extensions import db
+from app.models import resource_report
 from app.models.affected import Affected
-from app.models import ResourceReport
-from app.models.request import Request
-from app.models.request import RequestStatus
-from app.models.volunteer import Volunteer
-from app.models.task import Task
+from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
-from app.models.donation import DonationMoney, DonationItem
+from app.models.request import Request
+from app.models.volunteer import Volunteer
+
 
 class ReportService:
     def __init__(self):
@@ -35,7 +34,7 @@ class ReportService:
                 "location": "N/A"
             })
 
-        new_report = ResourceReport(
+        new_report = resource_report(
             report_id=self._next_id,
             created_at=datetime.now(),
             entries=entries
@@ -134,5 +133,3 @@ class ReportService:
             "Total money sum": float(total_money),
             "Total item sum": float(total_items)
         }
-
-

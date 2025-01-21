@@ -1,5 +1,3 @@
-from datetime import datetime
-
 class ResourceReport:
     def __init__(self, report_id, created_at, entries):
         self.report_id = report_id
