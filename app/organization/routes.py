@@ -1,11 +1,13 @@
-from flask import Blueprint, redirect, render_template, url_for, request
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app.extensions import db
 from app.models.address import Address
 from app.models.authorities import Authorities
 from app.models.charity_campaign import (CharityCampaign,
                                          OrganizationCharityCampaign)
+from app.models.evaluation import Evaluation
 from app.models.organization import Organization
+from app.models.task import Task
 from app.models.volunteer import Volunteer
 
 bp = Blueprint('organization', __name__, template_folder='../templates/organization')
@@ -128,3 +130,62 @@ def sign_to_charity_campaign():
     return render_template('sign_to_charity_campaign.jinja',
                            organizations=organizations,
                            charity_campaigns=charity_campaigns)
+
+
+@bp.route('/volunteer_sign_to_charity_campaign', methods=['GET', 'POST'])
+def volunteer_sign_to_charity_campaign():
+    if request.method == 'POST':
+        volunteer_id = request.form['volunteer_id']
+        organization_charity_campaign_id = request.form['organization_charity_campaign_id']
+
+        volunteer = db.session.get(Volunteer, volunteer_id)
+        organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
+
+        if organization_campaign and volunteer:
+            organization_campaign.volunteers.append(volunteer)
+            db.session.commit()
+            return redirect(url_for('organization.list_volunteers', charity_campaign_id=organization_charity_campaign_id))
+
+    volunteers = db.session.scalars(db.select(Volunteer)).all()
+    organization_charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
+    return render_template('volunteer_sign_to_charity_campaign.jinja',
+                           volunteers=volunteers,
+                           organization_charity_campaigns=organization_charity_campaigns)
+
+
+@bp.route('/charity_campaign/<int:organization_charity_campaign_id>/tasks/create', methods=['GET', 'POST'])
+def create_task(organization_charity_campaign_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        volunteer_id = request.form['volunteer_id']
+        # url_for('organization.create_task', organization_charity_campaign_id=)
+        new_task = Task(name=name, description=description, volunteer_id=volunteer_id)
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for('ogranization.list_volunteers', charity_campaign_id=organization_charity_campaign_id))
+    organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
+    return render_template('create_task.jinja', volunteers=organization_campaign.volunteers)
+
+
+@bp.route('/charity_campaign/<int:charity_campaign_id>/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])
+def eval_task(task_id):
+    task = db.session.query(Task).filter_by(id=task_id).first()
+    if task is None:
+        flash('Task not found.')
+        return redirect(url_for('volunteers.fetch_all'))
+
+    if request.method == 'POST':
+        if not task.evaluation_:
+            score = request.form['score']
+            description = request.form['description']
+            task_evaluation = Evaluation(score=score, description=description)
+            task.evaluation_ = task_evaluation
+            db.session.add(task)
+            db.session.commit()
+            flash('Evaluation added successfully!')
+        else:
+            flash('Task is already evaluated.')
+        return redirect(url_for('volunteers.list_tasks', volunteer_id=task.volunteer.id))
+
+    return render_template('eval_task.jinja', task=task)

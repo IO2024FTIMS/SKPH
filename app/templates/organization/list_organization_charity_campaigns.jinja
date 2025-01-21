@@ -12,6 +12,7 @@
         <th scope="col">Charity Campaign</th>
         <th scope="col">Organization</th>
         <th scope="col">Volunteers</th>
+        <th scope="col">Create Task</th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +33,11 @@
           <a class="btn btn-primary btn-sm"
             href="{{ url_for('organization.list_volunteers', charity_campaign_id=campaign.id) }}">{{_("View Volunteers")
             }}</a>
+        </td>
+        <td>
+          <a class="btn btn-primary btn-sm"
+            href="{{ url_for('organization.create_task', organization_charity_campaign_id=campaign.id) }}">{{ _("Create
+            Task") }}</a>
         </td>
       </tr>
       {% endfor %}
