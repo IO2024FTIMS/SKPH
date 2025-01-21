@@ -2,9 +2,8 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app.extensions import db
 from app.models.address import Address
-from app.models.request import Request, RequestStatus
 from app.models.affected import Affected
-
+from app.models.request import Request, RequestStatus
 
 bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',
@@ -139,7 +138,8 @@ def affected_details(affected_id):
 
     requests = db.session.query(Request).filter_by(affected_id=affected_id).all()
 
-    return render_template('affected_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus )
+    return render_template('affected_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus)
+
 
 @bp.route('/request/update_status/<int:request_id>', methods=['GET', 'POST'])
 def update_request_status(request_id):
@@ -156,6 +156,7 @@ def update_request_status(request_id):
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     return render_template('update_request_status.jinja', request=request_obj, statuses=RequestStatus)
+
 
 @bp.route('/request/edit/<int:request_id>', methods=['GET', 'POST'])
 def edit_request(request_id):
@@ -190,6 +191,7 @@ def edit_request(request_id):
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
     return render_template('edit_request.jinja', request=request_obj)
+
 
 @bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])
 def delete_request(request_id):
