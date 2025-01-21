@@ -1,8 +1,8 @@
-import matplotlib.pyplot as plt
 import base64
 import io
 
 import matplotlib
+import matplotlib.pyplot as plt
 
 matplotlib.use('Agg')  # używamy backendu do rysowania w pamięci
 

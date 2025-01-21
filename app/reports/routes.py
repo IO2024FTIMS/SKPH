@@ -1,12 +1,13 @@
-from flask import Blueprint, Response, render_template
 import csv
 import io
 
-from .chart_utils import create_bar_chart_base64
-from .report_service import ReportService
+from flask import Blueprint, Response, render_template, request
+
 from app.extensions import db
 from app.models.affected import Affected
-from flask import request
+
+from .chart_utils import create_bar_chart_base64
+from .report_service import ReportService
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 
@@ -230,6 +231,7 @@ def volunteer_report_csv():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=volunteer_report.csv"}
     )
+
 # =================== RAPORT DONOR ===================
 
 
@@ -311,8 +313,6 @@ def donor_report():
 @bp.route('/donor-report-csv', methods=['GET'])
 def donor_report_csv():
     donors = report_service.get_all_donors()
-    import csv
-    import io
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -466,10 +466,6 @@ def single_donor_report_csv():
     donor = db.session.get(Donor, donor_id)
     if not donor:
         return f"Donor o ID={donor_id} nie istnieje!", 404
-
-    # Przygotowanie CSV
-    import csv
-    import io
 
     output = io.StringIO()
     fieldnames = [

@@ -2,7 +2,7 @@ from collections import Counter
 from datetime import datetime
 
 from app.extensions import db
-from app.models import resource_report
+from app.models.resource_report import ResourceReport
 from app.models.affected import Affected
 from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
@@ -34,7 +34,7 @@ class ReportService:
                 "location": "N/A"
             })
 
-        new_report = resource_report(
+        new_report = ResourceReport(
             report_id=self._next_id,
             created_at=datetime.now(),
             entries=entries
