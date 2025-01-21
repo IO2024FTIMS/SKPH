@@ -6,29 +6,39 @@
 <div class="container mt-2">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <h1>Create a New Task</h1>
+      <h1>{{ _("Create a New Task") }}</h1>
+      <h6>{{ _("Creating task for campaign:") }} {{ campaign.charity_campaign.name }}, {{ _("organization:") }} {{
+        campaign.organization.organization_name }}</h6>
       <form action="{{ url_for('volunteers.create_task') }}" method="post">
         <fieldset>
           <div class="form-group">
-            <label for="name">Task Name:</label>
+            <label for="name">{{ _("Task Name:") }}</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Task name">
           </div>
           <div class="form-group">
-            <label for="exampleTextarea">Description:</label>
+            <label for="exampleTextarea">{{ _("Description:") }}</label>
             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
           </div>
           <div>
-            <label for="volunteer_id">Volunteer:</label>
+            <label for="volunteer_id">{{ _("Volunteer:") }}</label>
             <select class="form-control" id="volunteer_id" name="volunteer_id" required>
               {% for volunteer in volunteers %}
               <option value="{{ volunteer.id }}">{{ volunteer.first_name }} {{ volunteer.last_name }}
               </option>
               {% endfor %}
             </select>
-            <br>
           </div>
+          {# <div>
+            <label for="charity_campaign_id">Charity Campaign:</label>
+            {% for campaign in charity_campaigns %}
+            <option value="{{ campaign.id }}">{{ campaign.charity_campaign.name }} {{
+              campaign.organization.organization_name }}
+            </option>
+            {% endfor %}
+          </div> #}
+          <br>
           <div>
-            <button type="submit" class="btn btn-primary">Create task</button>
+            <button type="submit" class="btn btn-primary">{{ _("Create task") }}</button>
           </div>
         </fieldset>
       </form>

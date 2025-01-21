@@ -1,20 +1,51 @@
 {% extends "base.jinja" %}
 
-{% block title %}List of Volunteers{% endblock %}
+{% block title %}Volunteer List{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1>List of Volunteers</h1>
-            <ul class="list-group">
-                {% for volunteer in volunteers %}
-                    <li class="list-group-item">
-                        {{ volunteer.first_name }} {{ volunteer.last_name }} - {{ volunteer.email }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+<div class="container mt-2">
+    <div>
+        <a href="{{ url_for('volunteers.index') }}" class="btn btn-secondary">Back</a>
     </div>
+    <hr class="my-4" />
+    <h1>{{ _("Volunteer List") }}</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {# <th scope="col">{{ _("ID</th> #}
+                <th scope="col">{{ _("First Name") }}</th>
+                <th scope="col">{{ _("Last Name") }}</th>
+                <th scope="col">{{ _("Email") }}</th>
+                <th scope="col">{{ _("Phone") }}</th>
+                <th scope="col">{{ _("Address ID") }}</th>
+                <th scope="col">{{ _("Street") }}</th>
+                <th scope="col">{{ _("Street number") }}</th>
+                <th scope="col">{{ _("City") }}</th>
+                <th scope="col">{{ _("Voivodeship") }}</th>
+                <th scope="col">{{ _("Assigned tasks") }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for volunteer in volunteers %}
+            <tr>
+                {# <td>{{ volunteer.id }}</td> #}
+                <td>{{ volunteer.first_name }}</td>
+                <td>{{ volunteer.last_name }}</td>
+                <td>{{ volunteer.email }}</td>
+                <td>{{ volunteer.phone }}</td>
+                <td>{{ volunteer.address_id }}</td>
+                <td>{{ volunteer.address.street }}</td>
+                <td>{{ volunteer.address.street_number}}</td>
+                <td>{{ volunteer.address.city}}</td>
+                <td>{{ volunteer.address.voivodeship}}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                        href="{{ url_for('volunteers.list_tasks', volunteer_id=volunteer.id) }}">
+                        {{ _("View Tasks") }}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+    </table>
 </div>
 {% endblock %}
