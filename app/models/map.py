@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
 from app.extensions import db
 
@@ -15,46 +15,51 @@ class Coordinates(db.Model):
     def __repr__(self):
         return f"Coordinates({self.x}, {self.y})"
 
+
 class POI(db.Model):
     __tablename__ = 'poi'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     coordinates_id = Column(Integer, ForeignKey('coordinates.id'))
-    coordinates = relationship('Coordinates', backref='poi')  # change backref to 'poi' for clarity
+    coordinates = relationship('Coordinates', backref='poi')
+    status = Column(Boolean, default=True)  # Status jako boolean
 
-    def __init__(self, name: str, coordinates: Coordinates):
+    def __init__(self, name: str, coordinates: Coordinates, status: bool = True):
         self.name = name
         self.coordinates = coordinates
+        self.status = status
 
     def __repr__(self):
-        return f"{self.name} ({self.coordinates.x}, {self.coordinates.y})"
+        return f"{self.name} ({self.coordinates.x}, {self.coordinates.y}, Status: {self.status})"
+
 
 class DangerArea(db.Model):
     __tablename__ = 'danger_area'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    status = Column(String)
-    coordinates = Column(JSON)  # Przechowuje listę współrzędnych
+    status = Column(Boolean, default=True)  # Status jako boolean
+    coordinates = Column(JSON)
 
-    def __init__(self, name: str, coordinates: list, status: str):
+    def __init__(self, name: str, coordinates: list, status: bool = True):
         self.name = name
         self.coordinates = coordinates
         self.status = status
 
     def __repr__(self):
-        return f"DangerArea({self.name}, {self.status})"
+        return f"DangerArea({self.name}, Status: {self.status})"
+
 
 class ReliefArea(db.Model):
     __tablename__ = 'relief_area'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    status = Column(String)
-    coordinates = Column(JSON)  # Przechowuje listę współrzędnych
+    status = Column(Boolean, default=True)  # Status jako boolean
+    coordinates = Column(JSON)
 
-    def __init__(self, name: str, coordinates: list, status: str):
+    def __init__(self, name: str, coordinates: list, status: bool = True):
         self.name = name
         self.coordinates = coordinates
         self.status = status
 
     def __repr__(self):
-        return f"ReliefArea({self.name}, {self.status})"
+        return f"ReliefArea({self.name}, Status: {self.status})"

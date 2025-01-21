@@ -25,47 +25,6 @@ def create_app(config_class=Config):
         db.drop_all()
         db.create_all()
 
-        # Dodawanie punktów POI
-        coord1 = Coordinates(x=51.74708, y=19.45404)
-        coord2 = Coordinates(x=51.74800, y=19.45500)
-        db.session.add(coord1)
-        db.session.add(coord2)
-
-        poi1 = POI(name="Point A", coordinates=coord1)
-        poi2 = POI(name="Point B", coordinates=coord2)
-        db.session.add(poi1)
-        db.session.add(poi2)
-
-        # Dodanie pięciokątnej strefy zagrożenia
-        pentagon_coords = [
-            [51.7475, 19.4530],
-            [51.7480, 19.4535],
-            [51.7485, 19.4545],
-            [51.7475, 19.4550],
-            [51.7470, 19.4540]
-        ]
-        danger_area = DangerArea(name="Pentagon Danger Zone",
-                                 coordinates=pentagon_coords, status="active")
-        db.session.add(danger_area)
-
-        # Dodanie dziewięciokątnej strefy pomocy
-        nonagon_coords = [
-            [51.7465, 19.4525],
-            [51.7470, 19.4530],
-            [51.7475, 19.4535],
-            [51.7480, 19.4540],
-            [51.7485, 19.4545],
-            [51.7480, 19.4550],
-            [51.7475, 19.4555],
-            [51.7470, 19.4550],
-            [51.7465, 19.4545]
-        ]
-        relief_area = ReliefArea(name="Nonagon Relief Zone",
-                                 coordinates=nonagon_coords, status="open")
-        db.session.add(relief_area)
-
-        db.session.commit()
-
     # Register blueprints here
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
 
