@@ -1,0 +1,36 @@
+{% extends "base.jinja" %}
+
+{% block title %}List of Organizations{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>{{ _("List of Organizations") }}</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        {# <th>ID</th> #}
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("Description") }}</th>
+                        <th>{{ _("Approved") }}</th>
+                        <th>{{ _("Address") }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for organization in organizations %}
+                    <tr>
+                        {# <td>{{ organization.id }}</td> #}
+                        <td>{{ organization.organization_name }}</td>
+                        <td>{{ organization.description }}</td>
+                        <td>{{ organization.approved }}</td>
+                        <td>{{ organization.address.street }} {{ organization.address.street_number }},
+                            {{ organization.address.city }}, {{ organization.address.voivodeship }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
