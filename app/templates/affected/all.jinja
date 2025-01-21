@@ -1,27 +1,27 @@
 {% extends "base.jinja" %}
 
-{% block title %}Affected List{% endblock %}
+{% block title %}{{ _("Affected List") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
   <div>
-    <a href="{{ url_for('affected.index') }}" class="btn btn-secondary">Back</a>
+    <a href="{{ url_for('affected.index') }}" class="btn btn-secondary">{{ _("Back") }}</a>
   </div>
   <hr class="my-4"/>
-  <h1>Affected List</h1>
+  <h1>{{ _("Affected List") }}</h1>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Needs</th>
-        <th scope="col">Address ID</th>
-        <th scope="col">Street</th>
-        <th scope="col">Street number</th>
-        <th scope="col">City</th>
-        <th scope="col">Voivodeship</th>
-        <th scope="col">Actions</th>
+        <th scope="col">{{ _("ID") }}</th>
+        <th scope="col">{{ _("First Name") }}</th>
+        <th scope="col">{{ _("Last Name") }}</th>
+        <th scope="col">{{ _("Needs") }}</th>
+        <th scope="col">{{ _("Address ID") }}</th>
+        <th scope="col">{{ _("Street") }}</th>
+        <th scope="col">{{ _("Street number") }}</th>
+        <th scope="col">{{ _("City") }}</th>
+        <th scope="col">{{ _("Voivodeship") }}</th>
+        <th scope="col">{{ _("Actions") }}</th>
       </tr>
     </thead>
     <tbody>
@@ -37,7 +37,7 @@
         <td>{{ affected.address.city}}</td>
         <td>{{ affected.address.voivodeship}}</td>
         <td>
-          <a href="{{ url_for('affected.affected_details', affected_id=affected.id) }}" class="btn btn-primary btn-sm">View Details</a>
+          <a href="{{ url_for('affected.affected_details', affected_id=affected.id) }}" class="btn btn-primary btn-sm">{{ _("View Details") }}</a>
         </td>
       </tr>
       {% endfor %}

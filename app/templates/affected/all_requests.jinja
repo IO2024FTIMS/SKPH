@@ -8,17 +8,17 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Affected</th>
-        <th>Needs</th>
-        <th scope="col">Address ID</th>
-        <th scope="col">Street</th>
-        <th scope="col">Street number</th>
-        <th scope="col">City</th>
-        <th scope="col">Voivodeship</th>
-        <th scope="col">Actions</th>
+        <th>{{ _("ID") }}</th>
+        <th>{{ _("Name") }}</th>
+        <th>{{ _("Status") }}</th>
+        <th>{{ _("Affected") }}</th>
+        <th>{{ _("Needs") }}</th>
+        <th>{{ _("Address ID") }}</th>
+        <th>{{ _("Street") }}</th>
+        <th>{{ _("Street Number") }}</th>
+        <th>{{ _("City") }}</th>
+        <th>{{ _("Voivodeship") }}</th>
+        <th>{{ _("Actions") }}</th>
       </tr>
     </thead>
     <tbody>
@@ -26,14 +26,14 @@
       <tr>
         <td>{{ request.id }}</td>
         <td>{{ request.name }}</td>
-        <td>{{ request.status.value }}</td>
+        <td>{{ _(request.status.value) }}</td>
         <td>{{ request.affected.first_name }} {{ request.affected.last_name }}</td>
         <td>{{ request.needs }}</td>
         <td>{{ request.req_address_id }}</td>
         <td>{{ request.req_address.street }}</td>
-        <td>{{ request.req_address.street_number}}</td>
-        <td>{{ request.req_address.city}}</td>
-        <td>{{ request.req_address.voivodeship}}</td>
+        <td>{{ request.req_address.street_number }}</td>
+        <td>{{ request.req_address.city }}</td>
+        <td>{{ request.req_address.voivodeship }}</td>
         <td>
           <a href="{{ url_for('affected.update_request_status', request_id=request.id) }}" class="btn btn-primary">
             {{ _("Update Status") }}
