@@ -1,0 +1,34 @@
+{% extends "base.jinja" %}
+
+{% block title %}Charity Campaigns{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+  <h1>{{ _("Charity Campaigns") }}</h1>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        {# <th scope="col">ID</th> #}
+        <th scope="col">{{ _("Name") }}</th>
+        <th scope="col">{{ _("Description") }}</th>
+        <th scope="col">{{ _("Authorities") }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for campaign in charity_campaigns %}
+      <tr>
+        {# <td>{{ campaign.id }}</td> #}
+        <td>{{ campaign.name }}</td>
+        <td>{{ campaign.description}}</td>
+        <td>
+          <a class="btn btn-primary btn-sm"
+            href="{{ url_for('organization.view_authorities', authorities_id=campaign.authority.id) }}">
+            {{_("View Authority") }}
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+  </table>
+</div>
+{% endblock %}
