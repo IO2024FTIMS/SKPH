@@ -6,26 +6,27 @@
 <div class="container mt-2">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h1>Volunteer Sign to Charity Campaign</h1>
+            <h1>{{ _("Volunteer Sign to Charity Campaign") }}</h1>
             <form method="post">
                 <fieldset>
                     <div class="form-group">
-                        <label for="volunteer_id">Volunteer:</label>
+                        <label for="volunteer_id">{{ _("Volunteer:") }}</label>
                         <select class="form-control" id="volunteer_id" name="volunteer_id" required>
                             {% for volunteer in volunteers %}
                             <option value="{{ volunteer.id }}">{{ volunteer.first_name }} {{ volunteer.last_name }}
                             </option>
                             {% endfor %}
                         </select><br>
-                        <label for="organization_charity_campaign_id">Charity Campaign:</label>
+                        <label for="organization_charity_campaign_id">{{ _("Charity Campaign:") }}</label>
                         <select class="form-control" id="organization_charity_campaign_id"
                             name="organization_charity_campaign_id" required>
                             {% for campaign in organization_charity_campaigns %}
                             <option value="{{ campaign.id }}">{{ campaign.charity_campaign.name }} ({{
                                 campaign.organization.organization_name }})</option>
                             {% endfor %}
-                        </select><br>
-                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-primary">{{ _("Sign In") }}</button>
                     </div>
                 </fieldset>
             </form>

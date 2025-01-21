@@ -4,19 +4,19 @@
 
 {% block content %}
 <div class="container mt-2">
-    <h1>Authorities</h1>
+    <h1>{{ _("Authorities") }}</h1>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Approved</th>
+                {# <th scope="col">ID</th> #}
+                <th scope="col">{{ _("Name") }}</th>
+                <th scope="col">{{ _("Phone") }}</th>
+                <th scope="col">{{ _("Approved") }}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ authorities.id }}</td>
+                {# <td>{{ authorities.id }}</td> #}
                 <td>{{ authorities.name }}</td>
                 <td>{{ authorities.phone}}</td>
                 <td>{{ authorities.approved }}</td>

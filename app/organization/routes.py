@@ -45,29 +45,34 @@ def add_sample_charity_campaign():
 
 @bp.route('/add_sample_organization_charity_campaign')
 def add_sample_organization_charity_campaign():
-    a1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
-    authority = Authorities(name='John Doe', phone='123456789', approved=True, address=a1)
-    sample_campaign = CharityCampaign(name="Sample Campaign",
-                                      description="This is a sample charity campaign.",
-                                      authority=authority)
-    o1 = Organization(organization_name='Organization', description='desc', approved=True, address=a1)
-    sample_organization_campaign = OrganizationCharityCampaign(organization=o1, charity_campaign=sample_campaign)
+    address1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
+    authority1 = Authorities(name='Aleksander Wika', phone='758934576', approved=True, address=address1)
+    sample_campaign = CharityCampaign(name="Pomoc Dla Powodzian",
+                                      description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
+                                      authority=authority1)
+    organization1 = Organization(organization_name='Fundacja Siepomaga',
+                                 description='Fundacja Siepomaga powstała, by osiągać to,\
+                                    co na pierwszy rzut oka wydaje się niemożliwe.\
+                                    Ratujemy życie i zdrowie, które wyceniono na kwoty\
+                                    niemożliwe do osiągnięcia przez Potrzebujących.',
+                                 approved=True, address=address1)
+    sample_organization_campaign = OrganizationCharityCampaign(organization=organization1, charity_campaign=sample_campaign)
 
-    v1 = Volunteer(first_name='Michael', last_name='Johnson', email='mjohnson@mail.com', phone='957485273')
-    aa1 = Address(street='Główna', street_number='4d', city='Gdańsk', voivodeship='Pomorskie')
-    v1.address = aa1
+    volunteer1 = Volunteer(first_name='Michael', last_name='Johnson', email='mjohnson@mail.com', phone='957485273')
+    address2 = Address(street='Główna', street_number='4d', city='Gdańsk', voivodeship='Pomorskie')
+    volunteer1.address = address2
 
-    v2 = Volunteer(first_name='Jane', last_name='Doe', email='jdoe@mail.com', phone='823903283')
-    aa2 = Address(street='Wiejska', street_number='2b', city='Warszawa', voivodeship='Mazowieckie')
-    v2.address = aa2
+    volunteer2 = Volunteer(first_name='Jane', last_name='Doe', email='jdoe@mail.com', phone='823903283')
+    address3 = Address(street='Wiejska', street_number='2b', city='Warszawa', voivodeship='Mazowieckie')
+    volunteer2.address = address3
 
-    v3 = Volunteer(first_name='Alice', last_name='Smith', email='asmith@mail.com', phone='758292375')
-    aa3 = Address(street='Krakowska', street_number='3c', city='Kraków', voivodeship='Małopolskie')
-    v3.address = aa3
+    volunteer3 = Volunteer(first_name='Alice', last_name='Smith', email='asmith@mail.com', phone='758292375')
+    address4 = Address(street='Krakowska', street_number='3c', city='Kraków', voivodeship='Małopolskie')
+    volunteer3.address = address4
 
-    sample_organization_campaign.volunteers.extend([v1, v2, v3])
+    sample_organization_campaign.volunteers.extend([volunteer1, volunteer2, volunteer3])
 
-    db.session.add_all([v1, v2, v3])
+    db.session.add_all([volunteer1, volunteer2, volunteer3])
     db.session.add(sample_organization_campaign)
     db.session.commit()
     return redirect(url_for('organization.list_organization_charity_campaigns'))
@@ -159,13 +164,13 @@ def create_task(organization_charity_campaign_id):
         name = request.form['name']
         description = request.form['description']
         volunteer_id = request.form['volunteer_id']
-        # url_for('organization.create_task', organization_charity_campaign_id=)
-        new_task = Task(name=name, description=description, volunteer_id=volunteer_id)
+        new_task = Task(name=name, description=description,
+                        volunteer_id=volunteer_id, charity_campaign_id=organization_charity_campaign_id)
         db.session.add(new_task)
         db.session.commit()
         return redirect(url_for('ogranization.list_volunteers', charity_campaign_id=organization_charity_campaign_id))
     organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
-    return render_template('create_task.jinja', volunteers=organization_campaign.volunteers)
+    return render_template('create_task_campaign.jinja', volunteers=organization_campaign.volunteers, campaign=organization_campaign)
 
 
 @bp.route('/charity_campaign/<int:charity_campaign_id>/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])
@@ -189,3 +194,9 @@ def eval_task(task_id):
         return redirect(url_for('volunteers.list_tasks', volunteer_id=task.volunteer.id))
 
     return render_template('eval_task.jinja', task=task)
+
+
+@bp.route('/organizations')
+def list_organizations():
+    organizations = db.session.scalars(db.select(Organization)).all()
+    return render_template('list_organizations.jinja', organizations=organizations)
