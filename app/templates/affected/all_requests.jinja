@@ -18,6 +18,7 @@
         <th scope="col">Street number</th>
         <th scope="col">City</th>
         <th scope="col">Voivodeship</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +34,11 @@
         <td>{{ request.req_address.street_number}}</td>
         <td>{{ request.req_address.city}}</td>
         <td>{{ request.req_address.voivodeship}}</td>
+        <td>
+          <a href="{{ url_for('affected.update_request_status', request_id=request.id) }}" class="btn btn-primary">
+            {{ _("Update Status") }}
+          </a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

@@ -21,6 +21,7 @@
         <th scope="col">Street number</th>
         <th scope="col">City</th>
         <th scope="col">Voivodeship</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -29,14 +30,18 @@
         <td>{{ affected.id }}</td>
         <td>{{ affected.first_name }}</td>
         <td>{{ affected.last_name }}</td>
-        <td>{{ affected.needs }}</td>>
+        <td>{{ affected.needs }}</td>
         <td>{{ affected.address_id }}</td>
         <td>{{ affected.address.street }}</td>
         <td>{{ affected.address.street_number}}</td>
         <td>{{ affected.address.city}}</td>
         <td>{{ affected.address.voivodeship}}</td>
+        <td>
+          <a href="{{ url_for('affected.affected_details', affected_id=affected.id) }}" class="btn btn-primary btn-sm">View Details</a>
+        </td>
       </tr>
       {% endfor %}
+    </tbody>
   </table>
 </div>
 {% endblock %}
