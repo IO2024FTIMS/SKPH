@@ -1,14 +1,14 @@
 # Polish translations for PROJECT.
-# Copyright (C) 2024 ORGANIZATION
+# Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-21 19:44+0100\n"
-"PO-Revision-Date: 2024-12-06 20:07+0100\n"
+"POT-Creation-Date: 2025-01-21 18:00+0100\n"
+"PO-Revision-Date: 2025-01-21 18:00+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl\n"
 "Language-Team: pl <LL@li.org>\n"
@@ -38,15 +38,11 @@ msgstr "Zakończone"
 
 #: app/templates/base.jinja:7 app/templates/index.jinja:3
 msgid "Crisis Management System"
-msgstr "System Zarządzania Kryzysowego"
-
-#: app/templates/base.jinja:16
-msgid "SKPH"
 msgstr ""
 
 #: app/templates/base.jinja:25
 msgid "Home"
-msgstr "Główna"
+msgstr "Strona Główna"
 
 #: app/templates/base.jinja:30
 msgid "Crises"
@@ -60,12 +56,12 @@ msgstr "Organizacje"
 msgid "About"
 msgstr "O nas"
 
-#: app/templates/base.jinja:54
+#: app/templates/base.jinja:55
 msgid "Logout"
-msgstr ""
+msgstr "Wyloguj"
 
 #: app/templates/auth/login.jinja:3 app/templates/auth/login.jinja:7
-#: app/templates/auth/login.jinja:17 app/templates/base.jinja:56
+#: app/templates/auth/login.jinja:17 app/templates/base.jinja:58
 msgid "Login"
 msgstr "Zaloguj się"
 
@@ -76,7 +72,11 @@ msgstr ""
 #: app/templates/index.jinja:18 app/templates/volunteers/volunteers.jinja:3
 #: app/templates/volunteers/volunteers.jinja:7
 msgid "Volunteers Module"
-msgstr ""
+msgstr "Moduł Wolontariuszy"
+
+#: app/templates/index.jinja:20
+msgid "Organizations Module"
+msgstr "Moduł Organizacji"
 
 #: app/templates/affected/affected.jinja:3
 #: app/templates/affected/affected.jinja:7 app/templates/index.jinja:21
@@ -363,965 +363,483 @@ msgstr "Anuluj"
 #: app/templates/auth/approve_organizations.jinja:3
 #: app/templates/auth/approve_organizations.jinja:7
 msgid "Approve Organizations and Authorities"
-msgstr ""
+msgstr "Zatwierdź organizację lub władze"
+
+#: app/templates/auth/approve_organizations.jinja:13
+#: app/templates/auth/register.jinja:269
+#: app/templates/organization/list_charity_campaigns.jinja:13
+#: app/templates/organization/list_organization_charity_campaigns.jinja:12
+#: app/templates/organization/list_organizations.jinja:14
+#: app/templates/organization/view_authority.jinja:12
+#: app/templates/organization/view_charity_campaign.jinja:12
+#: app/templates/organization/view_organization.jinja:12
+msgid "Name"
+msgstr "Nazwa"
 
 #: app/templates/auth/approve_organizations.jinja:14
 #: app/templates/auth/login.jinja:10 app/templates/auth/register.jinja:13
+#: app/templates/organization/list_volunteers.jinja:18
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: app/templates/auth/approve_organizations.jinja:15
 #: app/templates/auth/manage_users.jinja:59
 #: app/templates/auth/register.jinja:145
+#: app/templates/organization/list_charity_campaigns.jinja:14
+#: app/templates/organization/list_organizations.jinja:15
+#: app/templates/organization/view_charity_campaign.jinja:13
+#: app/templates/organization/view_organization.jinja:13
 msgid "Description"
-msgstr ""
+msgstr "Opis"
+
+#: app/templates/auth/approve_organizations.jinja:16
+#: app/templates/auth/manage_users.jinja:17
+#: app/templates/auth/manage_users.jinja:61
+msgid "Actions"
+msgstr "Akcje"
 
 #: app/templates/auth/approve_organizations.jinja:31
 #: app/templates/auth/approve_organizations.jinja:51
 #: app/templates/auth/manage_users.jinja:37
 #: app/templates/auth/manage_users.jinja:82
 msgid "Disapprove"
-msgstr ""
+msgstr "Odrzuć"
 
 #: app/templates/auth/approve_organizations.jinja:33
 #: app/templates/auth/approve_organizations.jinja:53
 #: app/templates/auth/manage_users.jinja:39
 #: app/templates/auth/manage_users.jinja:84
 msgid "Approve"
-msgstr ""
+msgstr "Zatwierdź"
 
 #: app/templates/auth/approve_organizations.jinja:62
 msgid "No organizations or authorities pending approval."
-msgstr ""
+msgstr "Brak organizacji i władz oczekujących na zatwierdzenie."
 
 #: app/templates/auth/login.jinja:11 app/templates/auth/register.jinja:14
 msgid "Enter your email"
-msgstr ""
+msgstr "Wprowadź swój email"
 
 #: app/templates/auth/login.jinja:14 app/templates/auth/register.jinja:24
 msgid "Password"
-msgstr ""
+msgstr "Hasło"
 
 #: app/templates/auth/login.jinja:15 app/templates/auth/register.jinja:25
 msgid "Enter your password"
-msgstr ""
+msgstr "Wprowadź swoje hasło"
 
 #: app/templates/auth/login.jinja:20
 msgid "Forgot password?"
-msgstr ""
+msgstr "Zapomniane hasło?"
 
 #: app/templates/auth/login.jinja:21 app/templates/auth/reset_password.jinja:3
 #: app/templates/auth/reset_password_request.jinja:3
 msgid "Reset password"
-msgstr ""
+msgstr "Zresetuj hasło"
 
 #: app/templates/auth/login.jinja:24
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Nie masz konta?"
 
 #: app/templates/auth/login.jinja:25
 msgid "Register here"
-msgstr ""
+msgstr "Zarajestruj się"
 
 #: app/templates/auth/manage_users.jinja:3
 msgid "Manage Users"
-msgstr ""
+msgstr "Zarządzaj użytkownikami"
 
 #: app/templates/auth/manage_users.jinja:7
 msgid "Manage Authorities and Organizations"
-msgstr ""
+msgstr "Zarządzaj władzami i organizacjami"
 
 #: app/templates/auth/manage_users.jinja:10
+#: app/templates/organization/list_charity_campaigns.jinja:15
+#: app/templates/organization/view_authority.jinja:7
+#: app/templates/organization/view_charity_campaign.jinja:14
 msgid "Authorities"
-msgstr ""
+msgstr "Władze"
 
 #: app/templates/auth/manage_users.jinja:14
 #: app/templates/auth/manage_users.jinja:57
 msgid "User"
-msgstr ""
+msgstr "Użytkownik"
 
 #: app/templates/auth/manage_users.jinja:15
 #: app/templates/auth/register.jinja:87 app/templates/auth/register.jinja:154
 #: app/templates/auth/register.jinja:278
-#, fuzzy
+#: app/templates/organization/list_volunteers.jinja:19
+#: app/templates/organization/view_authority.jinja:13
 msgid "Phone"
-msgstr "Główna"
+msgstr "Numer telefonu"
 
 #: app/templates/auth/manage_users.jinja:16
 #: app/templates/auth/manage_users.jinja:60
 msgid "Approval Status"
-msgstr ""
+msgstr "Status zatwierdzenia"
+
+#: app/templates/auth/manage_users.jinja:27
+#: app/templates/auth/manage_users.jinja:72
+#: app/templates/organization/list_organizations.jinja:16
+#: app/templates/organization/view_authority.jinja:14
+#: app/templates/organization/view_organization.jinja:14
+msgid "Approved"
+msgstr "Zatwierdzone"
 
 #: app/templates/auth/manage_users.jinja:29
 #: app/templates/auth/manage_users.jinja:74
 msgid "Not Approved"
-msgstr ""
+msgstr "Niezatwierdzone"
 
 #: app/templates/auth/manage_users.jinja:46
 msgid "No authorities found."
-msgstr ""
+msgstr "Nie znaleziono władz"
 
 #: app/templates/auth/manage_users.jinja:58
 #: app/templates/auth/register.jinja:136
-#, fuzzy
 msgid "Organization Name"
-msgstr "Organizacje"
+msgstr "Nazwa organizacji"
 
 #: app/templates/auth/manage_users.jinja:91
-#, fuzzy
 msgid "No organizations found."
-msgstr "Organizacje"
+msgstr "Nie znaleziono organizacji"
 
 #: app/templates/auth/register.jinja:3 app/templates/auth/register.jinja:323
 #: app/templates/auth/register_choice.jinja:3
 msgid "Register"
-msgstr ""
+msgstr "Zarejestruj się"
 
 #: app/templates/auth/register.jinja:7
 msgid "Register as"
-msgstr ""
+msgstr "Zarejestruj się jako"
 
 #: app/templates/auth/register.jinja:35
 msgid "Confirm Password"
-msgstr ""
+msgstr "Potwierdź hasło"
 
 #: app/templates/auth/register.jinja:36
 msgid "Re-enter your password"
-msgstr ""
+msgstr "Wprowadź ponownie hasło"
+
+#: app/templates/auth/register.jinja:47 app/templates/auth/register.jinja:69
+#: app/templates/auth/register.jinja:203
+#: app/templates/organization/list_volunteers.jinja:16
+msgid "First Name"
+msgstr "Imię"
 
 #: app/templates/auth/register.jinja:48 app/templates/auth/register.jinja:70
 #: app/templates/auth/register.jinja:204
 msgid "Enter your first name"
-msgstr ""
+msgstr "Wprowadź imię"
+
+#: app/templates/auth/register.jinja:56 app/templates/auth/register.jinja:78
+#: app/templates/auth/register.jinja:212
+#: app/templates/organization/list_volunteers.jinja:17
+msgid "Last Name"
+msgstr "Nazwisko"
 
 #: app/templates/auth/register.jinja:57 app/templates/auth/register.jinja:79
 #: app/templates/auth/register.jinja:213
 msgid "Enter your last name"
-msgstr ""
+msgstr "Wprowadź nazwisko"
 
 #: app/templates/auth/register.jinja:88 app/templates/auth/register.jinja:155
 #: app/templates/auth/register.jinja:279
 msgid "Enter your phone number"
-msgstr ""
+msgstr "Wprowadź numer telefonu"
+
+#: app/templates/auth/register.jinja:96 app/templates/auth/register.jinja:163
+#: app/templates/auth/register.jinja:230 app/templates/auth/register.jinja:287
+#: app/templates/organization/list_volunteers.jinja:21
+#: app/templates/organization/view_organization.jinja:15
+msgid "Street"
+msgstr "Ulica"
 
 #: app/templates/auth/register.jinja:97 app/templates/auth/register.jinja:164
 #: app/templates/auth/register.jinja:231 app/templates/auth/register.jinja:288
 msgid "Enter your street"
-msgstr ""
+msgstr "Wprowadź ulicę"
+
+#: app/templates/auth/register.jinja:105 app/templates/auth/register.jinja:172
+#: app/templates/auth/register.jinja:239 app/templates/auth/register.jinja:296
+msgid "Street Number"
+msgstr "Numer"
 
 #: app/templates/auth/register.jinja:106 app/templates/auth/register.jinja:173
 #: app/templates/auth/register.jinja:240 app/templates/auth/register.jinja:297
 msgid "Enter your street number"
-msgstr ""
+msgstr "Wprowadź numer"
+
+#: app/templates/auth/register.jinja:114 app/templates/auth/register.jinja:181
+#: app/templates/auth/register.jinja:248 app/templates/auth/register.jinja:305
+#: app/templates/organization/list_volunteers.jinja:23
+#: app/templates/organization/view_organization.jinja:17
+msgid "City"
+msgstr "Miasto"
 
 #: app/templates/auth/register.jinja:115 app/templates/auth/register.jinja:182
 #: app/templates/auth/register.jinja:249 app/templates/auth/register.jinja:306
 msgid "Enter your city"
-msgstr ""
+msgstr "Wprowadź miasto"
+
+#: app/templates/auth/register.jinja:123 app/templates/auth/register.jinja:190
+#: app/templates/auth/register.jinja:257 app/templates/auth/register.jinja:314
+#: app/templates/organization/list_volunteers.jinja:24
+#: app/templates/organization/view_organization.jinja:18
+msgid "Voivodeship"
+msgstr "Województwo"
 
 #: app/templates/auth/register.jinja:124 app/templates/auth/register.jinja:191
 #: app/templates/auth/register.jinja:258 app/templates/auth/register.jinja:315
 msgid "Enter your voivodeship"
-msgstr ""
+msgstr "Wprowadź województwo"
 
 #: app/templates/auth/register.jinja:137
 msgid "Enter your organization name"
-msgstr ""
+msgstr "Wprowadź nazwę organizacji"
 
 #: app/templates/auth/register.jinja:146
 msgid "Enter a description of your organization"
-msgstr ""
+msgstr "Wprowadź opis organizacji"
+
+#: app/templates/auth/register.jinja:221
+msgid "Needs"
+msgstr "Potrzeby"
 
 #: app/templates/auth/register.jinja:222
 msgid "Enter your needs"
-msgstr ""
+msgstr "Wprowadź potrzeby"
 
 #: app/templates/auth/register.jinja:270
 msgid "Enter your name"
-msgstr ""
+msgstr "Wprowadź imię"
 
 #: app/templates/auth/register_choice.jinja:7
 msgid "Choose your account type"
-msgstr ""
+msgstr "Wybierz typ konta"
 
 #: app/templates/auth/register_choice.jinja:8
 msgid "Please select the type of account you want to create."
-msgstr ""
+msgstr "Prosimy o wybranie typu tworzonego konta"
 
 #: app/templates/auth/register_choice.jinja:10
 msgid "Register as Volunteer"
-msgstr ""
+msgstr "Zarejestruj się jako wolontariusz"
 
 #: app/templates/auth/register_choice.jinja:11
-#, fuzzy
 msgid "Register as Organization"
-msgstr "Organizacje"
+msgstr "Zarejestruj się jako organizacja"
 
 #: app/templates/auth/register_choice.jinja:12
 msgid "Register as Donor"
-msgstr ""
+msgstr "Zarejestruj się jako darczyńca"
 
 #: app/templates/auth/register_choice.jinja:13
 msgid "Register as Affected"
-msgstr ""
+msgstr "Zarejestruj się jako poszkodowany"
 
 #: app/templates/auth/register_choice.jinja:14
 msgid "Register as Authorities"
-msgstr ""
+msgstr "Zarejestruj się jako władze"
 
 #: app/templates/auth/reset_password.jinja:7
 #: app/templates/auth/reset_password_request.jinja:7
 msgid "Reset Your Password"
-msgstr ""
+msgstr "Zresetuj hasło"
 
 #: app/templates/auth/reset_password.jinja:27
 msgid "Reset Password"
-msgstr ""
+msgstr "Zresetuj hasło"
 
 #: app/templates/auth/reset_password_request.jinja:18
 msgid "Send reset link"
+msgstr "Wyślij link do zresetowania hasła"
+
+#: app/templates/organization/create_charity_campaign.jinja:9
+msgid "Create a New Campaign"
+msgstr "Stwórz nową kampanię pomocową"
+
+#: app/templates/organization/create_charity_campaign.jinja:13
+msgid "Name:"
+msgstr "Nazwa:"
+
+#: app/templates/organization/create_charity_campaign.jinja:15
+#: app/templates/organization/create_task_campaign.jinja:19
+msgid "Description:"
+msgstr "Opis:"
+
+#: app/templates/organization/create_charity_campaign.jinja:18
+msgid "Authority:"
+msgstr "Władze:"
+
+#: app/templates/organization/create_charity_campaign.jinja:24
+msgid "Create Campaign"
+msgstr "Stwórz kampanię pomocową"
+
+#: app/templates/organization/create_task_campaign.jinja:9
+msgid "Create a New Task"
+msgstr "Stwórz nowe zadanie"
+
+#: app/templates/organization/create_task_campaign.jinja:10
+msgid "Creating task for campaign:"
+msgstr "Tworzenie zadań do kampani:"
+
+#: app/templates/organization/create_task_campaign.jinja:10
+msgid "organization:"
+msgstr "organizacja:"
+
+#: app/templates/organization/create_task_campaign.jinja:15
+msgid "Task Name:"
+msgstr "Nazwa zadania:"
+
+#: app/templates/organization/create_task_campaign.jinja:23
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:13
+msgid "Volunteer:"
+msgstr "Wolontariusz:"
+
+#: app/templates/organization/create_task_campaign.jinja:41
+msgid "Create task"
+msgstr "Stwórz zadanie"
+
+#: app/templates/organization/list_charity_campaigns.jinja:7
+#: app/templates/organization/view_charity_campaign.jinja:7
+msgid "Charity Campaigns"
+msgstr "Kampanie pomocowe"
+
+#: app/templates/organization/list_charity_campaigns.jinja:27
+#: app/templates/organization/view_charity_campaign.jinja:25
+msgid "View Authority"
+msgstr "Wyświetl władze"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:7
+msgid "Organization Charity Campaigns"
+msgstr "Kampanie pomocowe organizacji"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:13
+msgid "Charity Campaign"
+msgstr "Kampanie pomocowe"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:14
+#: app/templates/organization/view_organization.jinja:7
+msgid "Organization"
+msgstr "Organizacja"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:15
+msgid "Volunteers"
+msgstr "Wolontariusze"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:16
+#: app/templates/organization/list_organization_charity_campaigns.jinja:46
+#: app/templates/volunteers/volunteers.jinja:20
+msgid "Create Task"
+msgstr "Stwórz zadanie"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:28
+msgid "View Campaign"
+msgstr "Wyświelt kampanię"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:34
+msgid "View Organization"
+msgstr "Wyświetl organizację"
+
+#: app/templates/organization/list_organization_charity_campaigns.jinja:40
+msgid "View Volunteers"
+msgstr "Wyświetl wolontariuszy"
+
+#: app/templates/organization/list_organizations.jinja:9
+msgid "List of Organizations"
+msgstr "Lista organizacji pomocowych"
+
+#: app/templates/organization/list_organizations.jinja:17
+msgid "Address"
+msgstr "Adres"
+
+#: app/templates/organization/list_volunteers.jinja:11
+msgid "Volunteer List"
+msgstr "Lista wolontariuszy"
+
+#: app/templates/organization/list_volunteers.jinja:20
+msgid "Address ID"
 msgstr ""
 
+#: app/templates/organization/list_volunteers.jinja:22
+#: app/templates/organization/view_organization.jinja:16
+msgid "Street number"
+msgstr "Numer ulicy"
+
+#: app/templates/organization/list_volunteers.jinja:25
+msgid "Assigned tasks"
+msgstr "Przydzielone zadania"
+
+#: app/templates/organization/list_volunteers.jinja:44
 #: app/templates/volunteers/view.jinja:42
 msgid "View Tasks"
+msgstr "Wyświetl zadania"
+
+#: app/templates/organization/organization_index.jinja:9
+msgid "Organization Main Page"
+msgstr "Strona główna modułu organizacji"
+
+#: app/templates/organization/organization_index.jinja:12
+msgid "List Charity Campaigns"
+msgstr "Lista Kampani Pomocowych"
+
+#: app/templates/organization/organization_index.jinja:15
+msgid "List Organizations"
+msgstr "Lista Organizacji"
+
+#: app/templates/organization/organization_index.jinja:19
+msgid "List Organization Charity Campaigns"
+msgstr "Lista Kampani Pomocowych Organizacji"
+
+#: app/templates/organization/organization_index.jinja:22
+msgid "Add Sample Charity Campaign"
+msgstr "Dodaj Przykładowe Kampanie pomocowe"
+
+#: app/templates/organization/organization_index.jinja:26
+msgid "Add Sample Organization Charity Campaign"
+msgstr "Dodaj Przykładowe Kampanie Pomocowe Organizacji"
+
+#: app/templates/organization/organization_index.jinja:29
+msgid "Create Charity Campaign"
+msgstr "Stwórz Kampanię Pomocową"
+
+#: app/templates/organization/organization_index.jinja:32
+#: app/templates/organization/sign_to_charity_campaign.jinja:9
+msgid "Sign to Charity Campaign"
+msgstr "Zapisz Do Kampani Pomocowej"
+
+#: app/templates/organization/organization_index.jinja:35
+msgid "Sign to Charity Campaign (Volunteer)"
+msgstr "Zapisz Do Kampani Pomocwej (Wolontariusz)"
+
+#: app/templates/organization/sign_to_charity_campaign.jinja:12
+msgid "Organization:"
+msgstr "Organizacja:"
+
+#: app/templates/organization/sign_to_charity_campaign.jinja:18
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:20
+msgid "Charity Campaign:"
+msgstr "Kampania Pomocowa:"
+
+#: app/templates/organization/sign_to_charity_campaign.jinja:24
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:29
+msgid "Sign In"
+msgstr "Zapisz się"
+
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:9
+msgid "Volunteer Sign to Charity Campaign"
 msgstr ""
+
+#: app/templates/volunteers/volunteers.jinja:12
+msgid "Add Sample Data"
+msgstr "Dodaj Przykładowe Dane"
+
+#: app/templates/volunteers/volunteers.jinja:15
+msgid "Sample Data Added"
+msgstr "Dodano Przykładowe Dane"
 
 #: app/templates/volunteers/volunteers.jinja:19
 msgid "View All Volunteers"
-msgstr ""
-
-#: app/templates/volunteers/volunteers.jinja:20
-msgid "Create Task"
-msgstr ""
-
-#~ msgid "Personal Information"
-#~ msgstr "Personalne Informacje"
-
-#~ msgid "{editor}: Editing failed"
-#~ msgstr ""
-
-#~ msgid "{editor}: Editing failed: {e}"
-#~ msgstr ""
-
-#~ msgid "Aborted!"
-#~ msgstr "O nas"
-
-#~ msgid "Show this message and exit."
-#~ msgstr ""
-
-#~ msgid "(Deprecated) {text}"
-#~ msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Organizacje"
-
-#~ msgid "Got unexpected extra argument ({args})"
-#~ msgid_plural "Got unexpected extra arguments ({args})"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "DeprecationWarning: The command {name!r} is deprecated."
-#~ msgstr ""
-
-#~ msgid "Commands"
-#~ msgstr ""
-
-#~ msgid "Missing command."
-#~ msgstr ""
-
-#~ msgid "No such command {name!r}."
-#~ msgstr ""
-
-#~ msgid "Value must be an iterable."
-#~ msgstr ""
-
-#~ msgid "Takes {nargs} values but 1 was given."
-#~ msgid_plural "Takes {nargs} values but {len} were given."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "env var: {var}"
-#~ msgstr ""
-
-#~ msgid "(dynamic)"
-#~ msgstr ""
-
-#~ msgid "default: {default}"
-#~ msgstr ""
-
-#~ msgid "required"
-#~ msgstr ""
-
-#~ msgid "%(prog)s, version %(version)s"
-#~ msgstr ""
-
-#~ msgid "Show the version and exit."
-#~ msgstr ""
-
-#~ msgid "Error: {message}"
-#~ msgstr ""
-
-#~ msgid "Try '{command} {option}' for help."
-#~ msgstr ""
-
-#~ msgid "Invalid value: {message}"
-#~ msgstr ""
-
-#~ msgid "Invalid value for {param_hint}: {message}"
-#~ msgstr ""
-
-#~ msgid "Missing argument"
-#~ msgstr ""
-
-#~ msgid "Missing option"
-#~ msgstr ""
-
-#~ msgid "Missing parameter"
-#~ msgstr ""
-
-#~ msgid "Missing {param_type}"
-#~ msgstr ""
-
-#~ msgid "Missing parameter: {param_name}"
-#~ msgstr ""
-
-#~ msgid "No such option: {name}"
-#~ msgstr ""
-
-#~ msgid "Did you mean {possibility}?"
-#~ msgid_plural "(Possible options: {possibilities})"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "unknown error"
-#~ msgstr ""
-
-#~ msgid "Could not open file {filename!r}: {message}"
-#~ msgstr ""
-
-#~ msgid "Argument {name!r} takes {nargs} values."
-#~ msgstr ""
-
-#~ msgid "Option {name!r} does not take a value."
-#~ msgstr ""
-
-#~ msgid "Option {name!r} requires an argument."
-#~ msgid_plural "Option {name!r} requires {nargs} arguments."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Shell completion is not supported for Bash versions older than 4.4."
-#~ msgstr ""
-
-#~ msgid "Couldn't detect Bash version, shell completion is not supported."
-#~ msgstr ""
-
-#~ msgid "Repeat for confirmation"
-#~ msgstr ""
-
-#~ msgid "Error: The value you entered was invalid."
-#~ msgstr ""
-
-#~ msgid "Error: {e.message}"
-#~ msgstr ""
-
-#~ msgid "Error: The two entered values do not match."
-#~ msgstr ""
-
-#~ msgid "Error: invalid input"
-#~ msgstr ""
-
-#~ msgid "Press any key to continue..."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Choose from:\n"
-#~ "\t{choices}"
-#~ msgstr ""
-
-#~ msgid "{value!r} is not {choice}."
-#~ msgid_plural "{value!r} is not one of {choices}."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "{value!r} does not match the format {format}."
-#~ msgid_plural "{value!r} does not match the formats {formats}."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "{value!r} is not a valid {number_type}."
-#~ msgstr ""
-
-#~ msgid "{value} is not in the range {range}."
-#~ msgstr ""
-
-#~ msgid "{value!r} is not a valid boolean."
-#~ msgstr ""
-
-#~ msgid "{value!r} is not a valid UUID."
-#~ msgstr ""
-
-#~ msgid "file"
-#~ msgstr ""
-
-#~ msgid "directory"
-#~ msgstr ""
-
-#~ msgid "path"
-#~ msgstr ""
-
-#~ msgid "{name} {filename!r} does not exist."
-#~ msgstr ""
-
-#~ msgid "{name} {filename!r} is a file."
-#~ msgstr ""
-
-#~ msgid "{name} '{filename}' is a directory."
-#~ msgstr ""
-
-#~ msgid "{name} {filename!r} is not readable."
-#~ msgstr ""
-
-#~ msgid "{name} {filename!r} is not writable."
-#~ msgstr ""
-
-#~ msgid "{name} {filename!r} is not executable."
-#~ msgstr ""
-
-#~ msgid "{len_type} values are required, but {len_value} was given."
-#~ msgid_plural "{len_type} values are required, but {len_value} were given."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Cli: Invalid command."
-#~ msgstr ""
-
-#~ msgid "File required."
-#~ msgstr ""
-
-#~ msgid "Invalid file type."
-#~ msgstr ""
-
-#~ msgid "Invalid name"
-#~ msgstr ""
-
-#~ msgid "File \"%(name)s\" already exists."
-#~ msgstr ""
-
-#~ msgid "Permission denied."
-#~ msgstr ""
-
-#~ msgid "File uploading is disabled."
-#~ msgstr ""
-
-#~ msgid "Successfully saved file: %(name)s"
-#~ msgstr ""
-
-#~ msgid "Failed to save file: %(error)s"
-#~ msgstr ""
-
-#~ msgid "Upload File"
-#~ msgstr ""
-
-#~ msgid "Directory creation is disabled."
-#~ msgstr ""
-
-#~ msgid "Successfully created directory: %(directory)s"
-#~ msgstr ""
-
-#~ msgid "Failed to create directory: %(error)s"
-#~ msgstr ""
-
-#~ msgid "Create Directory"
-#~ msgstr ""
-
-#~ msgid "Deletion is disabled."
-#~ msgstr ""
-
-#~ msgid "Directory deletion is disabled."
-#~ msgstr ""
-
-#~ msgid "Directory \"%(path)s\" was successfully deleted."
-#~ msgstr ""
-
-#~ msgid "Failed to delete directory: %(error)s"
-#~ msgstr ""
-
-#~ msgid "File \"%(name)s\" was successfully deleted."
-#~ msgstr ""
-
-#~ msgid "Failed to delete file: %(name)s"
-#~ msgstr ""
-
-#~ msgid "Renaming is disabled."
-#~ msgstr ""
-
-#~ msgid "Path does not exist."
-#~ msgstr ""
-
-#~ msgid "Successfully renamed \"%(src)s\" to \"%(dst)s\""
-#~ msgstr ""
-
-#~ msgid "Failed to rename: %(error)s"
-#~ msgstr ""
-
-#~ msgid "Rename %(name)s"
-#~ msgstr ""
-
-#~ msgid "Error saving changes to %(name)s."
-#~ msgstr ""
-
-#~ msgid "Changes to %(name)s saved successfully."
-#~ msgstr ""
-
-#~ msgid "Error reading %(name)s."
-#~ msgstr ""
-
-#~ msgid "Unexpected error while reading from %(name)s"
-#~ msgstr ""
-
-#~ msgid "Cannot edit %(name)s."
-#~ msgstr ""
-
-#~ msgid "Editing %(path)s"
-#~ msgstr ""
-
-#~ msgid "File deletion is disabled."
-#~ msgstr ""
-
-#~ msgid "Cannot operate on non empty directories"
-#~ msgstr ""
-
-#~ msgid "Failed to get model. %(error)s"
-#~ msgstr ""
-
-#~ msgid "Failed to create record. %(error)s"
-#~ msgstr ""
-
-#~ msgid "Failed to update record. %(error)s"
-#~ msgstr ""
-
-#~ msgid "Failed to delete record. %(error)s"
-#~ msgstr ""
-
-#~ msgid "Record was successfully deleted."
-#~ msgid_plural "%(count)s records were successfully deleted."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Failed to delete records. %(error)s"
-#~ msgstr ""
-
-#~ msgid "Not a valid choice"
-#~ msgstr ""
-
-#~ msgid "Already exists."
-#~ msgstr ""
-
-#~ msgid "At least %(num)d item is required"
-#~ msgid_plural "At least %(num)d items are required"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Not a valid ISO currency code (e.g. USD, EUR, CNY)."
-#~ msgstr ""
-
-#~ msgid "Not a valid color (e.g. \"red\", \"#f00\", \"#ff0000\")."
-#~ msgstr ""
-
-#~ msgid "Integrity error. %(message)s"
-#~ msgstr ""
-
-#~ msgid "Invalid time format"
-#~ msgstr ""
-
-#~ msgid "Invalid Choice: could not coerce"
-#~ msgstr ""
-
-#~ msgid "Invalid JSON"
-#~ msgstr ""
-
-#~ msgid "Invalid file extension"
-#~ msgstr ""
-
-#~ msgid "File \"%s\" already exists."
-#~ msgstr ""
-
-#~ msgid "This field requires at least one item."
-#~ msgstr ""
-
-#~ msgid "There are no items in the table."
-#~ msgstr ""
-
-#~ msgid "Invalid Filter Value: %(value)s"
-#~ msgstr ""
-
-#~ msgid "Record was successfully created."
-#~ msgstr ""
-
-#~ msgid "Record does not exist."
-#~ msgstr ""
-
-#~ msgid "Record was successfully saved."
-#~ msgstr ""
-
-#~ msgid "Tablib dependency not installed."
-#~ msgstr ""
-
-#~ msgid "Export type \"%(type)s not supported."
-#~ msgstr ""
-
-#~ msgid "View Record"
-#~ msgstr ""
-
-#~ msgid "Edit Record"
-#~ msgstr ""
-
-#~ msgid "Delete Record"
-#~ msgstr ""
-
-#~ msgid "Please select model"
-#~ msgstr ""
-
-#~ msgid "No"
-#~ msgstr ""
-
-#~ msgid "Yes"
-#~ msgstr ""
-
-#~ msgid "This Username is already in use. Please try another one."
-#~ msgstr ""
-
-#~ msgid "This Email is already in use. Please try another one."
-#~ msgstr ""
-
-#~ msgid "Email is required"
-#~ msgstr ""
-
-#~ msgid "Invalid Email"
-#~ msgstr ""
-
-#~ msgid "Add Email"
-#~ msgstr ""
-
-#~ msgid "Old Password"
-#~ msgstr ""
-
-#~ msgid "Old Password is required"
-#~ msgstr ""
-
-#~ msgid "New Password"
-#~ msgstr ""
-
-#~ msgid "New Password is required"
-#~ msgstr ""
-
-#~ msgid "Retype New Password"
-#~ msgstr ""
-
-#~ msgid "New Password and Retype Password did not match"
-#~ msgstr ""
-
-#~ msgid "Change password"
-#~ msgstr ""
-
-#~ msgid "Old Password is incorrect"
-#~ msgstr ""
-
-#~ msgid "New Username"
-#~ msgstr ""
-
-#~ msgid "Username is required"
-#~ msgstr ""
-
-#~ msgid "Change username"
-#~ msgstr ""
-
-#~ msgid "First name"
-#~ msgstr ""
-
-#~ msgid "Last name"
-#~ msgstr ""
-
-#~ msgid "Username"
-#~ msgstr ""
-
-#~ msgid "Password is required"
-#~ msgstr ""
-
-#~ msgid "Remember me"
-#~ msgstr ""
-
-#~ msgid "Sign in"
-#~ msgstr ""
-
-#~ msgid "Username or Email"
-#~ msgstr ""
-
-#~ msgid "Username/Email"
-#~ msgstr ""
-
-#~ msgid "%(username_or_email)s does not exist"
-#~ msgstr ""
-
-#~ msgid "Incorrect Password"
-#~ msgstr ""
-
-#~ msgid "Incorrect %(username_or_email)s and/or Password"
-#~ msgstr ""
-
-#~ msgid "Retype Password"
-#~ msgstr ""
-
-#~ msgid "Password and Retype Password did not match"
-#~ msgstr ""
-
-#~ msgid "Token"
-#~ msgstr ""
-
-#~ msgid "Your email address"
-#~ msgstr ""
-
-#~ msgid "Email address is required"
-#~ msgstr ""
-
-#~ msgid "Invalid Email address"
-#~ msgstr ""
-
-#~ msgid "Send reset password email"
-#~ msgstr ""
-
-#~ msgid "Resend email confirmation email"
-#~ msgstr ""
-
-#~ msgid "Invite!"
-#~ msgstr ""
-
-#~ msgid "Sign out"
-#~ msgstr ""
-
-#~ msgid "Home Page"
-#~ msgstr "Główna"
-
-#~ msgid "User profile"
-#~ msgstr ""
-
-#~ msgid "Member Page"
-#~ msgstr ""
-
-#~ msgid "Admin Page"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Password must have at least 6 "
-#~ "characters with one lowercase letter, "
-#~ "one uppercase letter and one number"
-#~ msgstr ""
-
-#~ msgid "Username must be at least 3 characters long"
-#~ msgstr ""
-
-#~ msgid "Username may only contain letters, numbers, '-', '.' and '_'"
-#~ msgstr ""
-
-#~ msgid "Your password has been changed successfully."
-#~ msgstr ""
-
-#~ msgid "Your username has been changed to '%(username)s'."
-#~ msgstr ""
-
-#~ msgid "Invalid confirmation token."
-#~ msgstr ""
-
-#~ msgid "Your email has been confirmed."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A reset password email has been "
-#~ "sent to '%(email)s'. Open that email "
-#~ "and follow the instructions to reset "
-#~ "your password."
-#~ msgstr ""
-
-#~ msgid "Invitation has been sent."
-#~ msgstr ""
-
-#~ msgid "You have signed out successfully."
-#~ msgstr ""
-
-#~ msgid "Your reset password token is invalid."
-#~ msgstr ""
-
-#~ msgid "Your password has been reset successfully."
-#~ msgstr ""
-
-#~ msgid "You must be signed in to access '%(url)s'."
-#~ msgstr ""
-
-#~ msgid "You do not have permission to access '%(url)s'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A confirmation email has been sent "
-#~ "to %(email)s with instructions to "
-#~ "complete your registration."
-#~ msgstr ""
-
-#~ msgid "You have registered successfully."
-#~ msgstr ""
-
-#~ msgid "Your account has not been enabled."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Your email address has not yet "
-#~ "been confirmed. Check your email Inbox"
-#~ " and Spam folders for the "
-#~ "confirmation email or <a href=\"%(url)s"
-#~ "\">Re-send confirmation email</a>."
-#~ msgstr ""
-
-#~ msgid "You have signed in successfully."
-#~ msgstr ""
-
-#~ msgid "This field is required."
-#~ msgstr ""
-
-#~ msgid "File does not have an approved extension: {extensions}"
-#~ msgstr ""
-
-#~ msgid "File does not have an approved extension."
-#~ msgstr ""
-
-#~ msgid "show this help message and exit"
-#~ msgstr ""
-
-#~ msgid "algorithm"
-#~ msgstr ""
-
-#~ msgid "Invalid field name '%s'."
-#~ msgstr ""
-
-#~ msgid "Field must be equal to %(other_name)s."
-#~ msgstr ""
-
-#~ msgid "Field must be at least %(min)d character long."
-#~ msgid_plural "Field must be at least %(min)d characters long."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Field cannot be longer than %(max)d character."
-#~ msgid_plural "Field cannot be longer than %(max)d characters."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Field must be exactly %(max)d character long."
-#~ msgid_plural "Field must be exactly %(max)d characters long."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Field must be between %(min)d and %(max)d characters long."
-#~ msgstr ""
-
-#~ msgid "Number must be at least %(min)s."
-#~ msgstr ""
-
-#~ msgid "Number must be at most %(max)s."
-#~ msgstr ""
-
-#~ msgid "Number must be between %(min)s and %(max)s."
-#~ msgstr ""
-
-#~ msgid "Invalid input."
-#~ msgstr ""
-
-#~ msgid "Invalid email address."
-#~ msgstr ""
-
-#~ msgid "Invalid IP address."
-#~ msgstr ""
-
-#~ msgid "Invalid Mac address."
-#~ msgstr ""
-
-#~ msgid "Invalid URL."
-#~ msgstr ""
-
-#~ msgid "Invalid UUID."
-#~ msgstr ""
-
-#~ msgid "Invalid value, must be one of: %(values)s."
-#~ msgstr ""
-
-#~ msgid "Invalid value, can't be any of: %(values)s."
-#~ msgstr ""
-
-#~ msgid "This field cannot be edited."
-#~ msgstr ""
-
-#~ msgid "This field is disabled and cannot have a value."
-#~ msgstr ""
-
-#~ msgid "Invalid CSRF Token."
-#~ msgstr ""
-
-#~ msgid "CSRF token missing."
-#~ msgstr ""
-
-#~ msgid "CSRF failed."
-#~ msgstr ""
-
-#~ msgid "CSRF token expired."
-#~ msgstr ""
-
-#~ msgid "Invalid Choice: could not coerce."
-#~ msgstr ""
-
-#~ msgid "Choices cannot be None."
-#~ msgstr ""
-
-#~ msgid "Not a valid choice."
-#~ msgstr ""
-
-#~ msgid "Invalid choice(s): one or more data inputs could not be coerced."
-#~ msgstr ""
-
-#~ msgid "'%(value)s' is not a valid choice for this field."
-#~ msgid_plural "'%(value)s' are not valid choices for this field."
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-#~ msgstr[2] ""
-
-#~ msgid "Not a valid datetime value."
-#~ msgstr ""
-
-#~ msgid "Not a valid date value."
-#~ msgstr ""
-
-#~ msgid "Not a valid time value."
-#~ msgstr ""
-
-#~ msgid "Not a valid week value."
-#~ msgstr ""
-
-#~ msgid "Not a valid integer value."
-#~ msgstr ""
-
-#~ msgid "Not a valid decimal value."
-#~ msgstr ""
-
-#~ msgid "Not a valid float value."
-#~ msgstr ""
+msgstr "Zobacz Listę Wszystkich Wolontariuszy"
 
