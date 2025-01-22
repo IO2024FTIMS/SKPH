@@ -27,7 +27,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">{{ _("Crises") }}</a>
+            <a class="nav-link" href="{{ url_for('organization.list_charity_campaigns') }}">{{ _("Crises") }}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('organization.list_organizations') }}">{{ _("Organizations")}}</a>
@@ -35,7 +35,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">{{ _("About") }}</a>
           </li>
-          <li class="nav-item dropdown">
+          {# <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
               aria-expanded="false">Dropdown</a>
             <div class="dropdown-menu">
@@ -45,7 +45,7 @@
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Separated link</a>
             </div>
-          </li>
+          </li> #}
         </ul>
         {% if current_user.is_authenticated %}
         <div class="navbar-text mr-3">
@@ -75,9 +75,9 @@
     {% block content %} {% endblock %}
   </main>
 
-  <footer>
-    <p></p>
-  </footer>
+  {# <footer class="d-flex justify-content-end align-items-end mr-2" style="height: 42vh;">
+    <p>{{ _(" Crisis Management System - building a better future together. © 2025 All rights reserved.") }}</p>
+  </footer> #}
 
   <!-- Include jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

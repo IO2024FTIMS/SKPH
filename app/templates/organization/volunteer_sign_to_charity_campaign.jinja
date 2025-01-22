@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 
-{% block title %}Volunteer Sign to Charity Campaign{% endblock %}
+{% block title %}{{ _("Volunteer Sign to Charity Campaign") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
@@ -10,13 +10,6 @@
             <form method="post">
                 <fieldset>
                     <div class="form-group">
-                        <label for="volunteer_id">{{ _("Volunteer:") }}</label>
-                        <select class="form-control" id="volunteer_id" name="volunteer_id" required>
-                            {% for volunteer in volunteers %}
-                            <option value="{{ volunteer.id }}">{{ volunteer.first_name }} {{ volunteer.last_name }}
-                            </option>
-                            {% endfor %}
-                        </select><br>
                         <label for="organization_charity_campaign_id">{{ _("Charity Campaign:") }}</label>
                         <select class="form-control" id="organization_charity_campaign_id"
                             name="organization_charity_campaign_id" required>

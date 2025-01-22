@@ -10,7 +10,7 @@
       <label for="status" class="form-label">{{ _("Status") }}</label>
       <select name="status" id="status" class="form-select" required>
         {% for status in statuses %}
-        <option value="{{ status.name }}" {% if request.status == status %}selected{% endif %}>
+        <option value="{{ status.name }}" {% if request.status==status %}selected{% endif %}>
           {{ _(status.value) }}
         </option>
         {% endfor %}

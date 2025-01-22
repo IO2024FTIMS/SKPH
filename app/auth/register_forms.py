@@ -22,6 +22,7 @@ class AddressFormMixin:
 class DonorRegisterForm(BaseRegisterForm):
     first_name = StringField('First Name')
     last_name = StringField('Last Name')
+    phone = StringField('Phone', validators=[DataRequired(), Length(min=9, max=15)])
 
 
 class VolunteerRegisterForm(BaseRegisterForm, AddressFormMixin):

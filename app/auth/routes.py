@@ -59,8 +59,10 @@ def create_user_and_related_data(form, user_type):
 
     if user_type == 'donor':
         donor = Donor(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
+            name=form.first_name.data,
+            surname=form.last_name.data,
+            phone_number=form.phone.data,
+            email=form.email.data,
             user_id=user.id
         )
         db.session.add(donor)
