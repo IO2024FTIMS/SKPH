@@ -19,7 +19,7 @@
           </div>
           <div>
             <label for="donor_id">{{ _("Donor:") }}</label>
-            <select id="donor_id" name="donor_id" required>
+            <select class="form-control" id="donor_id" name="donor_id" required>
               {% for donor in donors %}
               <option value="{{ donor.donor_id }}">{{ donor.name }} {{ donor.surname }}
               </option>
@@ -28,11 +28,12 @@
           </div>
           <div>
             <label for="donation_type">{{ _("Type:") }}</label>
-            <select id="donation_type" name="donation_type" required>
+            <select class="form-control" id="donation_type" name="donation_type" required>
               <option value="money">{{ _("Money") }}</option>
               <option value="item">{{ _("Item") }}</option>
             </select>
           </div>
+          <br>
           <div>
             <button type="submit" class="btn btn-primary">{{ _("Confirm Donation") }}</button>
           </div>

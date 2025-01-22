@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from app.extensions import db
 from app.models.address import Address
@@ -9,6 +10,7 @@ from app.models.evaluation import Evaluation
 from app.models.organization import Organization
 from app.models.task import Task
 from app.models.volunteer import Volunteer
+from app.utils.helpers import role_required
 
 bp = Blueprint('organization', __name__, template_folder='../templates/organization')
 
@@ -19,6 +21,7 @@ def index():
 
 
 @bp.route('/charity_campaigns')
+@role_required(['volunteer', 'donor'])  # example of access management
 def list_charity_campaigns():
     charity_campaigns = db.session.scalars(db.select(CharityCampaign)).all()
     return render_template('list_charity_campaigns.jinja', charity_campaigns=charity_campaigns)
@@ -31,7 +34,7 @@ def list_organization_charity_campaigns():
                            organization_charity_campaigns=organization_charity_campaigns)
 
 
-@bp.route('/add_sample_charity_campaign')
+@bp.route('/add_sample_charity_campaign')  # NOTE: not neccesary
 def add_sample_charity_campaign():
     a1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
     authority = Authorities(name='John Doe', phone='123456789', approved=True, address=a1)
@@ -98,6 +101,7 @@ def view_campaign(charity_campaign_id):
 
 
 @bp.route('/charity_campaign/<int:charity_campaign_id>/volunteers')
+@role_required(['organization', 'authorities', 'admin'])
 def list_volunteers(charity_campaign_id):
     campaign = db.session.get(OrganizationCharityCampaign, charity_campaign_id)
     volunteers = campaign.volunteers
@@ -105,6 +109,7 @@ def list_volunteers(charity_campaign_id):
 
 
 @bp.route('/create_charity_campaign', methods=['GET', 'POST'])
+@role_required(['authorities', 'admin'])
 def create_charity_campaign():
     if request.method == 'POST':
         name = request.form['name']
@@ -120,6 +125,7 @@ def create_charity_campaign():
 
 
 @bp.route('/sign_to_charity_campaign', methods=['GET', 'POST'])
+@role_required(['organization', 'admin'])
 def sign_to_charity_campaign():
     if request.method == 'POST':
         organization_id = request.form['organization_id']
@@ -139,12 +145,11 @@ def sign_to_charity_campaign():
 
 
 @bp.route('/volunteer_sign_to_charity_campaign', methods=['GET', 'POST'])
+@role_required(['volunteer'])
 def volunteer_sign_to_charity_campaign():
     if request.method == 'POST':
-        volunteer_id = request.form['volunteer_id']
         organization_charity_campaign_id = request.form['organization_charity_campaign_id']
-
-        volunteer = db.session.get(Volunteer, volunteer_id)
+        volunteer = db.session.scalar(db.select(Volunteer).where(Volunteer.user_id == current_user.id))
         organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
 
         if organization_campaign and volunteer:
@@ -153,14 +158,13 @@ def volunteer_sign_to_charity_campaign():
             return redirect(url_for('organization.list_volunteers',
                                     charity_campaign_id=organization_charity_campaign_id))
 
-    volunteers = db.session.scalars(db.select(Volunteer)).all()
     organization_charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
     return render_template('volunteer_sign_to_charity_campaign.jinja',
-                           volunteers=volunteers,
                            organization_charity_campaigns=organization_charity_campaigns)
 
 
 @bp.route('/charity_campaign/<int:organization_charity_campaign_id>/tasks/create', methods=['GET', 'POST'])
+@role_required(['organization', 'admin'])
 def create_task(organization_charity_campaign_id):
     if request.method == 'POST':
         name = request.form['name']
@@ -178,6 +182,7 @@ def create_task(organization_charity_campaign_id):
 
 
 @bp.route('/charity_campaign/<int:charity_campaign_id>/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])
+@role_required(['organization', 'admin'])
 def eval_task(task_id):
     task = db.session.query(Task).filter_by(id=task_id).first()
     if task is None:
