@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from app.extensions import db
 from app.models.address import Address
@@ -8,6 +9,7 @@ from app.models.charity_campaign import (CharityCampaign,
 from app.models.evaluation import Evaluation
 from app.models.organization import Organization
 from app.models.task import Task
+from app.models.user import User
 from app.models.volunteer import Volunteer
 from app.utils.helpers import role_required
 
@@ -141,12 +143,11 @@ def sign_to_charity_campaign():
 
 
 @bp.route('/volunteer_sign_to_charity_campaign', methods=['GET', 'POST'])
+@role_required(['volunteer'])
 def volunteer_sign_to_charity_campaign():
     if request.method == 'POST':
-        volunteer_id = request.form['volunteer_id']
         organization_charity_campaign_id = request.form['organization_charity_campaign_id']
-
-        volunteer = db.session.get(Volunteer, volunteer_id)
+        volunteer = db.session.scalar(db.select(Volunteer).where(Volunteer.user_id == current_user.id))
         organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
 
         if organization_campaign and volunteer:
