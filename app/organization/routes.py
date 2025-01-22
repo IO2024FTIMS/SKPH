@@ -39,7 +39,9 @@ def list_organization_charity_campaigns():
 
 @bp.route('charity_campaigns/<int:charity_campaign_id>')
 def list_signed_organizations(charity_campaign_id):
-    organization_charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign).where(OrganizationCharityCampaign.charity_campaign_id == charity_campaign_id))
+    organization_charity_campaigns = (
+        db.session.scalars(db.select(OrganizationCharityCampaign)
+                           .where(OrganizationCharityCampaign.charity_campaign_id == charity_campaign_id)))
     return render_template('list_organization_charity_campaigns.jinja',
                            organization_charity_campaigns=organization_charity_campaigns)
 
@@ -75,7 +77,8 @@ def view_authorities(authorities_id):
 
 @bp.route('authorities/<int:authorities_id>/charity_campaigns')
 def list_authorities_charity_campaigns(authorities_id):
-    charity_campaigns = db.session.scalars(db.select(CharityCampaign).where(CharityCampaign.authorities_id == authorities_id)).all()
+    charity_campaigns = db.session.scalars(db.select(CharityCampaign)
+                                           .where(CharityCampaign.authorities_id == authorities_id)).all()
     return render_template('list_charity_campaigns.jinja', charity_campaigns=charity_campaigns)
 
 
@@ -99,10 +102,11 @@ def manage_charity_campaign(charity_campaign_id):
 
             db.session.add(charity_campaign)
             db.session.commit()
-            return redirect(url_for('organization.list_authorities_charity_campaigns', authorities_id=current_user.authorities.id))
+            return redirect(url_for('organization.list_authorities_charity_campaigns',
+                                    authorities_id=current_user.authorities.id))
         return render_template('manage_charity_campaign.jinja', campaign=charity_campaign)
     else:
-        abort(403)
+        return abort(403)
 
 
 @bp.route('/create_charity_campaign', methods=['GET', 'POST'])
