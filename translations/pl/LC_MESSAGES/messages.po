@@ -868,7 +868,7 @@ msgstr "Zapisz Do Kampani Pomocowej"
 
 #: app/templates/organization/organization_index.jinja:35
 msgid "Sign to Charity Campaign (Volunteer)"
-msgstr "Zapisz Do Kampani Pomocwej (Wolontariusz)"
+msgstr "Zapisz Do Kampani Pomocowej (Wolontariusz)"
 
 #: app/templates/organization/sign_to_charity_campaign.jinja:12
 msgid "Organization:"
