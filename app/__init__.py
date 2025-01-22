@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
+from app.maps.routes import bp as maps_bp
 from app.affected.routes import bp as affected_bp
 from app.auth.routes import bp as auth_bp
 from app.auth.user_service import init_login_manager
@@ -39,6 +40,8 @@ def create_app(config_class=Config):
     flask_app.register_blueprint(donors_bp, url_prefix='/donors')
 
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
+
+    flask_app.register_blueprint(maps_bp, url_prefix='/maps')
 
     @flask_app.route('/')
     def home():
