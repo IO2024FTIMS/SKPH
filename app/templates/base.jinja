@@ -35,7 +35,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">{{ _("About") }}</a>
           </li>
-          <li class="nav-item dropdown">
+          {# <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
               aria-expanded="false">Dropdown</a>
             <div class="dropdown-menu">
@@ -45,7 +45,7 @@
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Separated link</a>
             </div>
-          </li>
+          </li> #}
         </ul>
         {% if current_user.is_authenticated %}
         <div class="navbar-text mr-3">
@@ -75,8 +75,8 @@
     {% block content %} {% endblock %}
   </main>
 
-  <footer>
-    <p></p>
+  <footer class="d-flex justify-content-end align-items-end m-4">
+    <p>{{ _(" Crisis Management System - building a better future together. © 2025 All rights reserved.") }}</p>
   </footer>
 
   <!-- Include jQuery and Bootstrap JS -->
