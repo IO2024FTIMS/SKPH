@@ -6,6 +6,7 @@ from flask import Blueprint, Response, render_template, request
 from app.extensions import db
 from app.models.affected import Affected
 from app.models.charity_campaign import OrganizationCharityCampaign
+from app.models.donor import Donor
 
 from .chart_utils import create_bar_chart_base64
 from .report_service import ReportService
@@ -348,7 +349,6 @@ def single_donor_report():
     if not donor_id:
         return "<h3>Brak parametru donor_id!</h3>", 400
 
-    from app.models.donor import Donor
     donor = db.session.get(Donor, donor_id)
     if not donor:
         return f"<h3>Donor o ID={donor_id} nie istnieje!</h3>", 404
@@ -462,7 +462,6 @@ def single_donor_report_csv():
     if not donor_id:
         return "Brak parametru donor_id", 400
 
-    from app.models.donor import Donor
     donor = db.session.get(Donor, donor_id)
     if not donor:
         return f"Donor o ID={donor_id} nie istnieje!", 404
