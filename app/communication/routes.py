@@ -31,6 +31,8 @@ def init_routes(bp):
         ).filter(
             or_(Message.sender_id == user.id, Message.receiver_id == user.id)
         ).distinct().all()
+
+        chat_users = [u for u in chat_users if u.email != current_user.email]
             
         return render_template('communication/chat.html', user=user, chat_users=chat_users)
 
@@ -69,3 +71,4 @@ def init_routes(bp):
             'content': message.content, 
             'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         } for message in messages])
+

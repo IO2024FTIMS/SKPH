@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room, emit
 from app.models.user import User
 from app.models.message import Message
 from app.extensions import db
@@ -15,6 +15,8 @@ def handle_message(data):
         sender_email = data['sender']
         receiver_email = data['receiver']
         message_content = data['message']
+
+        room = '_'.join(sorted([sender_email, receiver_email]))
         
         sender = User.query.filter_by(email=sender_email).first()
         receiver = User.query.filter_by(email=receiver_email).first()
@@ -28,11 +30,12 @@ def handle_message(data):
             db.session.add(new_message)
             db.session.commit()
             
-            socketio.emit('receive_message', {
+            emit('receive_message', {
                 'sender': sender_email, 
                 'receiver': receiver_email, 
-                'message': message_content
-            }, room=receiver_email)
+                'message': message_content,
+                'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            }, room=room)
         else:
             print(f"Sender or receiver not found: {sender_email}, {receiver_email}")
     except Exception as e:
@@ -42,4 +45,9 @@ def handle_message(data):
 @socketio.on('join')
 def on_join(data):
     email = data['email']
-    socketio.emit('user_joined', {'username': email})
+    receiver = data.get('receiver', None)
+
+    if receiver:
+        room = '_'.join(sorted([email, receiver]))
+        join_room(room)
+        print(f"User {email} joined room {room}")
