@@ -52,15 +52,18 @@ def get_registration_form(user_type):
 
 
 def create_user_and_related_data(form, user_type):
-    user = User(email=form.email.data, type=user_type)
+    # role works with current_user.role
+    user = User(email=form.email.data, type=user_type, role=user_type)
     user.set_password(form.password.data)
     db.session.add(user)
     db.session.commit()
 
     if user_type == 'donor':
         donor = Donor(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
+            name=form.first_name.data,
+            surname=form.last_name.data,
+            phone_number=form.phone.data,
+            email=form.email.data,
             user_id=user.id
         )
         db.session.add(donor)

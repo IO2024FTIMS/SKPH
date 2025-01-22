@@ -9,6 +9,7 @@ from app.models.evaluation import Evaluation
 from app.models.organization import Organization
 from app.models.task import Task
 from app.models.volunteer import Volunteer
+from app.utils.helpers import role_required
 
 bp = Blueprint('organization', __name__, template_folder='../templates/organization')
 
@@ -19,6 +20,7 @@ def index():
 
 
 @bp.route('/charity_campaigns')
+@role_required(['volunteer', 'donor'])  # example of access management
 def list_charity_campaigns():
     charity_campaigns = db.session.scalars(db.select(CharityCampaign)).all()
     return render_template('list_charity_campaigns.jinja', charity_campaigns=charity_campaigns)
