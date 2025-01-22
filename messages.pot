@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-22 10:31+0100\n"
+"POT-Creation-Date: 2025-01-22 10:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,12 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+#: app/templates/base.jinja:79
+msgid ""
+" Crisis Management System - building a better future together. © 2025 All"
+" rights reserved."
+msgstr ""
+
 #: app/templates/index.jinja:9
 msgid ""
 "The Crisis Management System is a web-based platform that brings "
@@ -76,26 +82,26 @@ msgid ""
 "    enabling effective coordination of emergency aid."
 msgstr ""
 
-#: app/templates/index.jinja:19
+#: app/templates/index.jinja:20
 msgid "Modules"
 msgstr ""
 
-#: app/templates/index.jinja:21 app/templates/volunteers/volunteers.jinja:3
+#: app/templates/index.jinja:22 app/templates/volunteers/volunteers.jinja:3
 #: app/templates/volunteers/volunteers.jinja:7
 msgid "Volunteers Module"
 msgstr ""
 
-#: app/templates/index.jinja:23
+#: app/templates/index.jinja:24
 msgid "Organizations Module"
 msgstr ""
 
 #: app/templates/affected/affected.jinja:3
-#: app/templates/affected/affected.jinja:7 app/templates/index.jinja:25
+#: app/templates/affected/affected.jinja:7 app/templates/index.jinja:26
 msgid "Affected Module"
 msgstr ""
 
 #: app/templates/donors/donors.jinja:3 app/templates/donors/donors.jinja:7
-#: app/templates/index.jinja:27
+#: app/templates/index.jinja:28
 msgid "Donors Module"
 msgstr ""
 
@@ -674,7 +680,7 @@ msgstr ""
 msgid "Item"
 msgstr ""
 
-#: app/templates/donors/create_donation.jinja:37
+#: app/templates/donors/create_donation.jinja:38
 msgid "Confirm Donation"
 msgstr ""
 

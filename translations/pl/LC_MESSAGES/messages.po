@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-22 10:31+0100\n"
+"POT-Creation-Date: 2025-01-22 10:49+0100\n"
 "PO-Revision-Date: 2025-01-21 18:00+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl\n"
@@ -69,6 +69,12 @@ msgstr "Wyloguj"
 msgid "Login"
 msgstr "Zaloguj się"
 
+#: app/templates/base.jinja:79
+msgid ""
+" Crisis Management System - building a better future together. © 2025 All"
+" rights reserved."
+msgstr "System Zarządzania Kryzysowego – wspólnie budujemy lepszą przyszłość. © 2025 Wszelkie prawa zastrzeżone."
+
 #: app/templates/index.jinja:9
 msgid ""
 "The Crisis Management System is a web-based platform that brings "
@@ -76,28 +82,32 @@ msgid ""
 "    volunteers, aid organisations, affected and donors together in one "
 "place,\n"
 "    enabling effective coordination of emergency aid."
-msgstr "System Zarządzania Kryzysowego to platforma webowa, która łączy władze, wolontariuszy, organizacje pomocowe, poszkodowanych i darczyńców w jednym miejscu, umożliwiając skuteczną koordynację pomocy w sytuacjach kryzysowych."
+msgstr ""
+"System Zarządzania Kryzysowego to platforma webowa, która łączy władze, "
+"wolontariuszy, organizacje pomocowe, poszkodowanych i darczyńców w jednym"
+" miejscu, umożliwiając skuteczną koordynację pomocy w sytuacjach "
+"kryzysowych."
 
-#: app/templates/index.jinja:19
+#: app/templates/index.jinja:20
 msgid "Modules"
 msgstr "Moduły"
 
-#: app/templates/index.jinja:21 app/templates/volunteers/volunteers.jinja:3
+#: app/templates/index.jinja:22 app/templates/volunteers/volunteers.jinja:3
 #: app/templates/volunteers/volunteers.jinja:7
 msgid "Volunteers Module"
 msgstr "Moduł Wolontariuszy"
 
-#: app/templates/index.jinja:23
+#: app/templates/index.jinja:24
 msgid "Organizations Module"
 msgstr "Moduł Organizacji"
 
 #: app/templates/affected/affected.jinja:3
-#: app/templates/affected/affected.jinja:7 app/templates/index.jinja:25
+#: app/templates/affected/affected.jinja:7 app/templates/index.jinja:26
 msgid "Affected Module"
 msgstr "Moduł poszkodowanych"
 
 #: app/templates/donors/donors.jinja:3 app/templates/donors/donors.jinja:7
-#: app/templates/index.jinja:27
+#: app/templates/index.jinja:28
 msgid "Donors Module"
 msgstr "Moduł Darczyńców"
 
@@ -676,7 +686,7 @@ msgstr "Pieniężna"
 msgid "Item"
 msgstr "Przedmiot"
 
-#: app/templates/donors/create_donation.jinja:37
+#: app/templates/donors/create_donation.jinja:38
 msgid "Confirm Donation"
 msgstr "Potiwerdź Donację"
 
