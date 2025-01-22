@@ -23,8 +23,8 @@ def create_app(config_class=Config):
     init_login_manager(flask_app)
     mail.init_app(flask_app)
 
-    # NOTE: remember to remove drop_all in final version
     with flask_app.app_context():
+        # db.drop_all()
         db.create_all()
 
     # Register blueprints here

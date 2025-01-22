@@ -15,6 +15,7 @@ class CharityCampaign(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[str]
+    is_active: Mapped[bool] = mapped_column(default=True)
     authority = relationship('Authorities')
     authorities_id = mapped_column(ForeignKey('authorities.id'), nullable=False)
 

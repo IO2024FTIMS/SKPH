@@ -29,5 +29,21 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('reports.ui') }}">{{ _("Reports Module") }}</a>
   </div>
+  {% if current_user.type == 'authorities' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Authorities") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg"
+      href="{{ url_for('organization.list_authorities_charity_campaigns', authorities_id=current_user.authorities.id) }}">{{
+      _("Track current campaigns") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.create_charity_campaign') }}">{{
+      _("Create a charity campaign") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="#">{{
+      _("Track supplies") }}</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
