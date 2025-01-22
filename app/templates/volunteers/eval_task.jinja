@@ -14,6 +14,7 @@
       <p>{{ _("Task:") }} {{ task.name }}</p>
       <p>{{ _("Volunteer:") }} {{ task.volunteer.first_name }} {{ task.volunteer.last_name }}</p>
       <p>{{ _("Task Description:") }} {{ task.description }}</p>
+      <p>{{ _("Task Status:") }} {{ task.status }}</p>
       <form action="{{ url_for('volunteers.eval_task', task_id=task.id) }}" method="post">
         <fieldset>
           <div class="form-group">

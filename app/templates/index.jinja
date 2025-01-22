@@ -59,5 +59,20 @@
       _("Manage requests") }}</a>
   </div>
   {% endif %}
+  {% if current_user.type == 'volunteer' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Volunteer") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.volunteer_sign_to_charity_campaign') }}">{{
+      _("Volunteer your help") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.list_volunteer_charity_campaigns') }}">{{
+      _("List my campaigns") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('volunteers.list_my_tasks') }}">{{
+      _("Manage my tasks") }}</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
