@@ -219,12 +219,20 @@ def volunteer_sign_to_charity_campaign():
         if organization_campaign and volunteer:
             organization_campaign.volunteers.append(volunteer)
             db.session.commit()
-            return redirect(url_for('organization.list_volunteers',
+            return redirect(url_for('organization.list_volunteer_charity_campaigns',
                                     charity_campaign_id=organization_charity_campaign_id))
 
     organization_charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
     return render_template('volunteer_sign_to_charity_campaign.jinja',
                            organization_charity_campaigns=organization_charity_campaigns)
+
+
+@bp.route('/volunteer/charity_campaigns', methods=['GET'])
+@role_required(['volunteer'])
+def list_volunteer_charity_campaigns():
+    volunteer = db.session.scalar(db.select(Volunteer).where(Volunteer.user_id == current_user.id))
+    return render_template('list_organization_charity_campaigns.jinja',
+                           organization_charity_campaigns=volunteer.campaigns)
 
 # =================== SAMPLES ===================
 

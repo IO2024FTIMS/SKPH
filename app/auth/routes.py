@@ -254,9 +254,9 @@ def manage_users():
 def profile():
     role_urls = {
         # 'admin': url_for('admin.dashboard'),
-        'affected': url_for('affected.affected_details', affected_id=current_user.affected.id),
+        # 'affected': url_for('affected.affected_details', affected_id=current_user.affected.id),
         'organization': url_for('organization.organization_profile'),
-        # 'volunteer': url_for('volunteer.dashboard'),
+        'volunteer': url_for('volunteers.volunteer_profile'),
         'authorities': url_for('organization.authorities_profile')
     }
     return redirect(role_urls[current_user.type])
