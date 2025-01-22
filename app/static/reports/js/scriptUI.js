@@ -37,3 +37,6 @@ exportBtn.addEventListener('click', () => {
 allBtn.addEventListener('click', () => {
     window.location.href = '/reports/all';
 });
+document.getElementById('affected-detailed-btn').addEventListener('click', () => {
+    window.location.href = '/reports/affected/detailed';
+});

@@ -4,18 +4,30 @@
 
 {% block content %}
 <div class="jumbotron">
-  <h1 class="display-3">{{ _("System zarządzania kryzysowego") }}</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-    featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <h1 class="display-3">{{ _("Crisis Management System") }}</h1>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    {{_("""The Crisis Management System is a web-based platform that brings authorities,
+    volunteers, aid organisations, affected and donors together in one place,
+    enabling effective coordination of emergency aid.""") }}
   </p>
   <hr class="my-4">
-  <h3>Modules</h3>
+  {# <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+  </p> #}
+  {#
+  <hr class="my-4"> #}
+  <h3>{{ _("Modules") }}</h3>
   <div class="d-flex flex-column">
     <a class="btn btn-primary btn-lg" href="{{ url_for('volunteers.index') }}">{{ _("Volunteers Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.index') }}">{{ _("Organizations Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('affected.index') }}">{{ _("Affected Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('donors.index') }}">{{ _("Donors Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('reports.ui') }}">{{ _("Reports Module") }}</a>
   </div>
 </div>
 {% endblock %}

@@ -8,6 +8,7 @@ class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[str]
+    charity_campaign_id = mapped_column(ForeignKey('organization_charity_campaign.id'))
     volunteer_id = mapped_column(ForeignKey('volunteer.id'))
     evaluation_id = mapped_column(ForeignKey('evaluation.id'))
 
