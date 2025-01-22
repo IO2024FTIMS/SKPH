@@ -20,3 +20,6 @@ email-validator~=2.2.0
 pytest == 8.3.3
 matplotlib==3.10.0
 
+# Real time chat
+flask-socketio == 5.5.1
+
