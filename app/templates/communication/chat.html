@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat - {{ user.username }}</title>
+    <title>Chat - {{ user.email }}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Witaj, {{ user.username }}!</h1>
+    <h1>Witaj, {{ user.email }} ({{user.type}})!</h1>
 
     <div>
         <h2>Wyszukaj użytkownika</h2>
@@ -24,35 +24,35 @@
     <h2>Twoje dotychczasowe czaty:</h2>
     <ul>
     {% for chat_user in chat_users %}
-        <li class="chat-user" data-username="{{ chat_user.username }}">
-            {{ chat_user.username }}
+        <li class="chat-user" data-email="{{ chat_user.email }}">
+            {{ chat_user.email }}
         </li>
     {% endfor %}
     </ul>
 
     <script>
         const socket = io();
-        const username = "{{ user.username }}";
-        socket.emit('join', {username: username});
+        const email = "{{ user.email }}";
+        socket.emit('join', {email: email});
 
         $('#search-users').on('input', function() {
             const query = $(this).val();
-            $.get('/search_users', {query: query, current_username: username}, function(users) {
+            $.get('/communication/search_users', {query: query, current_email: email}, function(users) {
                 const userList = $('#user-list');
                 userList.empty();
                 users.forEach(user => {
-                    userList.append(`<li class="chat-user" data-username="${user.username}">${user.username}</li>`);
+                    userList.append(`<li class="chat-user" data-email="${user.email}">${user.email}</li>`);
                 });
             });
         });
 
         $(document).on('click', '.chat-user', function() {
-            const selectedUser = $(this).data('username');
+            const selectedUser = $(this).data('email');
             $('#current-chat-user').text(selectedUser);
             $('#chat-area').show();
 
             // Pobierz historię wiadomości
-            $.get('/get_messages', {sender: username, receiver: selectedUser}, function(messages) {
+            $.get('/communication/get_messages', {sender: email, receiver: selectedUser}, function(messages) {
                 const messagesDiv = $('#messages');
                 messagesDiv.empty();
                 messages.forEach(msg => {
@@ -73,7 +73,7 @@
 
             if (message.trim() !== '') {
                 socket.emit('send_message', {
-                    sender: username,
+                    sender: email,
                     receiver: receiver,
                     message: message
                 });
@@ -82,8 +82,16 @@
         }
 
         socket.on('receive_message', function(data) {
-            if (data.receiver === username) {
+            if (data.receiver === email) {
                 $('#messages').append(`<p><strong>${data.sender}:</strong> ${data.message}</p>`);
+            }
+        });
+
+        socket.on('message_saved', function(data) {
+            if (data.success) {
+                console.log('Message saved successfully');
+            } else {
+                console.log('Failed to save message');
             }
         });
     </script>

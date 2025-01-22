@@ -14,7 +14,7 @@ from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.auth.routes import bp as auth_bp
 from app.communication.routes import bp as chat_bp
-
+from app.communication.socketio_chat import socketio, bp as socketio_bp
 
 def create_app(config_class=Config):
     flask_app = Flask(__name__)
@@ -45,12 +45,9 @@ def create_app(config_class=Config):
 
     # Register blueprints here
     flask_app.register_blueprint(auth_bp, url_prefix='/auth')
-
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
-
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
-
-    flask_app.register_blueprint(chat_bp, urfl_url_prefix="/communication")
+    flask_app.register_blueprint(chat_bp, url_prefix="/communication")
 
     @flask_app.route('/')
     def home():
@@ -71,3 +68,6 @@ def create_app(config_class=Config):
             return f'Database connection failed: {str(e)}'
 
     return flask_app
+
+if __name__ == "__main__":
+    app = create_app()

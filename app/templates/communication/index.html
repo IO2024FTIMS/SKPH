@@ -5,15 +5,12 @@
 </head>
 <body>
     <h1>Witaj w naszym czacie!</h1>
-    <form action="{{ url_for('register') }}" method="post">
-        <input type="text" name="username" placeholder="Nazwa użytkownika" required>
-        <button type="submit">Zaloguj/Zarejestruj</button>
-    </form>
+   
 
     <h2>Zarejestrowani użytkownicy:</h2>
     <ul>
     {% for user in users %}
-        <li>{{ user.username }}</li>
+        <li>{{ user.email }} {{user.id}} ({{user.type}})</li>
     {% endfor %}
     </ul>
 </body>
