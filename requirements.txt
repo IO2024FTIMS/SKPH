@@ -18,3 +18,5 @@ email-validator~=2.2.0
 
 # Additional utilities
 pytest == 8.3.3
+matplotlib==3.10.0
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-22 10:49+0100\n"
+"POT-Creation-Date: 2025-01-22 13:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,8 +24,6 @@ msgstr ""
 #: app/models/request.py:13 app/templates/auth/manage_users.jinja:27
 #: app/templates/auth/manage_users.jinja:73
 #: app/templates/organization/list_organizations.jinja:16
-#: app/templates/organization/view_authority.jinja:14
-#: app/templates/organization/view_organization.jinja:14
 msgid "Approved"
 msgstr ""
 
@@ -42,35 +40,29 @@ msgstr ""
 msgid "Crisis Management System"
 msgstr ""
 
-#: app/templates/base.jinja:25
+#: app/templates/base.jinja:26
 msgid "Home"
 msgstr ""
 
-#: app/templates/base.jinja:30
+#: app/templates/base.jinja:31
 msgid "Crises"
 msgstr ""
 
-#: app/templates/auth/manage_users.jinja:54 app/templates/base.jinja:33
+#: app/templates/auth/manage_users.jinja:54 app/templates/base.jinja:34
 msgid "Organizations"
 msgstr ""
 
-#: app/templates/base.jinja:36
+#: app/templates/base.jinja:37
 msgid "About"
 msgstr ""
 
-#: app/templates/base.jinja:55
+#: app/templates/base.jinja:56
 msgid "Logout"
 msgstr ""
 
 #: app/templates/auth/login.jinja:3 app/templates/auth/login.jinja:7
-#: app/templates/auth/login.jinja:19 app/templates/base.jinja:58
+#: app/templates/auth/login.jinja:19 app/templates/base.jinja:59
 msgid "Login"
-msgstr ""
-
-#: app/templates/base.jinja:79
-msgid ""
-" Crisis Management System - building a better future together. © 2025 All"
-" rights reserved."
 msgstr ""
 
 #: app/templates/index.jinja:9
@@ -103,6 +95,10 @@ msgstr ""
 #: app/templates/donors/donors.jinja:3 app/templates/donors/donors.jinja:7
 #: app/templates/index.jinja:28
 msgid "Donors Module"
+msgstr ""
+
+#: app/templates/index.jinja:30
+msgid "Reports Module"
 msgstr ""
 
 #: app/templates/affected/affected.jinja:12
@@ -171,6 +167,7 @@ msgstr ""
 #: app/templates/affected/all.jinja:18
 #: app/templates/affected/all_requests.jinja:15
 #: app/templates/auth/register.jinja:232
+#: app/templates/reports/affected_view.jinja:19
 msgid "Needs"
 msgstr ""
 
@@ -214,6 +211,7 @@ msgid "Create Request for"
 msgstr ""
 
 #: app/templates/affected/all.jinja:3 app/templates/affected/all.jinja:11
+#: app/templates/reports/affected_view.jinja:3
 msgid "Affected List"
 msgstr ""
 
@@ -225,6 +223,7 @@ msgstr ""
 #: app/templates/affected/all.jinja:15
 #: app/templates/affected/all_requests.jinja:11
 #: app/templates/donors/donor_view.jinja:15
+#: app/templates/reports/affected_view.jinja:16
 #: app/templates/volunteers/view.jinja:15
 msgid "ID"
 msgstr ""
@@ -259,14 +258,12 @@ msgstr ""
 #: app/templates/auth/register.jinja:105 app/templates/auth/register.jinja:174
 #: app/templates/auth/register.jinja:241 app/templates/auth/register.jinja:299
 #: app/templates/organization/list_volunteers.jinja:21
-#: app/templates/organization/view_organization.jinja:15
 #: app/templates/volunteers/view.jinja:21
 msgid "Street"
 msgstr ""
 
 #: app/templates/affected/all.jinja:21
 #: app/templates/organization/list_volunteers.jinja:22
-#: app/templates/organization/view_organization.jinja:16
 #: app/templates/volunteers/view.jinja:22
 msgid "Street number"
 msgstr ""
@@ -278,7 +275,6 @@ msgstr ""
 #: app/templates/auth/register.jinja:123 app/templates/auth/register.jinja:192
 #: app/templates/auth/register.jinja:259 app/templates/auth/register.jinja:317
 #: app/templates/organization/list_volunteers.jinja:23
-#: app/templates/organization/view_organization.jinja:17
 #: app/templates/volunteers/view.jinja:23
 msgid "City"
 msgstr ""
@@ -290,12 +286,11 @@ msgstr ""
 #: app/templates/auth/register.jinja:132 app/templates/auth/register.jinja:201
 #: app/templates/auth/register.jinja:268 app/templates/auth/register.jinja:326
 #: app/templates/organization/list_volunteers.jinja:24
-#: app/templates/organization/view_organization.jinja:18
 #: app/templates/volunteers/view.jinja:24
 msgid "Voivodeship"
 msgstr ""
 
-#: app/templates/affected/all.jinja:40
+#: app/templates/affected/all.jinja:41
 msgid "View Details"
 msgstr ""
 
@@ -310,9 +305,6 @@ msgstr ""
 #: app/templates/organization/list_charity_campaigns.jinja:13
 #: app/templates/organization/list_organization_charity_campaigns.jinja:12
 #: app/templates/organization/list_organizations.jinja:14
-#: app/templates/organization/view_authority.jinja:12
-#: app/templates/organization/view_charity_campaign.jinja:12
-#: app/templates/organization/view_organization.jinja:12
 #: app/templates/volunteers/tasks.jinja:15
 msgid "Name"
 msgstr ""
@@ -329,7 +321,7 @@ msgstr ""
 msgid "Street Number"
 msgstr ""
 
-#: app/templates/affected/all_requests.jinja:39
+#: app/templates/affected/all_requests.jinja:40
 msgid "Update Status"
 msgstr ""
 
@@ -433,8 +425,6 @@ msgstr ""
 #: app/templates/donors/donations.jinja:15
 #: app/templates/organization/list_charity_campaigns.jinja:14
 #: app/templates/organization/list_organizations.jinja:15
-#: app/templates/organization/view_charity_campaign.jinja:13
-#: app/templates/organization/view_organization.jinja:13
 #: app/templates/volunteers/tasks.jinja:16
 msgid "Description"
 msgstr ""
@@ -496,8 +486,6 @@ msgstr ""
 
 #: app/templates/auth/manage_users.jinja:10
 #: app/templates/organization/list_charity_campaigns.jinja:15
-#: app/templates/organization/view_authority.jinja:7
-#: app/templates/organization/view_charity_campaign.jinja:14
 msgid "Authorities"
 msgstr ""
 
@@ -511,7 +499,6 @@ msgstr ""
 #: app/templates/auth/register.jinja:165 app/templates/auth/register.jinja:290
 #: app/templates/donors/donor_view.jinja:18
 #: app/templates/organization/list_volunteers.jinja:19
-#: app/templates/organization/view_authority.jinja:13
 #: app/templates/volunteers/view.jinja:19
 msgid "Phone"
 msgstr ""
@@ -758,7 +745,6 @@ msgid "Task Name:"
 msgstr ""
 
 #: app/templates/organization/create_task_campaign.jinja:23
-#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:13
 #: app/templates/volunteers/create_task.jinja:21
 #: app/templates/volunteers/eval_task.jinja:15
 msgid "Volunteer:"
@@ -770,12 +756,11 @@ msgid "Create task"
 msgstr ""
 
 #: app/templates/organization/list_charity_campaigns.jinja:7
-#: app/templates/organization/view_charity_campaign.jinja:7
 msgid "Charity Campaigns"
 msgstr ""
 
 #: app/templates/organization/list_charity_campaigns.jinja:27
-#: app/templates/organization/view_charity_campaign.jinja:25
+#: app/templates/organization/view_charity_campaign.jinja:24
 msgid "View Authority"
 msgstr ""
 
@@ -789,7 +774,6 @@ msgstr ""
 
 #: app/templates/organization/list_organization_charity_campaigns.jinja:14
 #: app/templates/organization/organization_index.jinja:7
-#: app/templates/organization/view_organization.jinja:7
 msgid "Organization"
 msgstr ""
 
@@ -869,17 +853,91 @@ msgid "Organization:"
 msgstr ""
 
 #: app/templates/organization/sign_to_charity_campaign.jinja:18
-#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:20
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:13
 msgid "Charity Campaign:"
 msgstr ""
 
 #: app/templates/organization/sign_to_charity_campaign.jinja:24
-#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:29
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:22
 msgid "Sign In"
 msgstr ""
 
+#: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:3
 #: app/templates/organization/volunteer_sign_to_charity_campaign.jinja:9
 msgid "Volunteer Sign to Charity Campaign"
+msgstr ""
+
+#: app/templates/reports/affected_view.jinja:7
+msgid "Lista Affected"
+msgstr ""
+
+#: app/templates/reports/affected_view.jinja:17
+msgid "Imię"
+msgstr ""
+
+#: app/templates/reports/affected_view.jinja:18
+msgid "Nazwisko"
+msgstr ""
+
+#: app/templates/reports/affected_view.jinja:20
+msgid "Address (City)"
+msgstr ""
+
+#: app/templates/reports/affected_view.jinja:21
+msgid "Address (Voivodeship)"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:3
+#: app/templates/reports/reports_ui.jinja:8
+msgid "Reports UI"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:12
+msgid "Generuj Raport Affected"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:15
+msgid "Generuj Raport Volunteer"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:18
+msgid "Generuj Raport Donor"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:21
+msgid "Generuj Raport Organization"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:28
+msgid "Podaj"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:28
+msgid ", aby zobaczyć raport tylko dla jednego donora:"
+msgstr ""
+
+#: app/templates/reports/reports_ui.jinja:31
+msgid "Raport Jednego Donora"
+msgstr ""
+
+#: app/templates/reports/view.jinja:3 app/templates/reports/view.jinja:11
+msgid "Reports"
+msgstr ""
+
+#: app/templates/reports/view.jinja:13
+msgid "Powrót do Reports UI"
+msgstr ""
+
+#: app/templates/reports/view.jinja:19
+msgid "Report ID:"
+msgstr ""
+
+#: app/templates/reports/view.jinja:20
+msgid "Created At:"
+msgstr ""
+
+#: app/templates/reports/view.jinja:21
+msgid "Entries:"
 msgstr ""
 
 #: app/templates/volunteers/eval_task.jinja:3
