@@ -23,26 +23,14 @@ def create_app(config_class=Config):
     # Initialize Flask extensions here
     db.init_app(flask_app)
     babel.init_app(flask_app, locale_selector=get_locale)
+    init_login_manager(flask_app)
+    mail = Mail(flask_app)
+    mail.init_app(flask_app)
 
+    # NOTE: remember to remove drop_all in final version
     with flask_app.app_context():
         db.drop_all()
         db.create_all()
-
-    # Initialize login manager
-    init_login_manager(flask_app)
-
-    # Initialize flask_mailman
-    mail = Mail(flask_app)
-
-    flask_app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
-    flask_app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
-    flask_app.config["MAIL_USE_SSL"] = os.getenv("MAIL_USE_SSL") == 'True'
-    flask_app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == 'True'
-    flask_app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-    flask_app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-    flask_app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
-
-    mail.init_app(flask_app)
 
     # Register blueprints here
     flask_app.register_blueprint(auth_bp, url_prefix='/auth')
