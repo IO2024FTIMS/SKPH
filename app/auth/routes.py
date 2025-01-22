@@ -2,7 +2,6 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 from flask_login import login_required, logout_user, login_user, current_user
 from werkzeug.security import generate_password_hash
 
-from app import affected
 from app.auth.register_forms import VolunteerRegisterForm, OrganizationRegisterForm, DonorRegisterForm, \
     AffectedRegisterForm, AuthoritiesRegisterForm
 from app.auth.reset_password_forms import ResetPasswordRequestForm, ResetPasswordForm
