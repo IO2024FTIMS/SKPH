@@ -1,18 +1,19 @@
-from flask import Blueprint, Response, render_template
 import csv
 import io
 
-from .chart_utils import create_bar_chart_base64
-from .report_service import ReportService
+from flask import Blueprint, Response, render_template, request
+
 from app.extensions import db
 from app.models.affected import Affected
-from app.models.volunteer import Volunteer
 from app.models.charity_campaign import OrganizationCharityCampaign
-from flask import request
+
+from .chart_utils import create_bar_chart_base64
+from .report_service import ReportService
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 
 report_service = ReportService()
+
 
 @bp.route('/ui', methods=['GET'])
 def ui():
@@ -208,6 +209,7 @@ def volunteer_report():
     """
     return html
 
+
 @bp.route('/volunteer-report-csv', methods=['GET'])
 def volunteer_report_csv():
     volunteer_list = report_service.get_all_volunteers()
@@ -231,6 +233,7 @@ def volunteer_report_csv():
         headers={"Content-disposition": "attachment; filename=volunteer_report.csv"}
     )
 # =================== RAPORT DONOR ===================
+
 
 @bp.route('/donor-report', methods=['GET'])
 def donor_report():
@@ -310,8 +313,6 @@ def donor_report():
 @bp.route('/donor-report-csv', methods=['GET'])
 def donor_report_csv():
     donors = report_service.get_all_donors()
-    import csv
-    import io
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -339,6 +340,8 @@ def donor_report_csv():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=donor_report.csv"}
     )
+
+
 @bp.route('/single-donor-report', methods=['GET'])
 def single_donor_report():
     donor_id = request.args.get('donor_id', type=int)
@@ -451,20 +454,20 @@ def single_donor_report():
     </html>
     """
     return html
+
+
 @bp.route('/single-donor-report-csv', methods=['GET'])
 def single_donor_report_csv():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
         return "Brak parametru donor_id", 400
 
-    from app.models.donor import Donor, DonationMoney, DonationItem
+    from app.models.donor import Donor
     donor = db.session.get(Donor, donor_id)
     if not donor:
         return f"Donor o ID={donor_id} nie istnieje!", 404
 
     # Przygotowanie CSV
-    import csv
-    import io
 
     output = io.StringIO()
     fieldnames = [
@@ -509,6 +512,8 @@ def single_donor_report_csv():
         headers={"Content-disposition": f"attachment; filename=donor_{donor_id}_report.csv"}
     )
 # =================== RAPORT ORGANIZATION===================
+
+
 @bp.route('/organization-report', methods=['GET'])
 def organization_report():
 
@@ -550,7 +555,7 @@ def organization_report():
           <h3>Organizacja: {org.organization_name or ""} (ID={org.id})</h3>
           <p><strong>Opis:</strong> {org.description or ""}</p>
           <p><strong>Approved?</strong> {org.approved}</p>
-          <p><strong>Liczba kampanii:</strong> {camp_count}, 
+          <p><strong>Liczba kampanii:</strong> {camp_count},
              <strong>Wolontariuszy (unikalnych):</strong> {vol_count}</p>
         """
 
@@ -609,8 +614,6 @@ def organization_report():
 
 @bp.route('/organization-report-csv', methods=['GET'])
 def organization_report_csv():
-    import csv
-    import io
     org_list = report_service.get_all_organizations()
 
     output = io.StringIO()
