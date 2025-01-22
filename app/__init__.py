@@ -26,6 +26,7 @@ def create_app(config_class=Config):
 
     # NOTE: remember to remove drop_all in final version
     with flask_app.app_context():
+        db.drop_all()
         db.create_all()
 
     # Register blueprints here
