@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, mapped_column, Mapped
-from app.models.request import Request
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.extensions import db
 
 
@@ -11,7 +11,6 @@ class Affected(db.Model):
     needs = db.Column(db.Text)
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Add the missing relationship

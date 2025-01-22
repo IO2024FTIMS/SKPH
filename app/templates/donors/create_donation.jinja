@@ -1,40 +1,41 @@
 {% extends "base.jinja" %}
 
-{% block title %}Create Donation{% endblock %}
+{% block title %}{{ _("Create Donation") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <h1>Create a Donation</h1>
+      <h1>{{ _("Create a Donation") }}</h1>
       <form action="{{ url_for('donors.create_donation') }}" method="post">
         <fieldset>
-         <div class="form-group">
-            <label for="exampleTextarea">Donation Description:</label>
+          <div class="form-group">
+            <label for="exampleTextarea">{{ _("Donation Description:") }}</label>
             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
           </div>
-         <div class="form-group">
-            <label for="Amount">Donation Amount:</label>
+          <div class="form-group">
+            <label for="Amount">{{ _("Donation Amount:") }}</label>
             <input type="number" class="form-control" id="Amount" name="Amount" placeholder="Amount name">
           </div>
           <div>
-            <label for="donor_id">Donor:</label>
-            <select id="donor_id" name="donor_id" required>
+            <label for="donor_id">{{ _("Donor:") }}</label>
+            <select class="form-control" id="donor_id" name="donor_id" required>
               {% for donor in donors %}
               <option value="{{ donor.donor_id }}">{{ donor.name }} {{ donor.surname }}
               </option>
               {% endfor %}
-             </select>
-          </div>
-            <div>
-            <label for="donation_type">type:</label>
-            <select id="donation_type" name="donation_type" required>
-             <option value="money">Money</option>
-                <option value="item">Item</option>
             </select>
           </div>
           <div>
-            <button type="submit" class="btn btn-primary">Create task</button>
+            <label for="donation_type">{{ _("Type:") }}</label>
+            <select class="form-control" id="donation_type" name="donation_type" required>
+              <option value="money">{{ _("Money") }}</option>
+              <option value="item">{{ _("Item") }}</option>
+            </select>
+          </div>
+          <br>
+          <div>
+            <button type="submit" class="btn btn-primary">{{ _("Confirm Donation") }}</button>
           </div>
         </fieldset>
       </form>

@@ -2,9 +2,8 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app.extensions import db
 from app.models.address import Address
-from app.models.request import Request, RequestStatus
 from app.models.affected import Affected
-
+from app.models.request import Request, RequestStatus
 
 bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',
@@ -17,7 +16,6 @@ def index():
     samples_added = db.session.query(Affected).count() > 0
     affected = db.session.scalars(db.select(Affected))
     return render_template('affected.jinja', samples_added=samples_added, affected=affected.all())
-
 
 
 @bp.route('/all')
@@ -74,8 +72,6 @@ def samples():
     return redirect(url_for('affected.index'))
 
 
-
-
 @bp.route('/select_affected', methods=['GET', 'POST'])
 def select_affected():
     if request.method == 'POST':
@@ -91,7 +87,6 @@ def create_request(affected_id):
     affected = db.get_or_404(Affected, affected_id)
 
     if request.method == 'POST':
-
         name = request.form['name']
         status = RequestStatus.PENDING
         needs = request.form.get('needs')
@@ -100,10 +95,11 @@ def create_request(affected_id):
         city = request.form['city']
         voivodeship = request.form['voivodeship']
 
-        if not status or not needs:
-            flash('All fields are required.', 'error')
+        # Validation
+        if not all([name, needs, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.create_request', affected_id=affected_id))
 
+        # Create new address
         new_address = Address(
             street=street,
             street_number=street_number,
@@ -113,6 +109,7 @@ def create_request(affected_id):
         db.session.add(new_address)
         db.session.commit()
 
+        # Create new request
         new_request = Request(
             name=name,
             status=status,
@@ -123,10 +120,10 @@ def create_request(affected_id):
         db.session.add(new_request)
         db.session.commit()
 
-        flash('Request created successfully!', 'success')
-        return redirect(url_for('affected.index'))
+        return redirect(url_for('affected.affected_details', affected_id=affected_id))
 
     return render_template('create_request.jinja', affected=affected)
+
 
 @bp.route('/requests')
 def all_requests():
@@ -135,3 +132,79 @@ def all_requests():
     return render_template('all_requests.jinja', requests=requests)
 
 
+@bp.route('/affected/<int:affected_id>')
+def affected_details(affected_id):
+    affected = db.get_or_404(Affected, affected_id)
+
+    requests = db.session.query(Request).filter_by(affected_id=affected_id).all()
+
+    return render_template('affected_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus)
+
+
+@bp.route('/request/update_status/<int:request_id>', methods=['GET', 'POST'])
+def update_request_status(request_id):
+    request_obj = db.get_or_404(Request, request_id)
+
+    if request.method == 'POST':
+        new_status = request.form.get('status')
+        if new_status not in RequestStatus.__members__:
+            return redirect(url_for('affected.update_request_status', request_id=request_id))
+
+        request_obj.status = RequestStatus[new_status]
+        db.session.commit()
+
+        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+
+    return render_template('update_request_status.jinja', request=request_obj, statuses=RequestStatus)
+
+
+@bp.route('/request/edit/<int:request_id>', methods=['GET', 'POST'])
+def edit_request(request_id):
+    request_obj = db.get_or_404(Request, request_id)
+
+    # Tylko requesty w statusie PENDING mogą być edytowane
+    if request_obj.status != RequestStatus.PENDING:
+        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        needs = request.form.get('needs')
+        street = request.form.get('street')
+        street_number = request.form.get('street_number')
+        city = request.form.get('city')
+        voivodeship = request.form.get('voivodeship')
+
+        # Walidacja
+        if not all([name, needs, street, street_number, city, voivodeship]):
+            return redirect(url_for('affected.edit_request', request_id=request_id))
+
+        # Aktualizacja danych
+        request_obj.name = name
+        request_obj.needs = needs
+        request_obj.req_address.street = street
+        request_obj.req_address.street_number = street_number
+        request_obj.req_address.city = city
+        request_obj.req_address.voivodeship = voivodeship
+
+        db.session.commit()
+
+        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+
+    return render_template('edit_request.jinja', request=request_obj)
+
+
+@bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])
+def delete_request(request_id):
+    request_obj = db.get_or_404(Request, request_id)
+
+    # Only delete requests with the PENDING status
+    if request_obj.status != RequestStatus.PENDING:
+        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+
+    # Delete the request and its associated address
+    affected_id = request_obj.affected_id
+    db.session.delete(request_obj.req_address)  # First delete the address
+    db.session.delete(request_obj)  # Then delete the request
+    db.session.commit()
+
+    return redirect(url_for('affected.affected_details', affected_id=affected_id))

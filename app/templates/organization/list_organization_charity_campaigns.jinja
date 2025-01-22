@@ -23,7 +23,7 @@
         <td>{{ campaign.organization.organization_name }}</td>
         <td>
           {{ campaign.charity_campaign.name }}
-          <a class="btn btn-primary btn-sm"
+          <a class="btn btn-primary btn-sm ml-4"
             href="{{ url_for('organization.view_campaign', charity_campaign_id=campaign.charity_campaign.id) }}">
             {{ _("View Campaign") }}
           </a>
