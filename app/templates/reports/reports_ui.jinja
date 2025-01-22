@@ -5,30 +5,30 @@
 {% block content %}
 
 <div class="container mt-5">
-  <h1 class="text-primary text-center">Reports UI</h1>
+  <h1 class="text-primary text-center">{{ _("Reports UI") }}</h1>
 
   <div class="text-center mt-4">
     <button id="affected-report-btn" class="btn btn-primary mx-2">
-      Generuj Raport Affected
+      {{ _("Generuj Raport Affected") }}
     </button>
     <button id="volunteer-report-btn" class="btn btn-secondary mx-2">
-      Generuj Raport Volunteer
+      {{ _("Generuj Raport Volunteer") }}
     </button>
     <button id="donor-report-btn" class="btn btn-warning mx-2">
-      Generuj Raport Donor
+      {{ _("Generuj Raport Donor") }}
     </button>
     <button id="organization-report-btn" class="btn btn-success mx-2">
-      Generuj Raport Organization
+      {{ _("Generuj Raport Organization") }}
     </button>
   </div>
 
   <hr />
 
   <div class="mt-4 text-center">
-    <p>Podaj <strong>donor_id</strong>, aby zobaczyć raport tylko dla jednego donora:</p>
+    <p>{{ _("Podaj") }} <strong>donor_id</strong>{{ _(", aby zobaczyć raport tylko dla jednego donora:") }}</p>
     <input type="number" id="single-donor-id" placeholder="Wpisz donor_id" class="form-control d-inline-block w-auto" />
     <button id="single-donor-report-btn" class="btn btn-info mx-2">
-      Raport Jednego Donora
+      {{ _("Raport Jednego Donora") }}
     </button>
   </div>
 
