@@ -1,7 +1,4 @@
-import os
-
 from flask import Flask, render_template
-from flask_mailman import Mail
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -9,7 +6,7 @@ from app.affected.routes import bp as affected_bp
 from app.auth.routes import bp as auth_bp
 from app.auth.user_service import init_login_manager
 from app.donors.routes import bp as donors_bp
-from app.extensions import babel, db, get_locale
+from app.extensions import babel, db, get_locale, mail
 from app.organization.routes import bp as organization_bp
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
@@ -24,7 +21,6 @@ def create_app(config_class=Config):
     db.init_app(flask_app)
     babel.init_app(flask_app, locale_selector=get_locale)
     init_login_manager(flask_app)
-    mail = Mail(flask_app)
     mail.init_app(flask_app)
 
     # NOTE: remember to remove drop_all in final version
