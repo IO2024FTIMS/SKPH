@@ -1,10 +1,11 @@
-# chart_utils.py
-
-import io
 import base64
+import io
+
 import matplotlib
-matplotlib.use('Agg')  # używamy backendu do rysowania w pamięci
 import matplotlib.pyplot as plt
+
+matplotlib.use('Agg')  # używamy backendu do rysowania w pamięci
+
 
 def create_bar_chart_base64(data_dict, title):
 

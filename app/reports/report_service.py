@@ -1,17 +1,16 @@
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
 
 from app.extensions import db
 from app.models.affected import Affected
-from app.models import ResourceReport
-from app.models.request import Request
-from app.models.request import RequestStatus
-from app.models.volunteer import Volunteer
-from app.models.task import Task
-from app.models.donor import Donor
-from app.models.donation import DonationMoney, DonationItem
-from app.models.organization import Organization
 from app.models.charity_campaign import OrganizationCharityCampaign
+from app.models.donation import DonationItem, DonationMoney
+from app.models.donor import Donor
+from app.models.organization import Organization
+from app.models.request import Request
+from app.models.resource_report import ResourceReport
+from app.models.volunteer import Volunteer
+
 
 class ReportService:
     def __init__(self):
