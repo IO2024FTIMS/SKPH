@@ -45,5 +45,19 @@
       _("Track supplies") }}</a>
   </div>
   {% endif %}
+  {% if current_user.type == 'affected' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Affected") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg"
+      href="{{ url_for('affected.create_request', affected_id=current_user.affected.id) }}">{{
+      _("Create request") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg"
+      href="{{ url_for('affected.affected_details', affected_id=current_user.affected.id) }}">{{
+      _("Manage requests") }}</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
