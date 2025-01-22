@@ -3,9 +3,9 @@ from flask_socketio import SocketIO
 from app.models.user import User
 from app.models.message import Message
 from app.extensions import db
-from .routes import init_routes, bp  # Zmieniono import na względny
+from .routes import init_routes, bp  
 
-socketio = SocketIO()  # Inicjalizacja bez Blueprint
+socketio = SocketIO() 
 
 init_routes(bp)
 
@@ -41,7 +41,5 @@ def handle_message(data):
 
 @socketio.on('join')
 def on_join(data):
-    username = data['username']
-    socketio.emit('user_joined', {'username': username})
-
-# Usunięto uruchamianie socketio.run, ponieważ jest to obsługiwane w głównym __init__.py
+    email = data['email']
+    socketio.emit('user_joined', {'username': email})

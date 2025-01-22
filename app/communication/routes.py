@@ -43,7 +43,7 @@ def init_routes(bp):
             User.email.ilike(f'%{query}%'),
             User.email != current_email
         ).all()
-            
+        
         return jsonify([{'email': user.email} for user in users])
 
     @bp.route('/get_messages')

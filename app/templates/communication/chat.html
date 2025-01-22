@@ -86,14 +86,6 @@
                 $('#messages').append(`<p><strong>${data.sender}:</strong> ${data.message}</p>`);
             }
         });
-
-        socket.on('message_saved', function(data) {
-            if (data.success) {
-                console.log('Message saved successfully');
-            } else {
-                console.log('Failed to save message');
-            }
-        });
     </script>
 </body>
 </html>
