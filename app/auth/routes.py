@@ -52,8 +52,7 @@ def get_registration_form(user_type):
 
 
 def create_user_and_related_data(form, user_type):
-    # role works with current_user.role
-    user = User(email=form.email.data, type=user_type, role=user_type)
+    user = User(email=form.email.data, type=user_type)
     user.set_password(form.password.data)
     db.session.add(user)
     db.session.commit()

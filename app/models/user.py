@@ -16,8 +16,6 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(256), nullable=False)
     active = db.Column(db.Boolean, default=True)
     type = db.Column(db.Enum(*USER_TYPES, name='user_type'), nullable=False)
-    # role-system integration with flask-login
-    role = db.Column(db.Enum(*USER_TYPES, name='user_type'), nullable=False)
 
     volunteer = db.relationship('Volunteer', backref='user', uselist=False)
     organization = db.relationship('Organization', backref='user', uselist=False)
