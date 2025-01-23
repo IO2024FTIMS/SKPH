@@ -1,7 +1,9 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, mapped_column
-from .charity_campaign import organization_campaign_association
+from sqlalchemy.orm import mapped_column, relationship
+
 from app.extensions import db
+
+from .charity_campaign import organization_campaign_association
 
 
 class Organization(db.Model):
@@ -11,7 +13,9 @@ class Organization(db.Model):
     approved = db.Column(db.Boolean, default=False)
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
-    charity_campaigns = relationship('CharityCampaign', secondary=organization_campaign_association, back_populates='organizations')
+    charity_campaigns = relationship('CharityCampaign',
+                                     secondary=organization_campaign_association,
+                                     back_populates='organizations')
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
