@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 
 from app.extensions import db
 from app.models.charity_campaign import OrganizationCharityCampaign
-from app.models.donation import DonationItem, DonationMoney
+from app.models.donation import DonationItem, DonationMoney, ItemDonationType
 from app.models.donor import Donor
 from app.models.user import User
 from app.auth.user_service import roles_required
@@ -47,8 +47,9 @@ def create_donation():
     if request.method == 'POST':
         description = request.form['description']
         type_d = request.form['donation_type']
-        amount = request.form['Amount']
+
         if type_d == 'money':
+            amount = request.form['amount']
             new_donation_money = DonationMoney(
                 description=description,
                 donation_date=date.today(),
@@ -62,11 +63,13 @@ def create_donation():
             del new_donation_money
 
         if type_d == 'item':
+            item_type = request.form['item_donation_type']
+            item_count = request.form['count']
             new_donation_item = DonationItem(
                 description=description,
                 donation_date=date.today(),
-                donation_type="Item",
-                number=amount,
+                donation_type=ItemDonationType(item_type),
+                number=item_count,
                 donor_id=donor.donor_id
             )
             db.session.add(new_donation_item)
@@ -76,7 +79,7 @@ def create_donation():
 
         return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
     charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
-    return render_template('create_donation.jinja', charity_campaigns=charity_campaigns)
+    return render_template('create_donation.jinja', charity_campaigns=charity_campaigns, ItemDonationType=ItemDonationType)
 
 
 @bp.route('/donations/<int:donor_id>')
