@@ -4,7 +4,6 @@ Flask-SQLAlchemy == 3.1.1
 flask-babel == 4.0.0
 Flask-Admin == 1.6.1
 psycopg2-binary == 2.9.10
-openrouteservice == 2.3.0
 
 # Authentication and authorization
 Flask-Login~=0.6.3
@@ -26,4 +25,6 @@ matplotlib==3.10.0
 
 # Real time chat
 flask-socketio == 5.5.1
+# Maps
+openrouteservice == 2.3.0
 
