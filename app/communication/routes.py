@@ -1,9 +1,11 @@
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
-from app.models.user import User
-from app.models.message import Message
-from app.extensions import db
+from flask import (Blueprint, jsonify, redirect, render_template, request,
+                   url_for)
+from flask_login import current_user
 from sqlalchemy import or_
-from flask_login import login_required, logout_user, login_user, current_user
+
+from app.extensions import db
+from app.models.message import Message
+from app.models.user import User
 
 bp = Blueprint('chat', __name__,
                template_folder='../templates/communication',

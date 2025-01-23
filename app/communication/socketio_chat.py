@@ -1,13 +1,10 @@
-from flask import Blueprint
-from flask_socketio import SocketIO, join_room, emit
-from app.models.user import User
-from app.models.message import Message
+from flask_socketio import SocketIO, emit, join_room
+
 from app.extensions import db
-from .routes import init_routes, bp
+from app.models.message import Message
+from app.models.user import User
 
 socketio = SocketIO()
-
-# init_routes(bp)
 
 
 @socketio.on('/send_message')
