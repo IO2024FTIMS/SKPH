@@ -8,7 +8,7 @@ from app.models.user import User
 socketio = SocketIO()
 
 
-@socketio.on('/send_message')
+@socketio.on('send_message')
 def handle_message(data):
     try:
         sender_email = data['sender']
@@ -42,7 +42,7 @@ def handle_message(data):
         print(f"Error handling message: {e}")
 
 
-@socketio.on('/join')
+@socketio.on('join')
 def on_join(data):
     email = data['email']
     receiver = data.get('receiver', None)
