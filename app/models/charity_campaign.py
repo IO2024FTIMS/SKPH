@@ -25,7 +25,9 @@ class CharityCampaign(db.Model):
     is_active: Mapped[bool] = mapped_column(default=True)
     authority = relationship('Authorities')
     authorities_id = mapped_column(ForeignKey('authorities.id'), nullable=False)
-    organizations = relationship('Organization', secondary=organization_campaign_association, back_populates='charity_campaigns')
+    organizations = relationship('Organization',
+                                 secondary=organization_campaign_association,
+                                 back_populates='charity_campaigns')
 
     def __repr__(self):
         return f'CharityCampaign({self.id=}, {self.name=}, {self.description=}, {self.authority=})'
