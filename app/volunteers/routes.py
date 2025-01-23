@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from app.extensions import db
 from app.models.address import Address
@@ -62,6 +63,12 @@ def list_tasks(volunteer_id):
     return render_template('tasks.jinja', volunteer=volunteer)
 
 
+@bp.route('/tasks')
+def list_my_tasks():
+    volunteer = db.session.scalar(db.select(Volunteer).where(Volunteer.user_id == current_user.id))
+    return render_template('volunteer_tasks.jinja', volunteer=volunteer)
+
+
 @bp.route('/tasks/create', methods=['GET', 'POST'])
 def create_task():
     volunteers = db.session.scalars(db.select(Volunteer))
@@ -76,6 +83,25 @@ def create_task():
         return redirect(url_for('volunteers.index'))
 
     return render_template('create_task.jinja', volunteers=volunteers.all())
+
+
+@bp.route('task/update-status/<int:task_id>', methods=['GET', 'POST'])
+def update_task_status(task_id):
+    task = db.session.get(Task, task_id)
+
+    if request.method == 'POST':
+        new_status = request.form['status']
+        task.status = new_status
+        db.session.commit()
+        return redirect(url_for('volunteers.list_my_tasks'))
+
+    return render_template('update_task_status.jinja', task=task)
+
+
+@bp.route('volunteer/profile')
+def volunteer_profile():
+    volunteer = db.session.get(Volunteer, current_user.volunteer.id)
+    return render_template('volunteer_profile.jinja', volunteer=volunteer)
 
 
 @bp.route('/tasks/evaluate/<int:task_id>', methods=['GET', 'POST'])

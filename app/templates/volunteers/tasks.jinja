@@ -14,6 +14,7 @@
       <tr>
         <th scope="col">{{ _("Name") }}</th>
         <th scope="col">{{ _("Description") }}</th>
+        <th scope="col">{{ _("Status") }}</th>
         <th scope="col">{{ _("Evaluation") }}</th>
       </tr>
     </thead>
@@ -22,6 +23,7 @@
       <tr>
         <td>{{ task.name }}</td>
         <td>{{ task.description }}</td>
+        <td>{{ task.status}}</td>
         <td>
           {% if task.evaluation_ %}
           Score: {{ task.evaluation_.score }}<br />Description: {{ task.evaluation_.description }}

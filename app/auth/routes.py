@@ -247,3 +247,17 @@ def manage_users():
         return redirect(url_for('auth.manage_users'))
 
     return render_template('manage_users.jinja', authorities=authorities, organizations=organizations)
+
+
+@bp.route('/profile')
+@login_required
+def profile():
+    role_urls = {
+        # 'admin': url_for('admin.dashboard'),
+        # 'affected': url_for('affected.affected_details', affected_id=current_user.affected.id),
+        'donor': url_for('donors.donor_profile'),
+        'organization': url_for('organization.organization_profile'),
+        'volunteer': url_for('volunteers.volunteer_profile'),
+        'authorities': url_for('organization.authorities_profile')
+    }
+    return redirect(role_urls[current_user.type])

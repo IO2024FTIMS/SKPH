@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 
-{% block title %}Create Charity Campaign{% endblock %}
+{% block title %}{{ _("Create Charity Campaign") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
@@ -15,12 +15,7 @@
                         <label for="description">{{ _("Description:") }}</label>
                         <textarea class="form-control" id="description" name="description" rows="3"
                             required></textarea><br>
-                        <label for="authority_id">{{ _("Authority:") }}</label>
-                        <select class="form-control" id="authority_id" name="authority_id" required>
-                            {% for authority in authorities %}
-                            <option value="{{ authority.id }}">{{ authority.name }}</option>
-                            {% endfor %}
-                        </select><br>
+                        <br>
                         <button type="submit" class="btn btn-primary">{{ _("Create Campaign") }}</button>
                     </div>
                 </fieldset>
