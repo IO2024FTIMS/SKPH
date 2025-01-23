@@ -1,15 +1,21 @@
 {% extends "base.jinja" %}
 
-{% block title %}Create Task{% endblock %}
+{% block title %}{{ _("Create Task") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
+  <br>
+  <div>
+    <a href="{{ referrer }}" class="btn btn-secondary">{{ _("Back") }}</a>
+  </div>
+  <hr class="my-4" />
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <h1>{{ _("Create a New Task") }}</h1>
-      <h6>{{ _("Creating task for campaign:") }} {{ campaign.charity_campaign.name }}, {{ _("organization:") }} {{
-        campaign.organization.organization_name }}</h6>
-      <form action="{{ url_for('volunteers.create_task') }}" method="post">
+      {# <h6>{{ _("Creating task for campaign:") }} {{ campaign.charity_campaign.name }}, {{ _("organization:") }} {{
+        campaign.organization.organization_name }}</h6> #}
+      {% if volunteers %}
+      <form method="post">
+        <legend>{{ _("Create a New Task") }}</legend>
         <fieldset>
           <div class="form-group">
             <label for="name">{{ _("Task Name:") }}</label>
@@ -28,20 +34,40 @@
               {% endfor %}
             </select>
           </div>
-          {# <div>
-            <label for="charity_campaign_id">Charity Campaign:</label>
-            {% for campaign in charity_campaigns %}
-            <option value="{{ campaign.id }}">{{ campaign.charity_campaign.name }} {{
-              campaign.organization.organization_name }}
-            </option>
-            {% endfor %}
-          </div> #}
           <br>
           <div>
             <button type="submit" class="btn btn-primary">{{ _("Create task") }}</button>
           </div>
         </fieldset>
       </form>
+      {% elif volunteer_id %}
+      <form method="post">
+        <legend>{{ _("Create a New Task") }}</legend>
+        <fieldset>
+          <div class="form-group">
+            <label for="name">{{ _("Task Name:") }}</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Task name">
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea">{{ _("Description:") }}</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <br>
+          <div>
+            <button type="submit" class="btn btn-primary">{{ _("Create task") }}</button>
+          </div>
+        </fieldset>
+      </form>
+      {% else %}
+      <div class="alert alert-dismissible alert-warning">
+        <h4 class="alert-heading">{{ _("Warning") }}!</h4>
+        <p class="mb-0">
+          {{ _("No volunteers are assigned to your charity campaign") }} <a
+            href="{{ url_for('organization.list_my_charity_campaigns') }}" class="alert-link">
+            {{_("Return to your campaings") }}</a>.
+        </p>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
