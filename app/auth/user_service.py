@@ -19,7 +19,7 @@ def init_login_manager(app):
         return User.query.get(int(user_id))
 
 
-def roles_required(*roles):
+def roles_required(roles):
     def wrapper(func):
         @wraps(func)
         def decorated_view(*args, **kwargs):

@@ -9,7 +9,7 @@ from app.extensions import db
 from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
 from app.models.user import User
-from app.utils.helpers import role_required
+from app.auth.user_service import roles_required
 
 bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
@@ -24,21 +24,21 @@ def index():
 
 
 @bp.route('donor/profile')
-@role_required(['donor'])
+@roles_required(['donor'])
 def donor_profile():
     donor = db.session.get(Donor, current_user.donor.donor_id)
     return render_template('donor_profile.jinja', donor=donor)
 
 
 @bp.route('/all')
-@role_required(['authorities'])
+@roles_required(['authorities'])
 def fetch_donors():
     donors = db.session.scalars(db.select(Donor))
     return render_template('donor_view.jinja', donors=donors.all())
 
 
 @bp.route('/donation/create', methods=['GET', 'POST'])
-@role_required(['donor'])
+@roles_required(['donor'])
 def create_donation():
     donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
     if request.method == 'POST':
@@ -77,7 +77,7 @@ def create_donation():
 
 
 @bp.route('/donations/<int:donor_id>')
-@role_required(['donor', 'organization', 'authorities'])
+@roles_required(['donor', 'organization', 'authorities'])
 def list_donations(donor_id):
     if current_user.type == 'donor':
         if current_user.donor.donor_id != donor_id:
