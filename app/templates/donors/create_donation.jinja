@@ -25,6 +25,15 @@
             </select>
           </div>
           <br>
+          <label for="organization_charity_campaign_id">{{ _("Charity Campaign:") }}</label>
+          <select class="form-control" id="organization_charity_campaign_id" name="organization_charity_campaign_id"
+            required>
+            {% for campaign in charity_campaigns %}
+            <option value="{{ campaign.id }}">{{ campaign.charity_campaign.name }} ({{
+              campaign.organization.organization_name }})</option>
+            {% endfor %}
+          </select>
+          <br>
           <div>
             <button type="submit" class="btn btn-primary">{{ _("Confirm Donation") }}</button>
             <a href="{{ url_for('home') }}" class="btn btn-danger">{{ _("Cancel") }}</a>

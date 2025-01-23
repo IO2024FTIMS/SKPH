@@ -6,6 +6,7 @@ from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
 from app.extensions import db
+from app.models.charity_campaign import OrganizationCharityCampaign
 from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
 from app.models.user import User
@@ -74,8 +75,8 @@ def create_donation():
             del new_donation_item
 
         return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
-
-    return render_template('create_donation.jinja')
+    charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
+    return render_template('create_donation.jinja', charity_campaigns=charity_campaigns)
 
 
 @bp.route('/donations/<int:donor_id>')
