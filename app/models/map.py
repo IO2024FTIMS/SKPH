@@ -22,16 +22,16 @@ class POI(db.Model):
     coordinates_id = Column(Integer, ForeignKey('coordinates.id'))
     coordinates = relationship('Coordinates', backref='poi')
     status = Column(Boolean, default=True)  # Status jako boolean
-    type = Column(String)  # Nowa kolumna na typ punktu
+    type_of_poi = Column(String)  # Nowa kolumna na typ punktu
 
-    def __init__(self, name: str, coordinates: Coordinates, type: str, status: bool = True):
+    def __init__(self, name: str, coordinates: Coordinates, type_of_poi: str, status: bool = True):
         self.name = name
         self.coordinates = coordinates
-        self.type = type
+        self.type_of_poi = type_of_poi
         self.status = status
 
     def __repr__(self):
-        return f"{self.name} ({self.coordinates.x}, {self.coordinates.y}, Type: {self.type}, Status: {self.status})"
+        return f"{self.name} ({self.coordinates.x}, {self.coordinates.y}, Type: {self.type_of_poi}, Status: {self.status})"
 
 
 class DangerArea(db.Model):

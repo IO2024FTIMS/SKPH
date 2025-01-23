@@ -37,7 +37,7 @@
 {% for poi in pois %}
     var markerIcon = L.divIcon({
         className: 'custom-marker-icon',
-        html: `<div style="background-color: {{ 'blue' if poi.type == 'punktDystrybucji' else 'red' }};
+        html: `<div style="background-color: {{ 'blue' if poi.type_of_poi == 'punktDystrybucji' else 'red' }};
                       width: 20px; height: 20px; border-radius: 50%;"></div>`,
         iconSize: [20, 20],
         iconAnchor: [10, 10],

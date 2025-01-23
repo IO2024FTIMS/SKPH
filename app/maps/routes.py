@@ -46,11 +46,11 @@ def add_poi():
     lat = data['lat']
     lng = data['lng']
     name = data.get('name', "Unnamed POI")
-    type = data.get('type')
+    type_of_poi = data.get('type')
 
     coordinates = Coordinates(x=lat, y=lng)
     db.session.add(coordinates)
-    poi = POI(name=name, coordinates=coordinates, type=type, status=True)
+    poi = POI(name=name, coordinates=coordinates, type_of_poi=type_of_poi, status=True)
     db.session.add(poi)
     db.session.commit()
 
@@ -58,7 +58,7 @@ def add_poi():
 
     return jsonify({
         "success": True,
-        "pois": [{"id": poi.id, "name": poi.name, "type": poi.type} for poi in pois]
+        "pois": [{"id": poi.id, "name": poi.name, "type": poi.type_of_poi} for poi in pois]
     })
 
 
