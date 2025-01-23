@@ -103,5 +103,24 @@
       _("Admin Dashboard") }}</a>
   </div>
   {% endif %}
+  <!-- ORGANIZATION -->
+  {% if current_user.type == 'organization' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Organization") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.sign_to_charity_campaign') }}">{{
+      _("Sign to a charity campaign") }}
+    </a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="#">{{
+      _("Manage donations") }}
+    </a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('organization.list_my_charity_campaigns') }}">{{
+      _("Manage charity campaigns") }}</a>
+    <br>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

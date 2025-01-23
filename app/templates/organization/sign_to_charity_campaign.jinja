@@ -1,20 +1,15 @@
 {% extends "base.jinja" %}
 
-{% block title %}Sign to Charity Campaign{% endblock %}
+{% block title %}{{ _("Sign to Charity Campaign") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1>{{ _("Sign to Charity Campaign") }}</h1>
+        <div class="col-md-8">
+            {% if charity_campaigns %}
             <form method="post">
                 <fieldset>
-                    <label for="organization_id">{{ _("Organization:") }}</label>
-                    <select class="form-control" id="organization_id" name="organization_id" required>
-                        {% for organization in organizations %}
-                        <option value="{{ organization.id }}">{{ organization.organization_name }}</option>
-                        {% endfor %}
-                    </select><br>
+                    <legend>{{ _("Sign to Charity Campaign") }}</legend>
                     <label for="charity_campaign_id">{{ _("Charity Campaign:") }}</label>
                     <select class="form-control" id="charity_campaign_id" name="charity_campaign_id" required>
                         {% for campaign in charity_campaigns %}
@@ -24,6 +19,16 @@
                     <button type="submit" class="btn btn-primary">{{ _("Sign In") }}</button>
                 </fieldset>
             </form>
+            {% else %}
+            <div class="alert alert-dismissible alert-warning">
+                <h4 class="alert-heading">{{ _("Warning") }}!</h4>
+                <p class="mb-0">
+                    {{ _("There is no available charity campaigns.") }} <a href="{{ url_for('home') }}"
+                        class="alert-link">
+                        {{_("Return to main page") }}</a>.
+                </p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
