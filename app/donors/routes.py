@@ -36,6 +36,8 @@ def fetch_donors():
     donors = db.session.scalars(db.select(Donor))
     return render_template('donor_view.jinja', donors=donors.all())
 
+# TODO: Link the donation to a specific charity campaign
+
 
 @bp.route('/donation/create', methods=['GET', 'POST'])
 @roles_required(['donor'])

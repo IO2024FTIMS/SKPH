@@ -1017,7 +1017,7 @@ msgstr "Wyświelt kampanie"
 #: app/templates/organization/list_charity_campaigns.jinja:45
 #: app/templates/organization/manage_charity_campaign.jinja:26
 msgid "Active"
-msgstr "Akcje"
+msgstr "Aktywna"
 
 #: app/templates/organization/list_charity_campaigns.jinja:47
 msgid "Inactive"

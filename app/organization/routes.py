@@ -11,6 +11,7 @@ from app.models.charity_campaign import (CharityCampaign,
 from app.models.evaluation import Evaluation
 from app.models.organization import Organization
 from app.models.task import Task
+from app.models.user import User
 from app.models.volunteer import Volunteer
 from app.auth.user_service import roles_required
 
@@ -70,6 +71,17 @@ def manage_volunteers(charity_campaign_id):
                            volunteers=volunteers,
                            referrer=referrer)
 
+
+@bp.route('/authorities/charity_campaign/<int:charity_campaign_id>/volunteers')
+@roles_required(['authorities'])
+def list_volunteers(charity_campaign_id):
+    campaign = db.session.get(OrganizationCharityCampaign, charity_campaign_id)
+    referrer = request.referrer
+    return render_template('organization/list_volunteers.jinja',
+                           volunteers=campaign.volunteers,
+                           charity_campaign_id=charity_campaign_id,
+                           referrer=referrer)
+
 # =================== AUTHORITIES ===================
 
 
@@ -89,7 +101,11 @@ def view_authorities(authorities_id):
 
 
 @bp.route('authorities/<int:authorities_id>/charity_campaigns')
+@roles_required(['authorities'])
 def list_authorities_charity_campaigns(authorities_id):
+    if current_user.type == 'authorities':
+        if current_user.authorities.id != authorities_id:
+            return abort(403)
     charity_campaigns = db.session.scalars(db.select(CharityCampaign)
                                            .where(CharityCampaign.authorities_id == authorities_id)).all()
     return render_template('list_charity_campaigns.jinja',
@@ -284,18 +300,22 @@ def eval_task(charity_campaign_id, task_id):
 
 
 @bp.route('/charity_campaign/<int:charity_campaign_id>/volunteer/<int:volunteer_id>/tasks')
-@roles_required(['organization'])
+@roles_required(['organization', 'authorities'])
 def view_volunteer_tasks(charity_campaign_id, volunteer_id):
     charity_campaign = db.session.get(OrganizationCharityCampaign, charity_campaign_id)
-    if current_user.organization.id != charity_campaign.organization_id:
-        return abort(403)
+    if current_user.type == 'organization':
+        if current_user.organization.id != charity_campaign.organization_id:
+            return abort(403)
     volunteer = db.session.get(Volunteer, volunteer_id)
     status_translations = {
         'completed': _('Completed'),
         'ongoing': _('Ongoing'),
         'rejected': _('Rejected')
     }
-    referrer = url_for('organization.manage_volunteers', charity_campaign_id=charity_campaign.id)
+    if current_user.type == 'organization':
+        referrer = url_for('organization.manage_volunteers', charity_campaign_id=charity_campaign.id)
+    else:
+        referrer = request.referrer
     return render_template('organization/volunteer_tasks.jinja',
                            volunteer=volunteer,
                            charity_campaign_id=charity_campaign.id,
