@@ -1,4 +1,5 @@
 from flask_socketio import SocketIO, emit, join_room
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import db
 from app.models.message import Message
@@ -36,7 +37,7 @@ def handle_message(data):
             }, room=room)
         else:
             print(f"Sender or receiver not found: {sender_email}, {receiver_email}")
-    except Exception as e:
+    except SQLAlchemyError as e:
         db.session.rollback()
         print(f"Error handling message: {e}")
 
