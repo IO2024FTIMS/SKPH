@@ -24,26 +24,26 @@ def roles_required(roles):
         @wraps(func)
         def decorated_view(*args, **kwargs):
             if not current_user.is_authenticated:
-                flash('You must be logged in to access this page.', 'danger')
+                flash('You must be logged in to access this page.', 'warning')
                 return redirect(url_for('auth.login'))
 
             if current_user.type == 'admin':
                 return func(*args, **kwargs)
 
             if current_user.type not in roles:
-                flash('You do not have permission to access this page.', 'danger')
+                flash('You do not have permission to access this page.', 'warning')
                 return redirect(request.referrer or url_for('home'))
 
             if current_user.type == 'authorities':
                 authority = current_user.authorities
                 if authority and not authority.approved:
-                    flash('You do not have permission to access this page.', 'danger')
+                    flash('You do not have permission to access this page.', 'warning')
                     return redirect(request.referrer or url_for('home'))
 
             if current_user.type == 'organization':
                 organization = current_user.organization
                 if organization and not organization.approved:
-                    flash('You do not have permission to access this page.', 'danger')
+                    flash('Your organisation has not yet been approved by the administration.', 'warning')
                     return redirect(request.referrer or url_for('home'))
 
             return func(*args, **kwargs)

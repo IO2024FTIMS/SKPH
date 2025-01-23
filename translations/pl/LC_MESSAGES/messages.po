@@ -201,7 +201,7 @@ msgstr "Organizacja"
 
 #: app/templates/index.jinja:116
 msgid "Sign to a charity campaign"
-msgstr "Zapisz Do Kampani Pomocowej"
+msgstr "Zgłoś Organizację Do Kampani Pomocowej"
 
 #: app/templates/index.jinja:120
 msgid "Manage donations"

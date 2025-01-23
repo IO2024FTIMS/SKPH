@@ -25,10 +25,9 @@ def index():
 # =================== CHARITY CAMPAIGNS ===================
 
 @bp.route('/charity_campaigns')
-@roles_required(['volunteer', 'donor', 'admin', 'authorities'])  # example of access management
 def list_charity_campaigns():
     charity_campaigns = db.session.scalars(db.select(CharityCampaign)).all()
-    return render_template('list_charity_campaigns.jinja',
+    return render_template('list_all_charity_campaigns.jinja',
                            charity_campaigns=charity_campaigns)
 
 
@@ -52,7 +51,6 @@ def list_signed_organizations(charity_campaign_id):
 def view_campaign(charity_campaign_id):
     campaign = db.session.get(CharityCampaign, charity_campaign_id)
     referrer = request.referrer
-    # url_for('organization.list_my_charity_campaigns')
     return render_template('view_charity_campaign.jinja',
                            campaign=campaign,
                            referrer=referrer)
@@ -62,6 +60,9 @@ def view_campaign(charity_campaign_id):
 @roles_required(['organization', 'authorities'])
 def manage_volunteers(charity_campaign_id):
     campaign = db.session.get(OrganizationCharityCampaign, charity_campaign_id)
+    organization = db.session.get(Organization, current_user.organization.id)
+    if organization.id != campaign.organization_id:
+        return abort(403)
     volunteers = campaign.volunteers
     referrer = url_for('organization.list_my_charity_campaigns')
     return render_template('manage_volunteers.jinja',
@@ -84,7 +85,7 @@ def authorities_profile():
 def view_authorities(authorities_id):
     authority = db.session.get(Authorities, authorities_id)
     return render_template('view_authority.jinja',
-                           authorities=authority)
+                           authority=authority)
 
 
 @bp.route('authorities/<int:authorities_id>/charity_campaigns')
@@ -198,6 +199,10 @@ def sign_to_charity_campaign():
 @bp.route('/charity_campaign/<int:organization_charity_campaign_id>/tasks/create', methods=['GET', 'POST'])
 @roles_required(['organization'])
 def create_task(organization_charity_campaign_id):
+    organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
+    organization = db.session.get(Organization, current_user.organization.id)
+    if organization.id != organization_campaign.organization_id:
+        return abort(403)
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
@@ -208,7 +213,6 @@ def create_task(organization_charity_campaign_id):
         db.session.commit()
         flash('Task create successfully!')
         return redirect(url_for('organization.list_my_charity_campaigns'))
-    organization_campaign = db.session.get(OrganizationCharityCampaign, organization_charity_campaign_id)
     referrer = request.referrer or url_for('organization.list_my_charity_campaigns')
     return render_template('create_task_campaign.jinja',
                            volunteers=organization_campaign.volunteers,
