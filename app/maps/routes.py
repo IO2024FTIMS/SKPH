@@ -6,7 +6,6 @@ from app.models.map import POI, DangerArea, ReliefArea, Coordinates
 ORS_API_KEY = "api"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
-
 bp = Blueprint('maps', __name__,
                template_folder='../templates/maps',
                static_folder='static',
@@ -97,6 +96,7 @@ def add_relief_area():
         "success": True,
         "relief_areas": [{"id": area.id, "name": area.name} for area in relief_areas]
     })
+
 
 @bp.route('/delete-poi/<int:poi_id>', methods=['DELETE'])
 def delete_poi(poi_id):
