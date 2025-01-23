@@ -1,5 +1,6 @@
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
+from flask_babel import gettext as _
 from flask_login import current_user
 
 from app.extensions import db
@@ -103,13 +104,9 @@ def manage_charity_campaign(charity_campaign_id):
             description = request.form['description']
             is_active = request.form.get('is_active') == 'true'
 
-            print(charity_campaign.is_active)
-
             charity_campaign.name = name
             charity_campaign.description = description
             charity_campaign.is_active = is_active
-
-            print(charity_campaign.is_active)
 
             db.session.add(charity_campaign)
             db.session.commit()
@@ -172,7 +169,6 @@ def list_my_charity_campaigns():
     organization_charity_campaigns = (
         db.session.scalars(db.select(OrganizationCharityCampaign)
                            .where(OrganizationCharityCampaign.organization_id == current_user.organization.id)).all())
-    print(organization_charity_campaigns)
     return render_template('list_organization_charity_campaigns.jinja',
                            organization_charity_campaigns=organization_charity_campaigns)
 
@@ -289,12 +285,17 @@ def view_volunteer_tasks(charity_campaign_id, volunteer_id):
     if current_user.organization.id != charity_campaign.organization_id:
         return abort(403)
     volunteer = db.session.get(Volunteer, volunteer_id)
-
+    status_translations = {
+        'completed': _('Completed'),
+        'ongoing': _('Ongoing'),
+        'rejected': _('Rejected')
+    }
     referrer = url_for('organization.manage_volunteers', charity_campaign_id=charity_campaign.id)
     return render_template('organization/volunteer_tasks.jinja',
                            volunteer=volunteer,
                            charity_campaign_id=charity_campaign.id,
-                           referrer=referrer)
+                           referrer=referrer,
+                           status_translations=status_translations)
 
 
 @bp.route('/charity_campaign/<int:organization_charity_campaign_id>/volunteer/<int:volunteer_id>/remove',
