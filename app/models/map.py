@@ -24,14 +24,16 @@ class POI(db.Model):
     status = Column(Boolean, default=True)  # Status jako boolean
     type_of_poi = Column(String)  # Nowa kolumna na typ punktu
 
-    def __init__(self, name: str, coordinates: Coordinates, type_of_poi: str, status: bool = True):
+    def __init__(self, name: str, coordinates: Coordinates,
+                 type_of_poi: str, status: bool = True):
         self.name = name
         self.coordinates = coordinates
         self.type_of_poi = type_of_poi
         self.status = status
 
     def __repr__(self):
-        return f"{self.name} ({self.coordinates.x}, {self.coordinates.y}, Type: {self.type_of_poi}, Status: {self.status})"
+        return (f"{self.name} ({self.coordinates.x}, {self.coordinates.y}, "
+                f"Type: {self.type_of_poi}, Status: {self.status})")
 
 
 class DangerArea(db.Model):
