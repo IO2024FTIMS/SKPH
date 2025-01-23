@@ -1,29 +1,29 @@
 {% extends "base.jinja" %}
 
-{% block title %}Authorities{% endblock %}
+{% block title %}{{ _("Authorities Information") }}{% endblock %}
 
 {% block content %}
 <div class="container mt-2">
-    <h1>Authorities</h1>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Approved</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ authorities.id }}</td>
-            <td>{{ authorities.name }}</td>
-            <td>{{ authorities.phone}}</td>
-            <td>{{ authorities.approved }}</td>
-            <td>
-            {# <a class="btn btn-primary btn-sm" href="{{ url_for('organization.view_authority', authorities=campaign.authority) }}">{{_("View Authority") }}</a> #}
-            </td>
-        </tr>
-    </table>
+    <section>
+        <h2>{{ _("Authorities Information") }}</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>{{ _("Name:") }}</strong> {{ authority.name }}</li>
+            <li class="list-group-item"><strong>{{ _("Phone:") }}</strong> {{ authority.phone }}</li>
+            <li class="list-group-item"><strong>{{ _("Status:") }}</strong>
+                {% if authority.approved %}
+                <span class="badge badge-success">{{ _("Approved") }}</span>
+                {% else %}
+                <span class="badge badge-warning">{{ _("Not approved") }}</span>
+                {% endif %}
+            </li>
+            <li class="list-group-item"><strong>{{ _("Voivodeship:") }}</strong> {{
+                authority.address.voivodeship }}
+            <li class="list-group-item"><strong>{{ _("City:") }}</strong> {{ authority.address.city }}</li>
+            <li class="list-group-item"><strong>{{ _("Street:") }}</strong> {{ authority.address.street }}</li>
+            <li class="list-group-item"><strong>{{ _("Street number:") }}</strong>
+                {{ authority.address.street_number }}
+            </li>
+        </ul>
+    </section>
 </div>
 {% endblock %}
