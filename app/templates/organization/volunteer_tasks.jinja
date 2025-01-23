@@ -32,7 +32,7 @@
             <tr>
                 <td>{{ task.name }}</td>
                 <td>{{ task.description }}</td>
-                <td>{{ task.status}}</td>
+                <td>{{ status_translations[task.status] }}</td>
                 <td>
                     {% if task.evaluation_ %}
                     {{ _("Score") }}: {{ task.evaluation_.score }}<br />{{ _("Description") }}: {{
