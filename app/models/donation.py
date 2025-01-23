@@ -1,9 +1,11 @@
-from typing import TYPE_CHECKING
 from datetime import date
+from enum import Enum
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.extensions import db
-from enum import Enum
 
 if TYPE_CHECKING:
     from app.models.donor import Donor

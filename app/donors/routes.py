@@ -5,12 +5,12 @@ from flask import (Blueprint, abort, flash, redirect, render_template, request,
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
+from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.charity_campaign import OrganizationCharityCampaign
 from app.models.donation import DonationItem, DonationMoney, ItemDonationType
 from app.models.donor import Donor
 from app.models.user import User
-from app.auth.user_service import roles_required
 
 bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
