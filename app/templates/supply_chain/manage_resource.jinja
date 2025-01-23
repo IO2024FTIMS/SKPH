@@ -1,0 +1,44 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+  <h1>{{ _("Tracking and managing resources module") }}</h1>
+<h2>Manage resource panel</h2>
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Amount</th>
+    </tr>
+    <tr>
+        <td>{{ resource_type.type }}</td>
+        <td>{{ resource.amount }}</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Last name</th>
+        <th>Needs</th>
+        <th>Assign</th>
+    </tr>
+    <form method="post">
+        {% for affected in affecteds %}
+            <tr>
+                <td>{{  loop.index }}</td>
+                <td>{{ affected.first_name }}</td>
+                <td>{{ affected.last_name }}</td>
+                <td>{{ affected.needs }}</td>
+                <td>
+                    <input type="Number" value="0" id="{{ affected.id }}" min="0" max="{{ resource.amount }}">
+                </td>
+            </tr>
+        {% endfor %}
+        <input type="Submit">
+    </form>
+</table>
+</div>
+
+{% endblock %}

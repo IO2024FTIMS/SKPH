@@ -1,10 +1,9 @@
-name: io_2024
+version: '3.8'
 
 services:
   postgresql:
     container_name: io_db
     image: postgres:17
-    restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}

@@ -1,0 +1,77 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+  <h1>{{ _("Tracking and managing resources module") }}</h1>
+  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.add_data') }}">{{ _("Add sample data") }}</a></p>
+
+
+  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.truncate') }}">{{ _("Remove sample data") }}</a></p>
+    <table>
+    <tr>
+      <th>Charity campagin name: {{ charity_campaign.name }}</th>
+    </tr>
+    <tr>
+      <th>Avalible resources:</th>
+    </tr>
+
+    {% if item_donations is none %}
+    </table>
+    <p>Could not find any items</p>
+
+    {% else %}
+    <tr>
+      <td>Lp</td>
+      <td>Resource type</td>
+      <td>Number</td>
+      <td>description</td>
+    </tr>
+    {% for donation in item_donations %}
+
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ donation.type }}</td>
+        <td>{{ donation.amount }}</td>
+        <td><a href="{{ url_for('supply_chain.manage_resource', id=donation.id ) }}"><input type="button" value="Manage"/></a></td>
+      </tr>
+
+    {% endfor %}
+  </table>
+    {% endif %}
+
+  <table>
+    <tr>
+      <th>Assigned resources:</th>
+    </tr>
+  </table>
+
+
+  <table>
+    <tr>
+      <th>Avalible money:</th>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>Volunteers:</th>
+    </tr>
+      {% for volunteer in volunteers %}
+          <tr>
+          <td>{{ volunteer.first_name }}</td>
+          <td>{{ volunteer.last_name }}</td>
+              <td><input type="button" value="Assign" onclick="dupa"/></td>
+          </tr>
+      {% endfor %}
+  </table>
+
+  <table>
+    <tr>
+      <th>Current requests: </th>
+    </tr>
+  </table>
+
+</div>
+{% endblock %}

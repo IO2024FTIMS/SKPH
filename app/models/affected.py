@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
 
-
 class Affected(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name: Mapped[str]
@@ -12,6 +11,10 @@ class Affected(db.Model):
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    campaign_id = db.Column(db.Integer, db.ForeignKey('charity_campaign.id'))
+
+    requests = relationship('Request', back_populates='affected')
+    campaign = relationship('CharityCampaign')
 
     # Add the missing relationship
     requests = relationship('app.models.request.Request', back_populates='affected')

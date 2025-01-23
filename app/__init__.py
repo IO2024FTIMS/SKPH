@@ -33,9 +33,7 @@ def create_app(config_class=Config):
 
     # Register blueprints here
     flask_app.register_blueprint(auth_bp, url_prefix='/auth')
-
     flask_app.register_blueprint(reports_bp, url_prefix='/reports')
-
     flask_app.register_blueprint(volunteers_bp, url_prefix='/volunteers')
 
     flask_app.register_blueprint(chat_bp, url_prefix="/communication")

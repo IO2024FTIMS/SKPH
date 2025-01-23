@@ -14,8 +14,14 @@ class Volunteer(db.Model):
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
     user_id = mapped_column(ForeignKey('users.id'))
+    user_id = mapped_column(ForeignKey('users.id'))
 
     tasks = relationship('Task', back_populates='volunteer')
+    campaigns = (
+        relationship('OrganizationCharityCampaign',
+                     secondary=volunteer_campaign_association,
+                     back_populates='volunteers')
+    )
     campaigns = (
         relationship('OrganizationCharityCampaign',
                      secondary=volunteer_campaign_association,
