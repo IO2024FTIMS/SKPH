@@ -14,6 +14,8 @@ class DonationMoney(db.Model):
     donation_date: Mapped[date] = mapped_column(default=date.today)
     donation_type: Mapped[str]
     cashAmount: Mapped[float]
+    charity_campaign = relationship('OrganizationCharityCampaign', back_populates='donations_money')
+    charity_campaign_id = mapped_column(ForeignKey('organization_charity_campaign.id'))
     donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
     donor: Mapped["Donor"] = relationship("Donor", back_populates="donations_money")
 
@@ -31,6 +33,8 @@ class DonationItem(db.Model):
     donation_date: Mapped[date] = mapped_column(default=date.today)
     donation_type: Mapped[str]
     number: Mapped[float]
+    charity_campaign = relationship('OrganizationCharityCampaign', back_populates='donations_item')
+    charity_campaign_id = mapped_column(ForeignKey('organization_charity_campaign.id'))
     donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
     donor: Mapped["Donor"] = relationship("Donor", back_populates="donations_items")
 
