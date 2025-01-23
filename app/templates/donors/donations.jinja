@@ -48,7 +48,7 @@
       {% for donation in donations_items %}
       <tr>
         <td>{{ donation.description }}</td>
-        <td>{{ donation.donation_type}}</td>
+        <td>{{ donation.donation_type.value }}</td>
         <td>{{ donation.number }}</td>
         <td>
           <a class="btn btn-primary btn-sm" href="#">
