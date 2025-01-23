@@ -138,6 +138,6 @@ def calculate_route(start, end):
             format='geojson'
         )
         return route['features'][0]['geometry']
-    except Exception as e:
+    except RuntimeError as e:
         print(f"Error calculating route: {e}")
         return None
