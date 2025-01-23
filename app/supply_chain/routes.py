@@ -77,8 +77,8 @@ def manage_resource(id):
             if int(request.form[i.id]) > 0:
                 affected_assigned_resources[i.id] = int(request.form[i.id])
                 resouce_use_amount+=int(request.form[i.id])
-        print(resource.id)
-        resource_manager.assign_resources_to_affected(affected_assigned_resources,resouce_use_amount, resource)
+        print(resource)
+        #resource_manager.assign_resources_to_affected(affected_assigned_resources,resouce_use_amount, resource)
         return redirect('/')
 
 
