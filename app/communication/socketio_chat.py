@@ -1,45 +1,55 @@
-from flask_socketio import SocketIO
-from .routes import bp  # , init_routes
-
-from app.extensions import db
-from app.models.message import Message
+from flask import Blueprint
+from flask_socketio import SocketIO, join_room, emit
 from app.models.user import User
+from app.models.message import Message
+from app.extensions import db
+from .routes import init_routes, bp
 
-socketio = SocketIO(bp)
+socketio = SocketIO()
 
 # init_routes(bp)
 
 
 @socketio.on('/send_message')
 def handle_message(data):
-    sender_username = data['sender']
-    receiver_username = data['receiver']
-    message_content = data['message']
+    try:
+        sender_email = data['sender']
+        receiver_email = data['receiver']
+        message_content = data['message']
 
-    sender = User.query.filter_by(username=sender_username).first()
-    receiver = User.query.filter_by(username=receiver_username).first()
+        room = '_'.join(sorted([sender_email, receiver_email]))
 
-    if sender and receiver:
-        new_message = Message(
-            sender_id=sender.id,
-            receiver_id=receiver.id,
-            content=message_content
-        )
-        db.session.add(new_message)
-        db.session.commit()
+        sender = User.query.filter_by(email=sender_email).first()
+        receiver = User.query.filter_by(email=receiver_email).first()
 
-        socketio.emit('receive_message', {
-            'sender': sender_username,
-            'receiver': receiver_username,
-            'message': message_content
-        }, room=receiver_username)
+        if sender and receiver:
+            new_message = Message(
+                sender_id=sender.id,
+                receiver_id=receiver.id,
+                content=message_content
+            )
+            db.session.add(new_message)
+            db.session.commit()
+
+            emit('receive_message', {
+                'sender': sender_email,
+                'receiver': receiver_email,
+                'message': message_content,
+                'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            }, room=room)
+        else:
+            print(f"Sender or receiver not found: {sender_email}, {receiver_email}")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error handling message: {e}")
 
 
 @socketio.on('/join')
 def on_join(data):
-    username = data['username']
-    socketio.emit('user_joined', {'username': username})
+    email = data['email']
+    receiver = data.get('receiver', None)
 
-
-if __name__ == '__main__':
-    socketio.run(bp, debug=True)
+    if receiver:
+        room = '_'.join(sorted([email, receiver]))
+        join_room(room)
+        print(f"User {email} joined room {room}")
