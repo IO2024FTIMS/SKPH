@@ -17,6 +17,7 @@
   </p> #}
   {#
   <hr class="my-4"> #}
+  {% if current_user.is_authenticated %}
   <h3>{{ _("Modules") }}</h3>
   <div class="d-flex flex-column">
     <a class="btn btn-primary btn-lg" href="{{ url_for('volunteers.index') }}">{{ _("Volunteers Module") }}</a>
@@ -29,6 +30,7 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('reports.ui') }}">{{ _("Reports Module") }}</a>
   </div>
+  {% endif %}
   <!-- AUTHORITIES -->
   {% if current_user.type == 'authorities' %}
   <div class="d-flex flex-column">
@@ -89,6 +91,16 @@
     <a class="btn btn-primary btn-lg"
       href="{{ url_for('donors.list_donations', donor_id=current_user.donor.donor_id) }}">{{
       _("View your donations") }}</a>
+  </div>
+  {% endif %}
+  <!-- ADMIN -->
+  {% if current_user.type == 'admin' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Admin") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('auth.manage_users') }}">{{
+      _("Admin Dashboard") }}</a>
   </div>
   {% endif %}
 </div>

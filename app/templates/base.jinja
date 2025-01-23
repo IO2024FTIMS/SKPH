@@ -52,8 +52,10 @@
         <div class="navbar-text mr-3">
           {{ current_user.email }} ({{ current_user.type }})
         </div>
+        {% if current_user.type != 'admin' %}
         <button type="button" class="btn btn-primary btn-sm mr-2"
           onclick="window.location.href='{{ url_for('auth.profile') }}'">{{ _('Profile') }}</button>
+        {% endif %}
         <button type="button" class="btn btn-primary btn-sm"
           onclick="window.location.href='{{ url_for('auth.logout') }}'">{{ _('Logout') }}</button>
         {% else %}
