@@ -29,6 +29,7 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('reports.ui') }}">{{ _("Reports Module") }}</a>
   </div>
+  <!-- AUTHORITIES -->
   {% if current_user.type == 'authorities' %}
   <div class="d-flex flex-column">
     <hr>
@@ -45,6 +46,7 @@
       _("Track supplies") }}</a>
   </div>
   {% endif %}
+  <!-- AFFECTED -->
   {% if current_user.type == 'affected' %}
   <div class="d-flex flex-column">
     <hr>
@@ -59,6 +61,7 @@
       _("Manage requests") }}</a>
   </div>
   {% endif %}
+  <!-- VOLUNTEERS -->
   {% if current_user.type == 'volunteer' %}
   <div class="d-flex flex-column">
     <hr>
@@ -72,6 +75,20 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('volunteers.list_my_tasks') }}">{{
       _("Manage my tasks") }}</a>
+  </div>
+  {% endif %}
+  <!-- DONORS -->
+  {% if current_user.type == 'donor' %}
+  <div class="d-flex flex-column">
+    <hr>
+    <h3>{{ _("Donor") }}</h3>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('donors.create_donation') }}">{{
+      _("Create a donation") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg"
+      href="{{ url_for('donors.list_donations', donor_id=current_user.donor.donor_id) }}">{{
+      _("View your donations") }}</a>
   </div>
   {% endif %}
 </div>
