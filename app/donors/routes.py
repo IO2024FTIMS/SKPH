@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.charity_campaign import OrganizationCharityCampaign
-from app.models.donation import DonationItem, DonationMoney, ItemDonationType
+from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
 from app.models.user import User
 
