@@ -88,14 +88,13 @@
 
         socket.on('receive_message', function(data) {
             const currentChatUser = $('#current-chat-user').text();
-           if(
+            if (
                 (data.sender === currentChatUser && data.receiver === email) ||
                 (data.sender === email && data.receiver === currentChatUser)
-           )
-           {
+            ) {
                 const formattedMessage = `<p><strong>${data.sender}:</strong> ${data.message} (${data.timestamp})</p>`;
                 $('#messages').append(formattedMessage);
-           }
+            }
         });
     </script>
 </body>
