@@ -6,6 +6,7 @@ from app.models.map import POI, DangerArea, ReliefArea, Coordinates
 ORS_API_KEY = "api"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
+
 bp = Blueprint('maps', __name__,
                template_folder='../templates/maps',
                static_folder='static',
