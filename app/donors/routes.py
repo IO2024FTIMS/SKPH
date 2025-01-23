@@ -1,11 +1,15 @@
 from datetime import date
-from flask import Blueprint, flash, redirect, render_template, url_for, request
+
+from flask import (Blueprint, abort, flash, redirect, render_template, request,
+                   url_for)
+from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
 from app.extensions import db
 from app.models.donation import DonationItem, DonationMoney
 from app.models.donor import Donor
 from app.models.user import User
+from app.utils.helpers import role_required
 
 bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
@@ -19,19 +23,27 @@ def index():
     return render_template('donors.jinja', samples_added=samples_added)
 
 
+@bp.route('donor/profile')
+@role_required(['donor'])
+def donor_profile():
+    donor = db.session.get(Donor, current_user.donor.donor_id)
+    return render_template('donor_profile.jinja', donor=donor)
+
+
 @bp.route('/all')
+@role_required(['authorities'])
 def fetch_donors():
     donors = db.session.scalars(db.select(Donor))
     return render_template('donor_view.jinja', donors=donors.all())
 
 
-@bp.route('/tasks/create', methods=['GET', 'POST'])
+@bp.route('/donation/create', methods=['GET', 'POST'])
+@role_required(['donor'])
 def create_donation():
-    donors = db.session.scalars(db.select(Donor))
+    donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
     if request.method == 'POST':
         description = request.form['description']
         type_d = request.form['donation_type']
-        donor_id = request.form['donor_id']
         amount = request.form['Amount']
         if type_d == 'money':
             new_donation_money = DonationMoney(
@@ -39,11 +51,11 @@ def create_donation():
                 donation_date=date.today(),
                 donation_type="Money",
                 cashAmount=amount,
-                donor_id=donor_id
+                donor_id=donor.donor_id
             )
             db.session.add(new_donation_money)
             db.session.commit()
-            flash('money donated with id ' + str(new_donation_money.donationMoney_id))
+            flash('Donation created successfully')
             del new_donation_money
 
         if type_d == 'item':
@@ -52,29 +64,36 @@ def create_donation():
                 donation_date=date.today(),
                 donation_type="Item",
                 number=amount,
-                donor_id=donor_id
+                donor_id=donor.donor_id
             )
             db.session.add(new_donation_item)
             db.session.commit()
-            flash('item donated with id ' + str(new_donation_item.donationItem_id))
+            flash('Donation created successfully')
             del new_donation_item
 
-        return redirect(url_for('donors.index'))
+        return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
 
-    return render_template('create_donation.jinja', donors=donors.all())
+    return render_template('create_donation.jinja')
 
 
 @bp.route('/donations/<int:donor_id>')
+@role_required(['donor', 'organization', 'authorities'])
 def list_donations(donor_id):
+    if current_user.type == 'donor':
+        if current_user.donor.donor_id != donor_id:
+            return abort(403)
+
+    donor = db.session.get(Donor, donor_id)
+    if Donor is None:
+        return 'Donor not found', 404
+
     donations_money = db.session.scalars(
         db.select(DonationMoney).where(DonationMoney.donor_id == donor_id)
     )
     donations_items = db.session.scalars(
         db.select(DonationItem).where(DonationItem.donor_id == donor_id)
     )
-    donor = db.session.get(Donor, donor_id)
-    if Donor is None:
-        return 'donor not found', 404
+
     return render_template('donations.jinja', donations_money=donations_money.all(), donor=donor,
                            donations_items=donations_items.all())
 

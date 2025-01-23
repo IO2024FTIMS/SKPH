@@ -1,18 +1,19 @@
-from app.extensions import babel, db, get_locale, mail
-from app.donors.routes import bp as donors_bp
-from app.affected.routes import bp as affected_bp
-from app.communication.socketio_chat import socketio
-from config import Config
-from app.volunteers.routes import bp as volunteers_bp
-from app.reports.routes import bp as reports_bp
-from app.organization.routes import bp as organization_bp
-from app.extensions import babel, db, get_locale
-from app.communication.routes import bp as chat_bp
-from app.auth.user_service import init_login_manager
-from app.auth.routes import bp as auth_bp
 from flask import Flask, render_template
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+
+from app.affected.routes import bp as affected_bp
+from app.auth.routes import bp as auth_bp
+from app.auth.user_service import init_login_manager
+from app.communication.routes import bp as chat_bp
+from app.communication.socketio_chat import socketio
+from app.donors.routes import bp as donors_bp
+from app.extensions import babel, db, get_locale, mail
+from app.maps.routes import bp as maps_bp
+from app.organization.routes import bp as organization_bp
+from app.reports.routes import bp as reports_bp
+from app.volunteers.routes import bp as volunteers_bp
+from config import Config
 
 
 def create_app(config_class=Config):
@@ -41,6 +42,8 @@ def create_app(config_class=Config):
 
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
 
+    flask_app.register_blueprint(maps_bp, url_prefix='/maps')
+
     @flask_app.route('/')
     def home():
         return render_template('index.jinja')
@@ -60,8 +63,3 @@ def create_app(config_class=Config):
             return f'Database connection failed: {str(e)}'
 
     return flask_app
-
-
-if __name__ == "__main__":
-    app = create_app()
-    socketio.run(app)

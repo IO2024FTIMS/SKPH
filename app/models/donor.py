@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class Donor(db.Model):
+    # TODO: unify
     donor_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     surname: Mapped[str]

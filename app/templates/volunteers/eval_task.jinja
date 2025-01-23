@@ -4,8 +4,9 @@
 
 {% block content %}
 <div class="container mt-2">
+  <br>
   <div>
-    <a href="{{ url_for('volunteers.list_tasks', volunteer_id=task.volunteer.id) }}" class="btn btn-secondary">Back</a>
+    <a href="{{ referrer }}" class="btn btn-secondary">{{ _("Back") }}</a>
   </div>
   <hr class="my-4" />
   <div class="row justify-content-center">
@@ -14,7 +15,8 @@
       <p>{{ _("Task:") }} {{ task.name }}</p>
       <p>{{ _("Volunteer:") }} {{ task.volunteer.first_name }} {{ task.volunteer.last_name }}</p>
       <p>{{ _("Task Description:") }} {{ task.description }}</p>
-      <form action="{{ url_for('volunteers.eval_task', task_id=task.id) }}" method="post">
+      <p>{{ _("Task Status:") }} {{ task.status }}</p>
+      <form method="post">
         <fieldset>
           <div class="form-group">
             <label for="score">{{ _("Score") }}</label>

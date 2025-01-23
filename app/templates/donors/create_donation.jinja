@@ -18,15 +18,6 @@
             <input type="number" class="form-control" id="Amount" name="Amount" placeholder="Amount name">
           </div>
           <div>
-            <label for="donor_id">{{ _("Donor:") }}</label>
-            <select class="form-control" id="donor_id" name="donor_id" required>
-              {% for donor in donors %}
-              <option value="{{ donor.donor_id }}">{{ donor.name }} {{ donor.surname }}
-              </option>
-              {% endfor %}
-            </select>
-          </div>
-          <div>
             <label for="donation_type">{{ _("Type:") }}</label>
             <select class="form-control" id="donation_type" name="donation_type" required>
               <option value="money">{{ _("Money") }}</option>
@@ -36,6 +27,7 @@
           <br>
           <div>
             <button type="submit" class="btn btn-primary">{{ _("Confirm Donation") }}</button>
+            <a href="{{ url_for('home') }}" class="btn btn-danger">{{ _("Cancel") }}</a>
           </div>
         </fieldset>
       </form>
