@@ -79,7 +79,9 @@ def create_donation():
 
         return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
     charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
-    return render_template('create_donation.jinja', charity_campaigns=charity_campaigns, ItemDonationType=ItemDonationType)
+    return render_template('create_donation.jinja',
+                           charity_campaigns=charity_campaigns,
+                           ItemDonationType=ItemDonationType)
 
 
 @bp.route('/donations/<int:donor_id>')
