@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
 from app.extensions import db
 
+
 class Coordinates(db.Model):
     __tablename__ = 'coordinates'
     id = Column(Integer, primary_key=True)
@@ -14,6 +15,7 @@ class Coordinates(db.Model):
 
     def __repr__(self):
         return f"Coordinates({self.x}, {self.y})"
+
 
 class POI(db.Model):
     __tablename__ = 'poi'
