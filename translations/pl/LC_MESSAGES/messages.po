@@ -691,7 +691,7 @@ msgstr "Wartość"
 
 #: app/templates/donors/donations.jinja:17
 msgid "Number"
-msgstr "Numer ulicy"
+msgstr "Ilość"
 
 #: app/templates/donors/donor_view.jinja:3
 msgid "Donor List"

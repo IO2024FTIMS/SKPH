@@ -255,6 +255,7 @@ def profile():
     role_urls = {
         # 'admin': url_for('admin.dashboard'),
         # 'affected': url_for('affected.affected_details', affected_id=current_user.affected.id),
+        'donor': url_for('donors.donor_profile'),
         'organization': url_for('organization.organization_profile'),
         'volunteer': url_for('volunteers.volunteer_profile'),
         'authorities': url_for('organization.authorities_profile')
