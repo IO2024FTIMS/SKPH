@@ -114,39 +114,6 @@
     }
 }
 
-function startArea(lat, lng, type) {
-    tempAreaPoints.push([lat, lng]);
-    if (!tempAreaLayer) {
-        tempAreaLayer = L.polyline(tempAreaPoints, { color: type === 'danger' ? 'red' : 'blue' }).addTo(map);
-    } else {
-        tempAreaLayer.setLatLngs(tempAreaPoints);
-    }
-
-    if (tempAreaPoints.length > 2 && confirm("Czy chcesz zakończyć dodawanie punktów do obszaru?")) {
-        var name = prompt(`Podaj nazwę dla ${type === 'danger' ? 'Danger Area' : 'Relief Area'}:`);
-        if (name) {
-            fetch(`/maps/add-${type}-area`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ coordinates: tempAreaPoints, name })
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    location.reload(); // Restartuje stronę po dodaniu obszaru
-                } else {
-                    alert("Wystąpił błąd podczas dodawania obszaru.");
-                }
-            });
-        } else {
-            tempAreaPoints = [];
-            if (tempAreaLayer) {
-                map.removeLayer(tempAreaLayer);
-                tempAreaLayer = null;
-            }
-        }
-    }
-}
-
-
     function updatePOIOptions(pois) {
         const startPoiSelect = document.getElementById('startPoi');
         const endPoiSelect = document.getElementById('endPoi');
