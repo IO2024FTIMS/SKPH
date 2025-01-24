@@ -203,51 +203,5 @@ function startArea(lat, lng, type) {
         const endPoiSelect = document.getElementById('endPoi');
 
     }
-
-    function deletePOI(id) {
-        if (confirm("Czy na pewno chcesz usunąć ten punkt?")) {
-            fetch(`/maps/delete-poi/${id}`, { method: 'DELETE' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Punkt został usunięty.");
-                        location.reload(); // Odśwież stronę, aby zaktualizować mapę
-                    } else {
-                        alert(data.message || "Wystąpił błąd podczas usuwania punktu.");
-                    }
-                });
-        }
-    }
-
-    function deleteDangerArea(id) {
-        if (confirm("Czy na pewno chcesz usunąć ten obszar?")) {
-            fetch(`/maps/delete-danger-area/${id}`, { method: 'DELETE' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Obszar niebezpieczeństwa został usunięty.");
-                        location.reload(); // Odśwież stronę, aby zaktualizować mapę
-                    } else {
-                        alert(data.message || "Wystąpił błąd podczas usuwania obszaru.");
-                    }
-                });
-        }
-    }
-
-    function deleteReliefArea(id) {
-        if (confirm("Czy na pewno chcesz usunąć ten obszar?")) {
-            fetch(`/maps/delete-relief-area/${id}`, { method: 'DELETE' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Obszar wsparcia został usunięty.");
-                        location.reload(); // Odśwież stronę, aby zaktualizować mapę
-                    } else {
-                        alert(data.message || "Wystąpił błąd podczas usuwania obszaru.");
-                    }
-                });
-        }
-    }
-
 </script>
 {% endblock %}
