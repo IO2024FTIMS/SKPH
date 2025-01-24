@@ -19,7 +19,7 @@
           </div>
 
           <div class="form-group">
-            <label for="donation_type">{{ _("Donation Type:") }}</label>
+            <label for="donation_type">{{ _("Needs:") }}</label>
             <select class="form-control" id="donation_type" name="donation_type" required>
               {% for donation_type in donation_types %}
                 <option value="{{ donation_type.id }}" {% if request.donation_type_id == donation_type.id %}selected{% endif %}>{{ donation_type.type }}</option>

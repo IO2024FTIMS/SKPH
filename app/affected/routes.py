@@ -42,8 +42,8 @@ def samples():
         session.add(sample_campaign)
         session.flush()
 
-        donation_type_1 = DonationType('Food')
-        donation_type_2 = DonationType('Clothes')
+        donation_type_1 = DonationType(type='Food')
+        donation_type_2 = DonationType(type='Clothes')
 
         session.add(donation_type_1)
         session.add(donation_type_2)
