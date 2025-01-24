@@ -3,6 +3,8 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
+from app.models.donor import Donor
+
 
 class DonationMoney(db.Model):
     donationMoney_id: Mapped[int] = mapped_column(primary_key=True)
@@ -21,6 +23,7 @@ class DonationMoney(db.Model):
     def __repr__(self):
         return f"<Donation(description={self.description}, amount={self.cashAmount})>"
 
+
 class DonationItem(db.Model):
     donationItem_id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str]
@@ -37,6 +40,7 @@ class DonationItem(db.Model):
 
     def __repr__(self):
         return f"<Donation(description={self.description}, amount={self.amount})>"
+
 
 class DonationType(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
