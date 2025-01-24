@@ -47,7 +47,6 @@
         .addTo(map)
         .bindPopup(`
             <b>{{ poi.name }}</b><br>
-            <button onclick="deletePOI({{ poi.id }})">Usuń</button>
         `);
 {% endfor %}
 
@@ -57,7 +56,6 @@
         { color: 'red', fillColor: 'red', fillOpacity: 0.5 }
     ).addTo(map).bindPopup(`
         <b>{{ area.name }}</b><br>
-        <button onclick="deleteDangerArea({{ area.id }})">Usuń</button>
     `);
 {% endfor %}
 
@@ -67,7 +65,6 @@
         { color: 'blue', fillColor: 'blue', fillOpacity: 0.5 }
     ).addTo(map).bindPopup(`
         <b>{{ area.name }}</b><br>
-        <button onclick="deleteReliefArea({{ area.id }})">Usuń</button>
     `);
 {% endfor %}
 
