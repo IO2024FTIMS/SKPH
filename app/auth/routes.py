@@ -59,8 +59,10 @@ def create_user_and_related_data(form, user_type):
 
     if user_type == 'donor':
         donor = Donor(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
+            name=form.first_name.data,
+            surname=form.last_name.data,
+            phone_number=form.phone.data,
+            email=form.email.data,
             user_id=user.id
         )
         db.session.add(donor)
@@ -245,3 +247,17 @@ def manage_users():
         return redirect(url_for('auth.manage_users'))
 
     return render_template('manage_users.jinja', authorities=authorities, organizations=organizations)
+
+
+@bp.route('/profile')
+@login_required
+def profile():
+    role_urls = {
+        # 'admin': url_for('admin.dashboard'),
+        # 'affected': url_for('affected.affected_details', affected_id=current_user.affected.id),
+        'donor': url_for('donors.donor_profile'),
+        'organization': url_for('organization.organization_profile'),
+        'volunteer': url_for('volunteers.volunteer_profile'),
+        'authorities': url_for('organization.authorities_profile')
+    }
+    return redirect(role_urls[current_user.type])

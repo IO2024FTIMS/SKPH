@@ -10,15 +10,28 @@ volunteer_campaign_association = Table(
     db.Column('campaign_id', db.Integer, db.ForeignKey('organization_charity_campaign.id'))
 )
 
+organization_campaign_association = Table(
+    'organization_campaign_association',
+    db.Model.metadata,
+    db.Column('campaign_id', db.Integer, db.ForeignKey('charity_campaign.id')),
+    db.Column('organization_id', db.Integer, db.ForeignKey('organization.id')),
+)
+
+
 class CharityCampaign(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[str]
+    is_active: Mapped[bool] = mapped_column(default=True)
     authority = relationship('Authorities')
     authorities_id = mapped_column(ForeignKey('authorities.id'), nullable=False)
+    organizations = relationship('Organization',
+                                 secondary=organization_campaign_association,
+                                 back_populates='charity_campaigns')
 
     def __repr__(self):
         return f'CharityCampaign({self.id=}, {self.name=}, {self.description=}, {self.authority=})'
+
 
 class OrganizationCharityCampaign(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -26,7 +39,7 @@ class OrganizationCharityCampaign(db.Model):
     organization = relationship('Organization')
     charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('charity_campaign.id'), nullable=False)
     organization_id: Mapped[int] = mapped_column(ForeignKey('organization.id'), nullable=False)
-    volunteers = relationship('Volunteer', secondary=volunteer_campaign_association, back_populates='campaigns')
+    volunteers = (
+        relationship('Volunteer', secondary=volunteer_campaign_association, back_populates='campaigns')
+    )
 
-    def assign_volunteer(self, volunteer):
-        self.volunteers.append(volunteer)

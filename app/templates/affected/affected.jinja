@@ -20,17 +20,5 @@
     <a class="btn btn-primary w-100 mb-2" href="{{ url_for('affected.all_requests') }}">{{ _("View All Requests") }}</a>
   </div>
 
-  <div>
-  <h2>{{ _("Create Requests for Affected") }}</h2>
-  {% for person in affected %}
-  <div class="mb-2">
-    <a class="btn btn-primary w-100"
-       href="{{ url_for('affected.create_request', affected_id=person.id) }}">
-      {{ _("Create Requests for") }} {{ person.first_name }} {{ person.last_name }}
-    </a>
-  </div>
-  {% endfor %}
-</div>
-
 </div>
 {% endblock %}

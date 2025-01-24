@@ -11,8 +11,8 @@ class DonationMoney(db.Model):
     donation_type: Mapped[str]
     cashAmount: Mapped[float]
     donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
-    charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('charity_campaign.id'))
-    charity_campaign = relationship('CharityCampaign')
+    charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('organization_charity_campaign.id'))
+    charity_campaign = relationship('OrganizationCharityCampaign')
     donor: Mapped["Donor"] = relationship(back_populates="donations_money")
 
     def return_confirmation(self) -> str:
@@ -29,8 +29,8 @@ class DonationItem(db.Model):
     amount: Mapped[float]
     donor_id: Mapped[int] = mapped_column(ForeignKey('donor.donor_id'))
     donor: Mapped["Donor"] = relationship(back_populates="donations_items")
-    charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('charity_campaign.id'))
-    charity_campaign = relationship('CharityCampaign')
+    charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('organization_charity_campaign.id'))
+    charity_campaign = relationship('OrganizationCharityCampaign')
 
     def return_confirmation(self) -> str:
         return f"Donation confirmed: {self.description}, Amount: {self.amount}"

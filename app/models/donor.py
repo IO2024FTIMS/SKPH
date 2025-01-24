@@ -1,10 +1,14 @@
+from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.extensions import db
+
+if TYPE_CHECKING:
+    from app.models.donation import DonationMoney, DonationItem
 
 
 class Donor(db.Model):
+    # TODO: unify
     donor_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     surname: Mapped[str]
@@ -13,12 +17,11 @@ class Donor(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
 
     donations_money: Mapped[list["DonationMoney"]] = relationship(
-        back_populates="donor", cascade="all, delete-orphan"
+        "DonationMoney", back_populates="donor", cascade="all, delete-orphan"
     )
     donations_items: Mapped[list["DonationItem"]] = relationship(
-        back_populates="donor", cascade="all, delete-orphan"
+        "DonationItem", back_populates="donor", cascade="all, delete-orphan"
     )
-
 
     def request_confirmation(self, donation_id: int) -> str:
         """Request confirmation for a specific donation."""

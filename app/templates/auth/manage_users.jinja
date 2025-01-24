@@ -19,32 +19,33 @@
     </thead>
     <tbody>
       {% for authority in authorities %}
-        <tr>
-          <td>{{ authority.user.email }}</td>
-          <td>{{ authority.phone }}</td>
-          <td>
+      <tr>
+        <td>{{ authority.user.email }}</td>
+        <td>{{ authority.phone }}</td>
+        <td>
+          {% if authority.approved %}
+          <span class="badge bg-success">{{ _("Approved") }}</span>
+          {% else %}
+          <span class="badge bg-danger">{{ _("Not Approved") }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <form action="{{ url_for('auth.manage_users') }}" method="POST" style="display:inline;">
+            <input type="hidden" name="user_id" value="{{ authority.user.id }}">
+            <input type="hidden" name="user_type" value="authorities">
             {% if authority.approved %}
-              <span class="badge bg-success">{{ _("Approved") }}</span>
+            <button type="submit" name="action" value="disapprove" class="btn btn-warning">{{ _("Disapprove")
+              }}</button>
             {% else %}
-              <span class="badge bg-danger">{{ _("Not Approved") }}</span>
+            <button type="submit" name="action" value="approve" class="btn btn-success">{{ _("Approve") }}</button>
             {% endif %}
-          </td>
-          <td>
-            <form action="{{ url_for('auth.manage_users') }}" method="POST" style="display:inline;">
-              <input type="hidden" name="user_id" value="{{ authority.user.id }}">
-              <input type="hidden" name="user_type" value="authorities">
-              {% if authority.approved %}
-                <button type="submit" name="action" value="disapprove" class="btn btn-warning">{{ _("Disapprove") }}</button>
-              {% else %}
-                <button type="submit" name="action" value="approve" class="btn btn-success">{{ _("Approve") }}</button>
-              {% endif %}
-            </form>
-          </td>
-        </tr>
+          </form>
+        </td>
+      </tr>
       {% else %}
-        <tr>
-          <td colspan="4">{{ _("No authorities found.") }}</td>
-        </tr>
+      <tr>
+        <td colspan="4">{{ _("No authorities found.") }}</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
@@ -63,33 +64,34 @@
     </thead>
     <tbody>
       {% for org in organizations %}
-        <tr>
-          <td>{{ org.user.email }}</td>
-          <td>{{ org.organization_name }}</td>
-          <td>{{ org.description }}</td>
-          <td>
+      <tr>
+        <td>{{ org.user.email }}</td>
+        <td>{{ org.organization_name }}</td>
+        <td>{{ org.description }}</td>
+        <td>
+          {% if org.approved %}
+          <span class="badge bg-success">{{ _("Approved") }}</span>
+          {% else %}
+          <span class="badge bg-danger">{{ _("Not Approved") }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <form action="{{ url_for('auth.manage_users') }}" method="POST" style="display:inline;">
+            <input type="hidden" name="user_id" value="{{ org.user.id }}">
+            <input type="hidden" name="user_type" value="organization">
             {% if org.approved %}
-              <span class="badge bg-success">{{ _("Approved") }}</span>
+            <button type="submit" name="action" value="disapprove" class="btn btn-warning">{{ _("Disapprove")
+              }}</button>
             {% else %}
-              <span class="badge bg-danger">{{ _("Not Approved") }}</span>
+            <button type="submit" name="action" value="approve" class="btn btn-success">{{ _("Approve") }}</button>
             {% endif %}
-          </td>
-          <td>
-            <form action="{{ url_for('auth.manage_users') }}" method="POST" style="display:inline;">
-              <input type="hidden" name="user_id" value="{{ org.user.id }}">
-              <input type="hidden" name="user_type" value="organization">
-              {% if org.approved %}
-                <button type="submit" name="action" value="disapprove" class="btn btn-warning">{{ _("Disapprove") }}</button>
-              {% else %}
-                <button type="submit" name="action" value="approve" class="btn btn-success">{{ _("Approve") }}</button>
-              {% endif %}
-            </form>
-          </td>
-        </tr>
+          </form>
+        </td>
+      </tr>
       {% else %}
-        <tr>
-          <td colspan="5">{{ _("No organizations found.") }}</td>
-        </tr>
+      <tr>
+        <td colspan="5">{{ _("No organizations found.") }}</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
