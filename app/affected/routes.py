@@ -5,7 +5,7 @@ from app.models.address import Address
 from app.models.affected import Affected
 from app.models.authorities import Authorities
 from app.models.charity_campaign import CharityCampaign
-from app.models.donation import ItemDonationType
+from app.models.donation import DonationType
 from app.models.request import Request, RequestStatus
 
 bp = Blueprint('affected', __name__,
@@ -42,6 +42,12 @@ def samples():
         session.add(sample_campaign)
         session.flush()
 
+        donation_type_1 = DonationType('Food')
+        donation_type_2 = DonationType('Clothes')
+
+        session.add(donation_type_1)
+        session.add(donation_type_2)
+
         # Create sample affected individuals
         aff1 = Affected(first_name='Geto', last_name='Mill', needs='Shelter', campaign_id=sample_campaign.id)
         a1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
@@ -64,16 +70,16 @@ def samples():
             name='Food Assistance',
             status=RequestStatus.PENDING,
             req_address=req1_address,
-            needs=ItemDonationType.FOOD,
-            quantity=10,
+            donation_type=donation_type_1,
+            amount=10,
             affected_id=aff1.id
         )
         req2 = Request(
             name='Clothes needed',
             status=RequestStatus.PENDING,
             req_address=req2_address,
-            needs=ItemDonationType.CLOTHES,
-            quantity=5,
+            donation_type=donation_type_2,
+            amount=5,
             affected_id=aff2.id
         )
         session.add(req1)
@@ -101,7 +107,7 @@ def create_request(affected_id):
     if request.method == 'POST':
         name = request.form['name']
         status = RequestStatus.PENDING
-        needs = ItemDonationType[request.form.get('needs')]
+        donation_type_id = int(request.form.get('needs'))
         quantity = int(request.form['quantity'])
         street = request.form['street']
         street_number = request.form['street_number']
@@ -109,7 +115,7 @@ def create_request(affected_id):
         voivodeship = request.form['voivodeship']
 
         # Validation
-        if not all([name, needs, quantity, street, street_number, city, voivodeship]):
+        if not all([name, donation_type_id, quantity, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.create_request', affected_id=affected_id))
 
         # Create new address
@@ -127,7 +133,7 @@ def create_request(affected_id):
             name=name,
             status=status,
             req_address=new_address,
-            needs=needs,
+            donation_type_id=donation_type_id,
             quantity=quantity,
             affected_id=affected_id
         )
@@ -136,7 +142,8 @@ def create_request(affected_id):
 
         return redirect(url_for('affected.affected_details', affected_id=affected_id))
 
-    return render_template('create_request.jinja', affected=affected, ItemDonationType=ItemDonationType)
+    donation_types = db.session.scalars(db.select(DonationType)).all()
+    return render_template('create_request.jinja', affected=affected, donation_types=donation_types)
 
 
 @bp.route('/requests')
@@ -182,7 +189,7 @@ def edit_request(request_id):
 
     if request.method == 'POST':
         name = request.form.get('name')
-        needs = ItemDonationType[request.form.get('needs')]
+        donation_type_id = int(request.form.get('needs'))
         quantity = int(request.form.get('quantity'))
         street = request.form.get('street')
         street_number = request.form.get('street_number')
@@ -190,12 +197,12 @@ def edit_request(request_id):
         voivodeship = request.form.get('voivodeship')
 
         # Walidacja
-        if not all([name, needs, quantity, street, street_number, city, voivodeship]):
+        if not all([name, donation_type_id, quantity, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.edit_request', request_id=request_id))
 
         # Aktualizacja danych
         request_obj.name = name
-        request_obj.needs = needs
+        request_obj.donation_type_id = donation_type_id
         request_obj.quantity = quantity
         request_obj.req_address.street = street
         request_obj.req_address.street_number = street_number
@@ -206,7 +213,8 @@ def edit_request(request_id):
 
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
-    return render_template('edit_request.jinja', request=request_obj, ItemDonationType=ItemDonationType)
+    donation_types = db.session.scalars(db.select(DonationType)).all()
+    return render_template('edit_request.jinja', request=request_obj, donation_types=donation_types)
 
 
 @bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])

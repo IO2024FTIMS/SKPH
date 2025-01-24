@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Enum as SQLEnum
 
 from app.extensions import db
-from app.models.donation import ItemDonationType
+from app.models.donation import DonationType
 
 
 class RequestStatus(Enum):
@@ -23,10 +23,11 @@ class Request(db.Model):
     req_address = relationship('Address')
     req_address_id = mapped_column(ForeignKey('address.id'))
     affected_id = mapped_column(ForeignKey('affected.id'))
-    needs: Mapped[ItemDonationType] = mapped_column(SQLEnum(ItemDonationType), nullable=False)
-    quantity: Mapped[int] = mapped_column(nullable=False)
+    donation_type_id = mapped_column(ForeignKey('donation_type.id'))
+    amount: Mapped[int]
 
     affected = relationship('Affected', back_populates='requests')
+    donation_type = relationship('DonationType')
 
     def __repr__(self):
         return (

@@ -11,11 +11,6 @@ if TYPE_CHECKING:
     from app.models.donor import Donor
 
 
-class ItemDonationType(Enum):
-    WATER = "water"
-    FOOD = "food"
-    CLOTHES = "clothes"
-    MEDICINE = "medicine"
 
 
 class DonationMoney(db.Model):
@@ -41,7 +36,7 @@ class DonationItem(db.Model):
     donationItem_id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str]
     donation_date: Mapped[date] = mapped_column(default=date.today)
-    donation_type: Mapped[ItemDonationType]
+    donation_type_id: Mapped[int] = mapped_column(ForeignKey('donation_type.id'))
     number: Mapped[int]
     charity_campaign = relationship('OrganizationCharityCampaign', back_populates='donations_item')
     charity_campaign_id = mapped_column(ForeignKey('organization_charity_campaign.id'))
@@ -54,3 +49,9 @@ class DonationItem(db.Model):
 
     def __repr__(self):
         return f"<Donation(description={self.description}, amount={self.number})>"
+
+
+
+class DonationType(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    type: Mapped[str]
