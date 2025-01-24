@@ -97,35 +97,6 @@
     var tempAreaPoints = [];
     var tempAreaLayer;
 
-    map.on('contextmenu', function(e) {
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
-
-        var contextMenu = document.createElement('div');
-        contextMenu.id = 'context-menu';
-        contextMenu.style.position = 'absolute';
-        contextMenu.style.left = e.originalEvent.pageX + 'px';
-        contextMenu.style.top = e.originalEvent.pageY + 'px';
-        contextMenu.style.backgroundColor = 'white';
-        contextMenu.style.border = '1px solid #ccc';
-        contextMenu.style.padding = '10px';
-        contextMenu.style.zIndex = '1000';
-
-        contextMenu.innerHTML = `
-            <button onclick="showPOIForm(${lat}, ${lng}, 'punktDystrybucji')">Dodaj Punkt Dystrybucji</button><br>
-            <button onclick="showPOIForm(${lat}, ${lng}, 'poszkodowany')">Dodaj Poszkodowanego</button><br>
-            <button onclick="startArea(${lat}, ${lng}, 'danger')">Rozpocznij Danger Area</button><br>
-            <button onclick="startArea(${lat}, ${lng}, 'relief')">Rozpocznij Relief Area</button>
-        `;
-
-        document.body.addEventListener('click', function removeContextMenu() {
-            document.body.removeEventListener('click', removeContextMenu);
-            contextMenu.remove();
-        });
-
-        document.body.appendChild(contextMenu);
-    });
-
    function showPOIForm(lat, lng, type) {
     var name = prompt(`Podaj nazwę dla ${type === 'punktDystrybucji' ? 'Punktu Dystrybucji' : 'Poszkodowanego'}:`);
     if (name) {
