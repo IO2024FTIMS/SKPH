@@ -1,7 +1,8 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, mapped_column, Mapped
+from sqlalchemy.orm import relationship
 
 from app.extensions import db
+
 
 class ItemStock(db.Model):
     id = db.Column(db.Integer, primary_key=True)

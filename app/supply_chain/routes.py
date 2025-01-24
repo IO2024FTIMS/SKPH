@@ -45,7 +45,7 @@ def index():
         .join(DonationType, Request.donation_type_id == DonationType.id) \
         .join(Affected, Request.affected_id == Affected.id) \
         .join(Address, Request.req_address_id == Address.id) \
-        .add_columns(Request.name, Request.status, Affected.first_name, Affected.last_name,
+        .add_columns(Request.id, Request.name, Request.status, Affected.first_name, Affected.last_name,
                      Address.city, Address.street, Address.voivodeship, DonationType.type, Request.amount) \
         .all()
     print(current_requests)
@@ -65,7 +65,7 @@ def truncate():
     return redirect('/supply-chain')
 
 
-@bp.route('/resource/<int:item_id>', methods=['GET', 'POST'])
+@bp.route('/resource/<int:id>', methods=['GET', 'POST'])
 def manage_resource(item_id):
     resource = db.session.get(ItemStock, item_id)
     if request.method == 'GET':
@@ -85,6 +85,11 @@ def manage_resource(item_id):
                 resouce_use_amount += int(request.form[i.id])
         print(resource)
         return redirect('/')
+
+
+@bp.route('/manage-request/<int:id>', methods=['GET', 'POST'])
+def manage_request(request_id):
+    return render_template('manage_request.jinja', request_id=request_id)
 
 
 @bp.route('/add-data')
