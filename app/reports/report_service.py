@@ -130,7 +130,7 @@ class ReportService:
 
     def stats_donation_sums(self):
         total_money = db.session.query(db.func.sum(DonationMoney.cashAmount)).scalar() or 0
-        total_items = db.session.query(db.func.sum(DonationItem.number)).scalar() or 0
+        total_items = db.session.query(db.func.sum(DonationItem.amount)).scalar() or 0
         return {
             "Total money sum": float(total_money),
             "Total item sum": float(total_items)

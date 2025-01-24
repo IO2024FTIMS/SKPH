@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.charity_campaign import OrganizationCharityCampaign
-from app.models.donation import DonationItem, DonationMoney, ItemDonationType
+from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
 from app.models.user import User
 
@@ -134,6 +134,13 @@ def donor_samples():
     db.session.commit()
     db.session.refresh(new_donor)
 
+    donation_type_1 = DonationType('Food')
+    donation_type_2 = DonationType('Clothes')
+
+    db.session.add(donation_type_1)
+    db.session.add(donation_type_2)
+
+
     new_donation_money = DonationMoney(
         description="Charity Fundraiser",
         donation_date=date.today(),
@@ -147,7 +154,7 @@ def donor_samples():
     new_donation_item = DonationItem(
         description="T-shirt",
         donation_date=date.today(),
-        donation_type="Clothes",
+        donation_type=donation_type_1,
         number=10,
         donor_id=new_donor.donor_id
     )

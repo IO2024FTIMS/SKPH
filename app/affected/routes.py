@@ -4,6 +4,7 @@ from app.extensions import db
 from app.models.address import Address
 from app.models.affected import Affected
 from app.models.request import Request, RequestStatus
+from app.models.donation import DonationType
 
 bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',
@@ -43,6 +44,10 @@ def samples():
         session.add(aff1)
         session.add(aff2)
 
+        donation_type_1 = DonationType(type='Water')
+        session.add(donation_type_1)
+
+
         # Tworzenie przykładowego requesta dla pierwszego poszkodowanego
         req1_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
         req2_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
@@ -54,15 +59,17 @@ def samples():
             name='Food Assistance',
             status=RequestStatus.PENDING,
             req_address=req1_address,
-            needs='Food',
-            affected_id=aff1.id
+            affected_id=aff1.id, 
+            amount=10,
+            donation_type=donation_type_1
         )
         req2 = Request(
             name='Shelter needed',
             status=RequestStatus.PENDING,
             req_address=req2_address,
-            needs='Shelter',
-            affected_id=aff2.id
+            affected_id=aff2.id,
+            amount=20,
+            donation_type=donation_type_1
         )
         session.add(req1)
         session.add(req2)
