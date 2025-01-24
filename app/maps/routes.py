@@ -41,7 +41,7 @@ def add_page():
     relief_areas = ReliefArea.query.filter_by(status=True).all()
 
     return render_template(
-        "add.jinja",
+        "bare-map.jinja",
         pois=pois,
         danger_areas=danger_areas,
         relief_areas=relief_areas,
