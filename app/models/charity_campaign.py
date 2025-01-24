@@ -42,5 +42,4 @@ class OrganizationCharityCampaign(db.Model):
     volunteers = (
         relationship('Volunteer', secondary=volunteer_campaign_association, back_populates='campaigns')
     )
-    donations_money = relationship('DonationMoney', back_populates='charity_campaign')
-    donations_item = relationship('DonationItem', back_populates='charity_campaign')
+

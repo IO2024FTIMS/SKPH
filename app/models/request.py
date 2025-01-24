@@ -22,9 +22,10 @@ class Request(db.Model):
     req_address = relationship('Address')
     req_address_id = mapped_column(ForeignKey('address.id'))
     affected_id = mapped_column(ForeignKey('affected.id'))
-    needs: Mapped[str]
+    donation_type_id = mapped_column(ForeignKey('donation_type.id'))
 
     affected = relationship('Affected', back_populates='requests')
+    donation_type = relationship('DonationType')
 
     def __repr__(self):
         return (

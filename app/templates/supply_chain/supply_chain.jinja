@@ -9,7 +9,7 @@
 
 
   <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.truncate') }}">{{ _("Remove sample data") }}</a></p>
-    <table>
+    <table class="table table-hover">
     <tr>
       <th>Charity campagin name: {{ charity_campaign.name }}</th>
     </tr>
@@ -41,11 +41,61 @@
   </table>
     {% endif %}
 
-  <table>
-    <tr>
-      <th>Assigned resources:</th>
-    </tr>
-  </table>
+    <table class="table table-hover">
+      <tr>
+        <th>Current requests:</th>
+      </tr>
+  
+      {% if current_requests is none %}
+      </table>
+      <p>Could not find any requests</p>
+  
+      {% else %}
+      <tr>
+        <td>Lp</td>
+        <td>Name</td>
+        <td>Status</td>
+        <td> Affected </td>
+        <td>Address </td>
+        <td>Needs</td>
+        
+      </tr>
+      {% for request in current_requests %}
+  
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ request.name }}</td>
+          <td>{{ request.status }}</td>
+          <td>
+            <table class="table">
+              <tr>
+                <td>First name:</td>
+                <td>{{ request.first_name }}</td>
+              </tr>
+              <tr>
+                <td> Last name </td>
+                <td> {{ request.last_name }} </td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr>
+                <td>City:</td>
+                <td>{{ request.city }}</td>
+              </tr>
+              <tr>
+                <td> Street </td>
+                <td> {{ request.street }} </td>
+              </tr>
+            </table>
+          </td>
+          <td>{{ request.type }}</td>
+        </tr>
+  
+      {% endfor %}
+    </table>
+      {% endif %}
 
 
   <table>
@@ -62,6 +112,7 @@
           <tr>
           <td>{{ volunteer.first_name }}</td>
           <td>{{ volunteer.last_name }}</td>
+
               <td><input type="button" value="Assign" onclick="dupa"/></td>
           </tr>
       {% endfor %}
