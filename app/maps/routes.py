@@ -1,5 +1,7 @@
 import openrouteservice
 from flask import Blueprint, render_template, request, jsonify
+from flask_login import login_required, current_user
+from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
 
@@ -30,6 +32,23 @@ def index():
     )
 
 
+@bp.route("/add")
+@roles_required(["admin", "organization"])
+def add_page():
+
+    pois = POI.query.filter_by(status=True).all()
+    danger_areas = DangerArea.query.filter_by(status=True).all()
+    relief_areas = ReliefArea.query.filter_by(status=True).all()
+
+    return render_template(
+        "add.jinja",
+        pois=pois,
+        danger_areas=danger_areas,
+        relief_areas=relief_areas,
+    )
+
+
+# API stuff
 @bp.route("/<int:start_id>/<int:end_id>")
 def get_route(start_id, end_id):
     start_poi = POI.query.get(start_id)
