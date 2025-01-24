@@ -1,13 +1,14 @@
 from datetime import date
 
-from flask import (Blueprint, abort, flash, redirect, render_template, request,
+from flask import (Blueprint, abort, flash, redirect, render_template,
                    url_for)
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
 from app.auth.user_service import roles_required
 from app.extensions import db
-from app.models.charity_campaign import OrganizationCharityCampaign
+# from app.models.charity_campaign import OrganizationCharityCampaign
+# from flask import request
 from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
 from app.models.user import User
@@ -43,45 +44,47 @@ def fetch_donors():
 @bp.route('/donation/create', methods=['GET', 'POST'])
 @roles_required(['donor'])
 def create_donation():
-    donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
-    if request.method == 'POST':
-        description = request.form['description']
-        type_d = request.form['donation_type']
+    return redirect('/donors')
+    # TODO - change behavior of DonationType
+    # donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
+    # if request.method == 'POST':
+    #     description = request.form['description']
+    #     type_d = request.form['donation_type']
 
-        if type_d == 'money':
-            amount = request.form['amount']
-            new_donation_money = DonationMoney(
-                description=description,
-                donation_date=date.today(),
-                donation_type="Money",
-                cashAmount=amount,
-                donor_id=donor.donor_id
-            )
-            db.session.add(new_donation_money)
-            db.session.commit()
-            flash('Donation created successfully')
-            del new_donation_money
+    #     if type_d == 'money':
+    #         amount = request.form['amount']
+    #         new_donation_money = DonationMoney(
+    #             description=description,
+    #             donation_date=date.today(),
+    #             donation_type="Money",
+    #             cashAmount=amount,
+    #             donor_id=donor.donor_id
+    #         )
+    #         db.session.add(new_donation_money)
+    #         db.session.commit()
+    #         flash('Donation created successfully')
+    #         del new_donation_money
 
-        if type_d == 'item':
-            item_type = request.form['item_donation_type']
-            item_count = request.form['count']
-            new_donation_item = DonationItem(
-                description=description,
-                donation_date=date.today(),
-                donation_type=ItemDonationType(item_type),
-                number=item_count,
-                donor_id=donor.donor_id
-            )
-            db.session.add(new_donation_item)
-            db.session.commit()
-            flash('Donation created successfully')
-            del new_donation_item
+    #     if type_d == 'item':
+    #         item_type = request.form['item_donation_type']
+    #         item_count = request.form['count']
+    #         new_donation_item = DonationItem(
+    #             description=description,
+    #             donation_date=date.today(),
+    #             donation_type=ItemDonation(item_type),
+    #             number=item_count,
+    #             donor_id=donor.donor_id
+    #         )
+    #         db.session.add(new_donation_item)
+    #         db.session.commit()
+    #         flash('Donation created successfully')
+    #         del new_donation_item
 
-        return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
-    charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
-    return render_template('create_donation.jinja',
-                           charity_campaigns=charity_campaigns,
-                           ItemDonationType=ItemDonationType)
+    #     return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
+    # charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
+    # return render_template('create_donation.jinja',
+    #                        charity_campaigns=charity_campaigns,
+    #                        ItemDonationType=ItemDonationType)
 
 
 @bp.route('/donations/<int:donor_id>')
@@ -139,7 +142,6 @@ def donor_samples():
 
     db.session.add(donation_type_1)
     db.session.add(donation_type_2)
-
 
     new_donation_money = DonationMoney(
         description="Charity Fundraiser",

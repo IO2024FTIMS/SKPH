@@ -46,8 +46,6 @@ def samples():
 
         donation_type_1 = DonationType(type='Water')
         session.add(donation_type_1)
-
-
         # Tworzenie przykładowego requesta dla pierwszego poszkodowanego
         req1_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
         req2_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
@@ -59,7 +57,7 @@ def samples():
             name='Food Assistance',
             status=RequestStatus.PENDING,
             req_address=req1_address,
-            affected_id=aff1.id, 
+            affected_id=aff1.id,
             amount=10,
             donation_type=donation_type_1
         )
