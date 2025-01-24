@@ -20,9 +20,18 @@
 
           <div class="form-group">
             <label for="needs">{{ _("Needs:") }}</label>
-            <textarea class="form-control" id="needs" name="needs" rows="1" placeholder="{{ _('Describe the needs') }}"
-              required>{{ request.needs }}</textarea>
+            <select class="form-control" id="needs" name="needs" required>
+              {% for item in ItemDonationType %}
+                <option value="{{ item.name }}" {% if request.needs.name == item.name %}selected{% endif %}>{{ item.value }}</option>
+              {% endfor %}
+            </select>
           </div>
+
+          <div class="form-group">
+            <label for="quantity">{{ _("Quantity:") }}</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" placeholder="{{ _('Quantity') }}" required>
+          </div>
+
 
           <h3 class="mt-4">{{ _("Address") }}</h3>
           <div class="form-group">

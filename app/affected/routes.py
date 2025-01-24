@@ -3,6 +3,9 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from app.extensions import db
 from app.models.address import Address
 from app.models.affected import Affected
+from app.models.authorities import Authorities
+from app.models.charity_campaign import CharityCampaign
+from app.models.donation import ItemDonationType
 from app.models.request import Request, RequestStatus
 
 bp = Blueprint('affected', __name__,
@@ -31,37 +34,46 @@ def samples():
         return redirect(url_for('affected.index'))
 
     with db.session() as session:
-        # Tworzenie przykładowych osób poszkodowanych
-        aff1 = Affected(first_name='Geto', last_name='Mill', needs='Shelter')
+        address1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
+        authority1 = Authorities(name='Aleksander Wika', phone='758934576', approved=True, address=address1)
+        sample_campaign = CharityCampaign(name="Pomoc Dla Powodzian",
+                                          description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
+                                          authority=authority1)
+        session.add(sample_campaign)
+        session.flush()
+
+        # Create sample affected individuals
+        aff1 = Affected(first_name='Geto', last_name='Mill', needs='Shelter', campaign_id=sample_campaign.id)
         a1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
         aff1.address = a1
 
-        aff2 = Affected(first_name='Lukas', last_name='Steven', needs='Food')
+        aff2 = Affected(first_name='Lukas', last_name='Steven', needs='Food', campaign_id=sample_campaign.id)
         a2 = Address(street='Wiejska', street_number='2b', city='Warsaw', voivodeship='Mazowieckie')
         aff2.address = a2
 
         session.add(aff1)
         session.add(aff2)
 
-        # Tworzenie przykładowego requesta dla pierwszego poszkodowanego
         req1_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
         req2_address = Address(street='Pomocna', street_number='10', city='Gdańsk', voivodeship='Pomorskie')
         session.add(req1_address)
         session.add(req2_address)
-        session.flush()  # Upewnij się, że ID adresu jest dostępne
+        session.flush()
 
         req1 = Request(
             name='Food Assistance',
             status=RequestStatus.PENDING,
             req_address=req1_address,
-            needs='Food',
+            needs=ItemDonationType.FOOD,
+            quantity=10,
             affected_id=aff1.id
         )
         req2 = Request(
-            name='Shelter needed',
+            name='Clothes needed',
             status=RequestStatus.PENDING,
             req_address=req2_address,
-            needs='Shelter',
+            needs=ItemDonationType.CLOTHES,
+            quantity=5,
             affected_id=aff2.id
         )
         session.add(req1)
@@ -89,14 +101,15 @@ def create_request(affected_id):
     if request.method == 'POST':
         name = request.form['name']
         status = RequestStatus.PENDING
-        needs = request.form.get('needs')
+        needs = ItemDonationType[request.form.get('needs')]
+        quantity = int(request.form['quantity'])
         street = request.form['street']
         street_number = request.form['street_number']
         city = request.form['city']
         voivodeship = request.form['voivodeship']
 
         # Validation
-        if not all([name, needs, street, street_number, city, voivodeship]):
+        if not all([name, needs, quantity, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.create_request', affected_id=affected_id))
 
         # Create new address
@@ -115,6 +128,7 @@ def create_request(affected_id):
             status=status,
             req_address=new_address,
             needs=needs,
+            quantity=quantity,
             affected_id=affected_id
         )
         db.session.add(new_request)
@@ -122,7 +136,7 @@ def create_request(affected_id):
 
         return redirect(url_for('affected.affected_details', affected_id=affected_id))
 
-    return render_template('create_request.jinja', affected=affected)
+    return render_template('create_request.jinja', affected=affected, ItemDonationType=ItemDonationType)
 
 
 @bp.route('/requests')
@@ -168,19 +182,21 @@ def edit_request(request_id):
 
     if request.method == 'POST':
         name = request.form.get('name')
-        needs = request.form.get('needs')
+        needs = ItemDonationType[request.form.get('needs')]
+        quantity = int(request.form.get('quantity'))
         street = request.form.get('street')
         street_number = request.form.get('street_number')
         city = request.form.get('city')
         voivodeship = request.form.get('voivodeship')
 
         # Walidacja
-        if not all([name, needs, street, street_number, city, voivodeship]):
+        if not all([name, needs, quantity, street, street_number, city, voivodeship]):
             return redirect(url_for('affected.edit_request', request_id=request_id))
 
         # Aktualizacja danych
         request_obj.name = name
         request_obj.needs = needs
+        request_obj.quantity = quantity
         request_obj.req_address.street = street
         request_obj.req_address.street_number = street_number
         request_obj.req_address.city = city
@@ -190,7 +206,7 @@ def edit_request(request_id):
 
         return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
 
-    return render_template('edit_request.jinja', request=request_obj)
+    return render_template('edit_request.jinja', request=request_obj, ItemDonationType=ItemDonationType)
 
 
 @bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])
