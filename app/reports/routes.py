@@ -2,16 +2,16 @@ import csv
 import io
 
 from flask import Blueprint, Response, render_template, request
-from app.extensions import db
+from flask_login import login_required
 
+from app.extensions import db
 from app.models.affected import Affected
 from app.models.donor import Donor
 from app.models.charity_campaign import OrganizationCharityCampaign
+from app.auth.user_service import roles_required
 
 from .chart_utils import create_bar_chart_base64
 from .report_service import ReportService
-from flask_login import login_required
-from app.auth.user_service import roles_required
 
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
@@ -82,14 +82,15 @@ def affected_report():
                 donation_type_str = getattr(r, "donation_type", "N/A")
                 req_city = r.req_address.city if r.req_address else ""
                 req_voiv = r.req_address.voivodeship if r.req_address else ""
-                html += f"<li>ReqID={r.id}, name={r.name}, status={r.status.value}, type={donation_type_str}, amount={r.amount}, address=({req_city},{req_voiv})</li>"
+                html += (f"<li>ReqID={r.id}, name={r.name}, status={r.status.value},"
+                         f" type={donation_type_str}, amount={r.amount}, address=({req_city},{req_voiv})</li>")
             html += "</ul>"
         else:
             html += "<p>Brak requestów.</p>"
 
         html += "</div>"
 
-    html += f"""
+    html += """
         <div class="mt-4">
           <a href="/reports/affected-report-csv" class="btn btn-success">Pobierz CSV</a>
           <a href="/reports/ui" class="btn btn-secondary">Powrót</a>
@@ -216,9 +217,6 @@ def volunteer_report_csv():
 @login_required
 @roles_required(['donor', 'authorities', 'admin'])
 def donor_report():
-    """
-    Raport Donor (bez 'rozszerzony').
-    """
     donors = report_service.get_all_donors()
 
     type_count_stats = report_service.stats_donation_type_count()
