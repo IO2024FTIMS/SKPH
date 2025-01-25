@@ -43,8 +43,6 @@ def fetch_donors():
 @bp.route('/donation/create', methods=['GET', 'POST'])
 @roles_required(['donor'])
 def create_donation():
-
-
     donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
     charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
     donation_type = db.session.scalars(db.select(DonationType)).all()
@@ -66,7 +64,6 @@ def create_donation():
             db.session.commit()
             flash('Donation created successfully')
             del new_donation_money
-
         else:
             new_donation_item = DonationItem(
                 description=description,
@@ -74,7 +71,7 @@ def create_donation():
                 donation_type_id=type_d,
                 amount=amount,
                 donor_id=donor.donor_id,
-                charity_campaign_id = charity_campaign
+                charity_campaign_id=charity_campaign
             )
             db.session.add(new_donation_item)
             db.session.commit()
@@ -121,8 +118,8 @@ def confirm_point(donation_item_id):
     return redirect('/donors/donations')
 
 @bp.route('/confirmMoney/<int:id>', methods=['POST'])
-def confirm_money(donation_item_id):
-    donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == donation_item_id))
+def confirm_money(donation_money_id):
+    donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == donation_money_id))
     if not donation:
         flash("Nie znaleziono przedmiotu o podanym ID.")
         return redirect('/')
