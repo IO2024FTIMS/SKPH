@@ -1,34 +1,33 @@
 import csv
 import io
 
-from flask import Blueprint, Response, render_template, request, redirect, url_for
+from flask import Blueprint, Response, render_template, request
 from app.extensions import db
 
-# Modele
 from app.models.affected import Affected
-from app.models.volunteer import Volunteer
 from app.models.donor import Donor
-from app.models.charity_campaign import OrganizationCharityCampaign, CharityCampaign
-from app.models.organization import Organization
+from app.models.charity_campaign import OrganizationCharityCampaign
 
-# Serwis i utils
 from .chart_utils import create_bar_chart_base64
 from .report_service import ReportService
+from flask_login import login_required
+from app.auth.user_service import roles_required
+
 
 bp = Blueprint("reports", __name__, template_folder="templates/reports", static_folder="../static/reports")
 report_service = ReportService()
 
 
 @bp.route('/ui', methods=['GET'])
+@login_required
 def ui():
-    """
-    Strona główna raportów (z przyciskami).
-    """
     return render_template('reports/reports_ui.jinja')
 
 
 # =================== RAPORT AFFECTED ===================
 @bp.route('/affected-report', methods=['GET'])
+@login_required
+@roles_required(['affected', 'authorities', 'admin'])
 def affected_report():
     affected_list = db.session.query(Affected).all()
 
@@ -103,6 +102,8 @@ def affected_report():
 
 
 @bp.route('/affected-report-csv', methods=['GET'])
+@login_required
+@roles_required(['affected', 'authorities', 'admin'])
 def affected_report_csv():
     affected_list = db.session.query(Affected).all()
     output = io.StringIO()
@@ -125,6 +126,8 @@ def affected_report_csv():
 
 # =================== RAPORT VOLUNTEER ===================
 @bp.route('/volunteer-report', methods=['GET'])
+@login_required
+@roles_required(['volunteer', 'authorities', 'admin'])
 def volunteer_report():
     volunteer_list = report_service.get_all_volunteers()
     city_stats = report_service.stats_by_city_volunteer()
@@ -188,6 +191,8 @@ def volunteer_report():
 
 
 @bp.route('/volunteer-report-csv', methods=['GET'])
+@login_required
+@roles_required(['volunteer', 'authorities', 'admin'])
 def volunteer_report_csv():
     volunteer_list = report_service.get_all_volunteers()
     output = io.StringIO()
@@ -208,6 +213,8 @@ def volunteer_report_csv():
 
 # =================== RAPORT DONOR ===================
 @bp.route('/donor-report', methods=['GET'])
+@login_required
+@roles_required(['donor', 'authorities', 'admin'])
 def donor_report():
     """
     Raport Donor (bez 'rozszerzony').
@@ -296,6 +303,8 @@ def donor_report():
 
 
 @bp.route('/donor-report-csv', methods=['GET'])
+@login_required
+@roles_required(['donor', 'authorities', 'admin'])
 def donor_report_csv():
     donors = report_service.get_all_donors()
     output = io.StringIO()
@@ -314,6 +323,8 @@ def donor_report_csv():
 
 
 @bp.route('/single-donor-report', methods=['GET'])
+@login_required
+@roles_required(['donor', 'authorities', 'admin'])
 def single_donor_report():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
@@ -424,6 +435,8 @@ def single_donor_report():
 
 
 @bp.route('/single-donor-report-csv', methods=['GET'])
+@login_required
+@roles_required(['donor', 'authorities', 'admin'])
 def single_donor_report_csv():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
@@ -481,6 +494,8 @@ def single_donor_report_csv():
 
 # =================== RAPORT ORGANIZATION ===================
 @bp.route('/organization-report', methods=['GET'])
+@login_required
+@roles_required(['organization', 'authorities', 'admin'])
 def organization_report():
     approval_stats = report_service.stats_organization_approval()
     approval_chart_b64 = create_bar_chart_base64(
@@ -571,6 +586,8 @@ def organization_report():
 
 
 @bp.route('/organization-report-csv', methods=['GET'])
+@login_required
+@roles_required(['organization', 'authorities', 'admin'])
 def organization_report_csv():
     org_list = report_service.get_all_organizations()
 
