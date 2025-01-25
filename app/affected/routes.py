@@ -36,9 +36,11 @@ def samples():
     with db.session() as session:
         address1 = Address(street='Miejska', street_number='1a', city='Łódź', voivodeship='Łódzkie')
         authority1 = Authorities(name='Aleksander Wika', phone='758934576', approved=True, address=address1)
-        sample_campaign = CharityCampaign(name="Pomoc Dla Powodzian",
-                                          description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
-                                          authority=authority1)
+        sample_campaign = CharityCampaign(
+            name="Pomoc Dla Powodzian",
+            description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
+            authority=authority1
+        )
         session.add(sample_campaign)
         session.flush()
 

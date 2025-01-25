@@ -6,7 +6,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Enum as SQLEnum
 
 from app.extensions import db
-from app.models.donation import DonationType
 
 
 class RequestStatus(Enum):
