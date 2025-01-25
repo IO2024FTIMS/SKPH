@@ -4,13 +4,14 @@ from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
-
 from app.auth.user_service import roles_required
 from app.extensions import db
-from app.models.charity_campaign import OrganizationCharityCampaign
-from app.models.donation import DonationItem, DonationMoney
+from app.models.address import Address
+from app.models.authorities import Authorities
+from app.models.charity_campaign import OrganizationCharityCampaign, CharityCampaign
+from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
-from app.models.user import User
+from app.models.organization import Organization
 
 bp = Blueprint('donors', __name__,
                template_folder='../templates/donors',
@@ -43,113 +44,147 @@ def fetch_donors():
 @bp.route('/donation/create', methods=['GET', 'POST'])
 @roles_required(['donor'])
 def create_donation():
+
+
     donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
+    charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
+    ItemDonationType = db.session.scalars(db.select(DonationType)).all()
     if request.method == 'POST':
         description = request.form['description']
         type_d = request.form['donation_type']
-
+        charity_campaign = request.form['organization_charity_campaign_id']
+        amount = request.form['amount']
         if type_d == 'money':
-            amount = request.form['amount']
             new_donation_money = DonationMoney(
                 description=description,
                 donation_date=date.today(),
                 donation_type="Money",
                 cashAmount=amount,
-                donor_id=donor.donor_id
+                donor_id=donor.donor_id,
+                charity_campaign_id=charity_campaign
             )
             db.session.add(new_donation_money)
             db.session.commit()
             flash('Donation created successfully')
             del new_donation_money
 
-        if type_d == 'item':
-            item_type = request.form['item_donation_type']
-            item_count = request.form['count']
+        else:
             new_donation_item = DonationItem(
                 description=description,
                 donation_date=date.today(),
-                donation_type=ItemDonationType(item_type),
-                number=item_count,
-                donor_id=donor.donor_id
+                donation_type_id=type_d,
+                amount=amount,
+                donor_id=donor.donor_id,
+                charity_campaign_id = charity_campaign
             )
             db.session.add(new_donation_item)
             db.session.commit()
             flash('Donation created successfully')
             del new_donation_item
 
-        return redirect(url_for('donors.list_donations', donor_id=donor.donor_id))
-    charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
+        return redirect(url_for('donors.index', donor_id=donor.donor_id))
     return render_template('create_donation.jinja',
                            charity_campaigns=charity_campaigns,
                            ItemDonationType=ItemDonationType)
 
 
-@bp.route('/donations/<int:donor_id>')
+@bp.route('/donations')
 @roles_required(['donor', 'organization', 'authorities'])
-def list_donations(donor_id):
+def list_donations():
+    donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
     if current_user.type == 'donor':
-        if current_user.donor.donor_id != donor_id:
+        if current_user.donor.donor_id != donor.donor_id:
             return abort(403)
 
-    donor = db.session.get(Donor, donor_id)
+    donor = db.session.get(Donor, donor.donor_id)
     if Donor is None:
         return 'Donor not found', 404
 
     donations_money = db.session.scalars(
-        db.select(DonationMoney).where(DonationMoney.donor_id == donor_id)
+        db.select(DonationMoney).where(DonationMoney.donor_id == donor.donor_id)
     )
     donations_items = db.session.scalars(
-        db.select(DonationItem).where(DonationItem.donor_id == donor_id)
+        db.select(DonationItem).where(DonationItem.donor_id == donor.donor_id)
     )
 
     return render_template('donations.jinja', donations_money=donations_money.all(), donor=donor,
                            donations_items=donations_items.all())
 
 
+@bp.route('/confirm/<int:id>', methods=['POST'])
+def confirm_point(id):
+    donation = db.session.scalar(db.select(DonationItem).filter(DonationItem.donationItem_id == id))
+    if not donation:
+        flash("Nie znaleziono przedmiotu o podanym ID.")
+        return redirect('/')
+
+    flash(str(donation.return_confirmation()))
+    return redirect('/donors/donations')
+
+@bp.route('/confirmMoney/<int:id>', methods=['POST'])
+def confirm_money(id):
+    donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == id))
+    if not donation:
+        flash("Nie znaleziono przedmiotu o podanym ID.")
+        return redirect('/')
+
+    flash(str(donation.return_confirmation()))
+    return redirect('/donors/donations')
+
+
 @bp.route('/samples', methods=['POST'])
 def donor_samples():
-    if db.session.query(Donor).count() > 0:
-        flash('EXISTING DATA FOUND, NOT ADDED!')
-        return redirect(url_for('volunteers.index'))
-
-    new_user = User(
-        email="john.doe@example.com",
-        password_hash=generate_password_hash("secure_password123"),
-        active=True,
-        type="donor"
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-    db.session.refresh(new_user)
-
     new_donor = Donor(
         name="John",
         surname="Doe",
         phone_number="123456789",
         email="john.doe@example.com",
-        user_id=new_user.id
+        user_id=current_user.id
     )
     db.session.add(new_donor)
     db.session.commit()
     db.session.refresh(new_donor)
 
+    address2 = Address(street='Kimbal', street_number='1a', city='Łódź', voivodeship='Łódzkie')
+    authority2 = Authorities(name='Aleksander alkohol', phone='758934576', approved=True, address=address2)
+    sample_campaign2 = CharityCampaign(name="Pomoc Dla Powodzian",
+                                      description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
+                                      authority=authority2)
+    organization2 = Organization(organization_name='Fundacja Sieniepomaga',
+                                 description='Fundacja Sieniepomaga powstała, by nie pomagac to,\
+                                       co na pierwszy rzut oka wydaje się możliwe.\
+                                       nie ratujemy życia i zdrowia, które wyceniono na kwoty\
+                                       niemożliwe do osiągnięcia przez Potrzebujących.',
+                                 approved=True, address=address2)
+
+    sample_organization_campaign2 = OrganizationCharityCampaign(organization=organization2,
+                                                               charity_campaign=sample_campaign2)
+    db.session.add(sample_campaign2)
+    db.session.add(organization2)
+    db.session.add(sample_organization_campaign2)
+
+    db.session.commit()
+    db.session.refresh(organization2)
+    db.session.refresh(sample_organization_campaign2)
+    db.session.refresh(sample_campaign2)
+
     new_donation_money = DonationMoney(
-        description="Charity Fundraiser",
+        description='duza kasa',
         donation_date=date.today(),
         donation_type="Money",
-        cashAmount=100.0,
-        donor_id=new_donor.donor_id
+        cashAmount=1000,
+        donor_id=new_donor.donor_id,
+        charity_campaign_id=sample_organization_campaign2.id
     )
     db.session.add(new_donation_money)
 
-    # Dodanie darowizny rzeczowej
     new_donation_item = DonationItem(
-        description="T-shirt",
+        description='elo',
         donation_date=date.today(),
-        donation_type="Clothes",
-        number=10,
-        donor_id=new_donor.donor_id
+        donation_type_id=1,
+        amount=15,
+        donor_id=new_donor.donor_id,
+        charity_campaign_id=sample_organization_campaign2.id  # Ensure this ID exists
     )
     db.session.add(new_donation_item)
     db.session.commit()
