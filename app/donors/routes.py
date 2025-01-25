@@ -117,6 +117,7 @@ def confirm_point(donation_item_id):
     flash(str(donation.return_confirmation()))
     return redirect('/donors/donations')
 
+
 @bp.route('/confirmMoney/<int:id>', methods=['POST'])
 def confirm_money(donation_money_id):
     donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == donation_money_id))
@@ -143,15 +144,17 @@ def donor_samples():
 
     address2 = Address(street='Kimbal', street_number='1a', city='Łódź', voivodeship='Łódzkie')
     authority2 = Authorities(name='Aleksander alkohol', phone='758934576', approved=True, address=address2)
-    sample_campaign2 = CharityCampaign(name="Pomoc Dla Powodzian",
-                                      description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
-                                      authority=authority2)
-    organization2 = Organization(organization_name='Fundacja Sieniepomaga',
-                                 description='Fundacja Sieniepomaga powstała, by nie pomagac to,\
-                                       co na pierwszy rzut oka wydaje się możliwe.\
-                                       nie ratujemy życia i zdrowia, które wyceniono na kwoty\
-                                       niemożliwe do osiągnięcia przez Potrzebujących.',
-                                 approved=True, address=address2)
+    sample_campaign2 = CharityCampaign(
+        name="Pomoc Dla Powodzian",
+        description="Akcja ma na celu pomoc osobą dotkniętych powodzią na Dolnym Śląsku",
+        authority=authority2)
+    organization2 = Organization(
+        organization_name='Fundacja Sieniepomaga',
+        description='Fundacja Sieniepomaga powstała, by nie pomagac to,\
+              co na pierwszy rzut oka wydaje się możliwe.\
+              nie ratujemy życia i zdrowia, które wyceniono na kwoty\
+              niemożliwe do osiągnięcia przez Potrzebujących.',
+        approved=True, address=address2)
 
     sample_organization_campaign2 = OrganizationCharityCampaign(organization=organization2,
                                                                charity_campaign=sample_campaign2)
