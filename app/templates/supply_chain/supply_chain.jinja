@@ -244,7 +244,11 @@
       <th>{{ _("Avalible money") }}</th>
     </tr>
     <tr>
-      <td>{{ curr_account_balance }}</td>
+      {% if curr_account_balance is defined %}
+      <td>{{ curr_account_balance.amount }}</td>
+      {% else %}
+      <td>0</td>
+      {% endif %}
     </tr>
   </table>
 
