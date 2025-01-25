@@ -44,3 +44,4 @@ class OrganizationCharityCampaign(db.Model):
     )
     donations_money = relationship('DonationMoney', back_populates='charity_campaign')
     donations_item = relationship('DonationItem', back_populates='charity_campaign')
+    item_stock = relationship('ItemStock', back_populates='organization_charity_campaign')

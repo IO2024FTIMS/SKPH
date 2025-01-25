@@ -34,6 +34,7 @@ class DonationItem(db.Model):
     donor: Mapped["Donor"] = relationship(back_populates="donations_items")
     charity_campaign_id: Mapped[int] = mapped_column(ForeignKey('organization_charity_campaign.id'))
     charity_campaign = relationship('OrganizationCharityCampaign')
+    donation_type = relationship('DonationType')
 
     def return_confirmation(self) -> str:
         return f"Donation confirmed: {self.description}, Amount: {self.amount}"
