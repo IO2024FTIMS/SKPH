@@ -2,7 +2,6 @@
 
 {% block title %}{{ _("Affected Details") }}{% endblock %}
 
-
 {% block content %}
 <div class="container mt-2">
   <header>
@@ -17,6 +16,7 @@
       <li class="list-group-item"><strong>{{ _("Needs:") }}</strong> {{ affected.needs }}</li>
       <li class="list-group-item"><strong>{{ _("Address:") }}</strong> {{ affected.address.street }} {{ affected.address.street_number }},
           {{ affected.address.city }}, {{ affected.address.voivodeship }}</li>
+      <li class="list-group-item"><strong>{{ _("Campaign:") }}</strong> {{ affected.campaign.name }}</li>
     </ul>
   </section>
 
@@ -29,6 +29,7 @@
                     <th>{{ _("Request Name") }}</th>
                     <th>{{ _("Status") }}</th>
                     <th>{{ _("Needs") }}</th>
+                    <th>{{ _("Amount") }}</th>
                     <th>{{ _("Address") }}</th>
                     <th>{{ _("Actions") }}</th>
                 </tr>
@@ -38,7 +39,8 @@
                     <tr>
                         <td>{{ request.name }}</td>
                         <td>{{ request.status.value }}</td>
-                        <td>{{ request.needs }}</td>
+                        <td>{{ request.donation_type.type }}</td>
+                        <td>{{ request.amount }}</td>
                         <td>{{ request.req_address.street }} {{ request.req_address.street_number }},
                             {{ request.req_address.city }}, {{ request.req_address.voivodeship }}</td>
                         <td>

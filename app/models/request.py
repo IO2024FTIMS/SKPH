@@ -22,12 +22,15 @@ class Request(db.Model):
     req_address = relationship('Address')
     req_address_id = mapped_column(ForeignKey('address.id'))
     affected_id = mapped_column(ForeignKey('affected.id'))
-    needs: Mapped[str]
+    donation_type_id = mapped_column(ForeignKey('donation_type.id'))
+    amount: Mapped[int]
 
     affected = relationship('Affected', back_populates='requests')
+    donation_type = relationship('DonationType')
 
     def __repr__(self):
         return (
             f'Request:(id={self.id!r}, name={self.name!r}, '
-            f'status={self.status.value!r},  affected_id={self.affected_id!r})'
+            f'status={self.status.value!r}, needs={self.needs.value!r}, '
+            f'quantity={self.quantity!r}, affected_id={self.affected_id!r})'
         )

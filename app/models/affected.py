@@ -12,9 +12,11 @@ class Affected(db.Model):
     address = relationship('Address')
     address_id = mapped_column(ForeignKey('address.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    campaign_id = db.Column(db.Integer, db.ForeignKey('charity_campaign.id'))
 
     # Add the missing relationship
     requests = relationship('app.models.request.Request', back_populates='affected')
+    campaign = relationship('CharityCampaign')
 
     def __repr__(self):
         return f'Affected(id={self.id}, needs={self.needs})'

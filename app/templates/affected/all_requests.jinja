@@ -13,6 +13,7 @@
                                 <th>{{ _("Status") }}</th>
                                 <th>{{ _("Affected") }}</th>
                                 <th>{{ _("Needs") }}</th>
+                                <th>{{ _("Amount") }}</th>
                                 <th>{{ _("Address ID") }}</th>
                                 <th>{{ _("Street") }}</th>
                                 <th>{{ _("Street Number") }}</th>
@@ -28,7 +29,8 @@
                                 <td>{{ request.name }}</td>
                                 <td>{{ _(request.status.value) }}</td>
                                 <td>{{ request.affected.first_name }} {{ request.affected.last_name }}</td>
-                                <td>{{ request.needs }}</td>
+                                <td>{{ request.donation_type.type }}</td>
+                                <td>{{ request.amount }}</td>
                                 <td>{{ request.req_address_id }}</td>
                                 <td>{{ request.req_address.street }}</td>
                                 <td>{{ request.req_address.street_number }}</td>

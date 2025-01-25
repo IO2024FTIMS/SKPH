@@ -15,12 +15,12 @@
         <th scope="col">{{ _("ID") }}</th>
         <th scope="col">{{ _("First Name") }}</th>
         <th scope="col">{{ _("Last Name") }}</th>
-        <th scope="col">{{ _("Needs") }}</th>
         <th scope="col">{{ _("Address ID") }}</th>
         <th scope="col">{{ _("Street") }}</th>
         <th scope="col">{{ _("Street number") }}</th>
         <th scope="col">{{ _("City") }}</th>
         <th scope="col">{{ _("Voivodeship") }}</th>
+        <th scope="col">{{ _("Campaign") }}</th>
         <th scope="col">{{ _("Actions") }}</th>
       </tr>
     </thead>
@@ -30,12 +30,12 @@
         <td>{{ affected.id }}</td>
         <td>{{ affected.first_name }}</td>
         <td>{{ affected.last_name }}</td>
-        <td>{{ affected.needs }}</td>
         <td>{{ affected.address_id }}</td>
         <td>{{ affected.address.street }}</td>
         <td>{{ affected.address.street_number}}</td>
         <td>{{ affected.address.city}}</td>
         <td>{{ affected.address.voivodeship}}</td>
+        <td>{{ affected.campaign.name }}</td>
         <td>
           <a href="{{ url_for('affected.affected_details', affected_id=affected.id) }}"
             class="btn btn-primary btn-sm">{{ _("View Details") }}</a>
