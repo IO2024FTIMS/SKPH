@@ -89,7 +89,6 @@ class ReportService:
             data[status_str] = data.get(status_str, 0) + 1
         return data
 
-
     # ====== Volunteer statystyki =======
     def stats_by_city_volunteer(self):
         data = {}
