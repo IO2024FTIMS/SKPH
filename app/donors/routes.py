@@ -156,8 +156,10 @@ def donor_samples():
               niemożliwe do osiągnięcia przez Potrzebujących.',
         approved=True, address=address2)
 
-    sample_organization_campaign2 = OrganizationCharityCampaign(organization=organization2,
-                                                               charity_campaign=sample_campaign2)
+    sample_organization_campaign2 = OrganizationCharityCampaign(
+        organization=organization2,
+        charity_campaign=sample_campaign2)
+
     db.session.add(sample_campaign2)
     db.session.add(organization2)
     db.session.add(sample_organization_campaign2)
