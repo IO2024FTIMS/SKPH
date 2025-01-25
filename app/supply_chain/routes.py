@@ -1,23 +1,21 @@
-from flask import Blueprint, redirect, render_template, request
-
-from sqlalchemy import text
-
 from datetime import datetime
 
-from app.extensions import db
-from app.models.item_stock import ItemStock
+from flask import Blueprint, redirect, render_template, request
+from sqlalchemy import text
 
-from app.models.volunteer import Volunteer
-from app.models.organization import Organization
-from app.models.charity_campaign import OrganizationCharityCampaign
+from app.extensions import db
 from app.models.address import Address
 from app.models.affected import Affected
-from app.models.donation import DonationItem, DonationType
-from app.models.user import User
-from app.models.donor import Donor
 from app.models.authorities import Authorities
-from app.models.request import Request
 from app.models.charity_campaign import CharityCampaign
+from app.models.charity_campaign import OrganizationCharityCampaign
+from app.models.donation import DonationItem, DonationType
+from app.models.donor import Donor
+from app.models.item_stock import ItemStock
+from app.models.organization import Organization
+from app.models.request import Request, RequestStatus
+from app.models.user import User
+from app.models.volunteer import Volunteer
 from app.supply_chain.resource_manager import ResourceManager
 
 bp = Blueprint('supply_chain', __name__,
@@ -28,6 +26,33 @@ bp = Blueprint('supply_chain', __name__,
 resource_manager = ResourceManager()
 
 
+def get_request_data(req_id=None):
+    if req_id is None:
+        current_requests = Request.query \
+            .join(DonationType, Request.donation_type_id == DonationType.id) \
+            .join(Affected, Request.affected_id == Affected.id) \
+            .join(Address, Request.req_address_id == Address.id) \
+            .add_columns(Request.id, Request.name, Request.status, Affected.first_name, Affected.last_name,
+                         Address.city, Address.street, Address.voivodeship, DonationType.type, Request.amount) \
+            .all()
+    else:
+        current_requests = Request.query \
+            .join(DonationType, Request.donation_type_id == DonationType.id) \
+            .join(Affected, Request.affected_id == Affected.id) \
+            .join(Address, Request.req_address_id == Address.id) \
+            .where(Request.id == req_id) \
+            .add_columns(Request.id, Request.name, Request.status, Affected.first_name, Affected.last_name,
+                         Address.city, Address.street, Address.voivodeship, DonationType.type, Request.amount) \
+            .first()
+    return current_requests
+
+
+def get_stock_with_types():
+    query = text('''select ist.id, dt.type, ist.amount  from item_stock ist
+        join donation_type dt on ist.item_type_id = dt.id''')
+    return db.session.execute(query).mappings().all()
+
+
 @bp.route('/')
 def index():
     charity_campaign = db.session.query(CharityCampaign).all()
@@ -35,26 +60,25 @@ def index():
         return render_template('supply_chain.jinja',
                                charity_campaign=None,
                                item_donations=None)
-    query = text('''select ist.id, dt.type, ist.amount  from item_stock ist
-        join donation_type dt on ist.item_type_id = dt.id''')
 
-    item_donations = db.session.execute(query).mappings().all()
+    item_donations = get_stock_with_types()
     charity_campaign = CharityCampaign.query.filter(CharityCampaign.name == 'Charity campagin 1').first()
     avalible_volunteers = Volunteer.query.all()
-    current_requests = Request.query \
-        .join(DonationType, Request.donation_type_id == DonationType.id) \
-        .join(Affected, Request.affected_id == Affected.id) \
-        .join(Address, Request.req_address_id == Address.id) \
-        .add_columns(Request.id, Request.name, Request.status, Affected.first_name, Affected.last_name,
-                     Address.city, Address.street, Address.voivodeship, DonationType.type, Request.amount) \
-        .all()
-    print(current_requests)
+
+    current_requests = get_request_data()
+    print(current_requests[0].status == RequestStatus.PENDING)
 
     return render_template('supply_chain.jinja',
                            item_donations=item_donations,
                            charity_campaign=charity_campaign,
                            volunteers=avalible_volunteers,
-                           current_requests=current_requests)
+                           current_requests=current_requests,
+                           request_status=RequestStatus)
+
+
+@bp.route('/donate-resources')
+def donate_resources():
+    return redirect('/supply-chain')
 
 
 @bp.route('/truncate')
@@ -65,31 +89,31 @@ def truncate():
     return redirect('/supply-chain')
 
 
-@bp.route('/resource/<int:id>', methods=['GET', 'POST'])
-def manage_resource(item_id):
-    resource = db.session.get(ItemStock, item_id)
+@bp.route('/request/<int:req_id>', methods=['GET', 'POST'])
+def manage_request(req_id):
+    curr_request_data = get_request_data(req_id=req_id)
+    query = text('''select ist.amount, ist.id  from item_stock ist
+        join donation_type dt on ist.item_type_id = dt.id
+        where dt.type = \'''' + curr_request_data.type + '\'')
+    stock_item = db.session.execute(query).mappings().first()
+    print(curr_request_data)
     if request.method == 'GET':
-        print('resource: ')
-        print(resource)
-        resource_type = db.session.get(DonationType, resource.item_type_id)
-        return render_template('manage_resource.jinja',
-                               resource=resource,
-                               resource_type=resource_type,
-                               affecteds=db.session.query(Affected).all())
-    if request.method == 'POST':
-        affected_assigned_resources = {}
-        resouce_use_amount = 0
-        for i in db.session.query(Affected).all():
-            if int(request.form[i.id]) > 0:
-                affected_assigned_resources[i.id] = int(request.form[i.id])
-                resouce_use_amount += int(request.form[i.id])
-        print(resource)
-        return redirect('/')
 
+        return render_template('manage_request.jinja', curr_request=curr_request_data,
+                               stock_item_count=stock_item['amount'])
 
-@bp.route('/manage-request/<int:id>', methods=['GET', 'POST'])
-def manage_request(request_id):
-    return render_template('manage_request.jinja', request_id=request_id)
+    elif request.method == 'POST':
+
+        print(request.form)
+        current_request = Request.query.filter(Request.id == req_id).first()
+        current_stock = ItemStock.query.filter(ItemStock.id == stock_item['id']).first()
+        donation_amount = int(request.form['donation_amount'])
+        if donation_amount <= current_stock.amount:
+            current_request.status = RequestStatus.COMPLETED
+            current_stock.amount -= donation_amount
+            current_request.amount = donation_amount
+            db.session.commit()
+            return redirect('/supply-chain')
 
 
 @bp.route('/add-data')
@@ -123,9 +147,12 @@ def add_data():
             return render_template('supply_chain.jinja', item_donations=None, charity_campaign=None)
         else:
             charity_campaign = charity_campaign[0]
-            query = text('select ist.id, dt.type, ist.amount from item_stock ist join donation_type dt on ist.item_type_id = dt.id')
+            query = text('select ist.id, dt.type, ist.amount from item_stock ist join donation_type \
+                         dt on ist.item_type_id = dt.id')
             item_donations = db.session.execute(query).mappings().all()
-            return render_template('supply_chain.jinja', item_donations=item_donations, charity_campaign=charity_campaign)
+            return render_template('supply_chain.jinja',
+                                   item_donations=item_donations,
+                                   charity_campaign=charity_campaign)
     else:
         db.session.add(address1)
         db.session.add(address2)
@@ -209,7 +236,9 @@ def add_data():
             organization_name="FUNDACJA OJCA RYDZYKA",
             description="bardzo dobra organizacja",
             approved=True,
-            address_id=Address.query.filter(Address.street == "456 Elm St" and Address.street_number == 'Apt 202' and Address.city == 'Los Angeles').first().id,
+            address_id=Address.query.filter(Address.street == "456 Elm St"
+                                            and Address.street_number == 'Apt 202'
+                                            and Address.city == 'Los Angeles').first().id,
             user_id=User.query.filter(User.email == "org@email.com").first().id,
         )
 

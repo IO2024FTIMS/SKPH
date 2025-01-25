@@ -25,8 +25,7 @@
     <tr>
       <td>{{ _("Lp") }} </td>
       <td>{{ _("Resource type:") }} </td>
-      <td>{{ _("Number") }} Number</td>
-      <td>{{ _("description") }} description</td>
+      <td>{{ _("Number") }} </td>
     </tr>
     {% for donation in item_donations %}
 
@@ -34,7 +33,7 @@
         <td>{{ loop.index }}</td>
         <td>{{ donation.type }}</td>
         <td>{{ donation.amount }}</td>
-        <td><a href="{{ url_for('supply_chain.manage_resource', id=donation.id ) }}"><input type="button" value="Manage"/></a></td>
+        <td><a href="">{{ _("Manage") }}</a></td>
       </tr>
 
     {% endfor %}
@@ -61,21 +60,21 @@
         <td>{{ _("Amount") }}</td>
         
       </tr>
-      {% for request in current_requests %}
-  
+      {% for curr_request in current_requests %}
+      {% if curr_request.status == request_status.PENDING %}
         <tr>
           <td>{{ loop.index }}</td>
-          <td>{{ request.name }}</td>
-          <td>{{ request.status }}</td>
+          <td>{{ curr_request.name }}</td>
+          <td>{{ curr_request.status }}</td>
           <td>
             <table class="table">
               <tr>
                 <td>{{ _("First name:") }}</td>
-                <td>{{ request.first_name }}</td>
+                <td>{{ curr_request.first_name }}</td>
               </tr>
               <tr>
                 <td>{{ _("Last name") }}  </td>
-                <td> {{ request.last_name }} </td>
+                <td> {{ curr_request.last_name }} </td>
               </tr>
             </table>
           </td>
@@ -83,26 +82,85 @@
             <table>
               <tr>
                 <td>{{ _("City") }}:</td>
-                <td>{{ request.city }}</td>
+                <td>{{ curr_request.city }}</td>
               </tr>
               <tr>
                 <td>{{ _("Street") }}  </td>
-                <td> {{ request.street }} </td>
+                <td> {{ curr_request.street }} </td>
               </tr>
             </table>
           </td>
-          <td>{{ request.type }}</td>
-          <td> {{request.amount}} </td>
+          <td>{{ curr_request.type }}</td>
+          <td> {{curr_request.amount}} </td>
           <td>
-            <a href="{{ url_for('supply_chain.manage_request', id=request.id) }}">
+            <a href="{{ url_for('supply_chain.manage_request', req_id=curr_request.id) }}">
             {{ _("Manage request") }}
         </a>
           </td>
         </tr>
-  
+      {% endif %}
       {% endfor %}
+
     </table>
       {% endif %}
+
+      <table class="table table-hover">
+        <tr>
+          <th>{{ _("Donation history: ") }} </th>
+        </tr>
+    
+        {% if current_requests is none %}
+        </table>
+        <p>{{ _("Could not find any requests") }} </p>
+    
+        {% else %}
+        <tr>
+          <td>{{ _("Lp") }} </td>
+          <td>{{ _("Name") }}</td>
+          <td>{{ _("Affected") }}  </td>
+          <td>{{ _("Address") }} </td>
+          <td>{{ _("Needs") }}</td>
+          <td>{{ _("Amount") }}</td>
+          
+        </tr>
+        {% for curr_request in current_requests %}
+        {% if curr_request.status == request_status.COMPLETED %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ curr_request.name }}</td>
+            <td>
+              <table class="table">
+                <tr>
+                  <td>{{ _("First name:") }}</td>
+                  <td>{{ curr_request.first_name }}</td>
+                </tr>
+                <tr>
+                  <td>{{ _("Last name") }}  </td>
+                  <td> {{ curr_request.last_name }} </td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <table>
+                <tr>
+                  <td>{{ _("City") }}:</td>
+                  <td>{{ curr_request.city }}</td>
+                </tr>
+                <tr>
+                  <td>{{ _("Street") }}  </td>
+                  <td> {{ curr_request.street }} </td>
+                </tr>
+              </table>
+            </td>
+            <td>{{ curr_request.type }}</td>
+            <td> {{curr_request.amount}} </td>
+          </tr>
+        {% endif %}
+        {% endfor %}
+  
+      </table>
+        {% endif %}
+
 
 
   <table>
