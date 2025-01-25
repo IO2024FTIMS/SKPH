@@ -18,28 +18,18 @@
             <input type="number" class="form-control" id="amount" name="amount" placeholder="{{ _('Amount') }}"
               step="0.5">
           </div>
-          <div class="form-group" id="count_container" style="display: none;">
-            <label for="count">{{ _("Donation Count:") }}</label>
-            <input type="number" class="form-control" id="count" name="count" placeholder="{{ _('Count') }}" step="1">
-          </div>
           <div>
             <label for="donation_type">{{ _("Type:") }}</label>
             <select class="form-control" id="donation_type" name="donation_type" required
               onchange="toggleDonationFields()">
               <option value="money">{{ _("Money") }}</option>
-              <option value="item">{{ _("Item") }}</option>
-            </select>
-          </div>
-          <br>
-          <div id="item_donation_type_container" style="display: none;">
-            <label for="item_donation_type">{{ _("Item") }}:</label>
-            <select name="item_donation_type" id="item_donation_type" class="form-control">
               {% for item in ItemDonationType %}
-              <option value="{{ item.value }}">{{ item.name }}</option>
+              <option value="{{ item.id }}">{{ item.type }}</option>
               {% endfor %}
             </select>
           </div>
-          <br>
+            <br>
+          <div>
           <label for="organization_charity_campaign_id">{{ _("Charity Campaign:") }}</label>
           <select class="form-control" id="organization_charity_campaign_id" name="organization_charity_campaign_id"
             required>
@@ -48,7 +38,8 @@
               campaign.organization.organization_name }})</option>
             {% endfor %}
           </select>
-          <br>
+          </div>
+         <br>
           <div>
             <button type="submit" class="btn btn-primary">{{ _("Confirm Donation") }}</button>
             <a href="{{ url_for('home') }}" class="btn btn-danger">{{ _("Cancel") }}</a>
