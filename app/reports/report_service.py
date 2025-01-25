@@ -4,7 +4,7 @@ from datetime import datetime
 from app.extensions import db
 from app.models.affected import Affected
 from app.models.charity_campaign import OrganizationCharityCampaign, CharityCampaign
-from app.models.donation import DonationItem, DonationMoney,DonationType
+from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
 from app.models.organization import Organization
 from app.models.request import Request
