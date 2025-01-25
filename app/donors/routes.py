@@ -3,7 +3,6 @@ from datetime import date
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user
-from werkzeug.security import generate_password_hash
 from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.address import Address
@@ -48,7 +47,7 @@ def create_donation():
 
     donor = db.session.scalar(db.select(Donor).where(Donor.donor_id == current_user.donor.donor_id))
     charity_campaigns = db.session.scalars(db.select(OrganizationCharityCampaign)).all()
-    ItemDonationType = db.session.scalars(db.select(DonationType)).all()
+    donation_type = db.session.scalars(db.select(DonationType)).all()
     if request.method == 'POST':
         description = request.form['description']
         type_d = request.form['donation_type']
@@ -85,7 +84,7 @@ def create_donation():
         return redirect(url_for('donors.index', donor_id=donor.donor_id))
     return render_template('create_donation.jinja',
                            charity_campaigns=charity_campaigns,
-                           ItemDonationType=ItemDonationType)
+                           ItemDonationType=donation_type)
 
 
 @bp.route('/donations')
@@ -112,8 +111,8 @@ def list_donations():
 
 
 @bp.route('/confirm/<int:id>', methods=['POST'])
-def confirm_point(id):
-    donation = db.session.scalar(db.select(DonationItem).filter(DonationItem.donationItem_id == id))
+def confirm_point(donation_item_id):
+    donation = db.session.scalar(db.select(DonationItem).filter(DonationItem.donationItem_id == donation_item_id))
     if not donation:
         flash("Nie znaleziono przedmiotu o podanym ID.")
         return redirect('/')
@@ -122,8 +121,8 @@ def confirm_point(id):
     return redirect('/donors/donations')
 
 @bp.route('/confirmMoney/<int:id>', methods=['POST'])
-def confirm_money(id):
-    donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == id))
+def confirm_money(donation_item_id):
+    donation = db.session.scalar(db.select(DonationMoney).filter(DonationMoney.donationMoney_id == donation_item_id))
     if not donation:
         flash("Nie znaleziono przedmiotu o podanym ID.")
         return redirect('/')
