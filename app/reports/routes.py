@@ -221,7 +221,6 @@ def donor_report():
     """
     donors = report_service.get_all_donors()
 
-    # Podstawowe statystyki
     type_count_stats = report_service.stats_donation_type_count()
     sums_stats = report_service.stats_donation_sums()
 

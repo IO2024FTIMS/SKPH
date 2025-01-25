@@ -4,7 +4,7 @@ import io
 import matplotlib
 import matplotlib.pyplot as plt
 
-matplotlib.use('Agg')  # używamy backendu do rysowania w pamięci
+matplotlib.use('Agg')
 
 
 def create_bar_chart_base64(data_dict, title):

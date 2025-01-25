@@ -18,9 +18,6 @@ class ReportService:
         self._next_id = 1
 
     def generate_report(self):
-        """
-        Przykład metody, która tworzy w pamięci ResourceReport (jeśli potrzebne).
-        """
         affected_list = db.session.query(Affected).all()
 
         needs_counter = Counter()
@@ -92,15 +89,6 @@ class ReportService:
             data[status_str] = data.get(status_str, 0) + 1
         return data
 
-    def stats_request_by_needs(self):
-        data = {}
-        requests_list = db.session.query(Request).all()
-        for req in requests_list:
-            # UWAGA: w modelu Request NIE masz pola "needs", więc pewnie to błąd
-            # data[n] = ...
-            # Zostawiamy to jako przykład, jeśli by istniało. Możesz usunąć.
-            pass
-        return data
 
     # ====== Volunteer statystyki =======
     def stats_by_city_volunteer(self):
@@ -128,9 +116,6 @@ class ReportService:
         return db.session.query(Donor).all()
 
     def stats_donation_type_count(self):
-        """
-        Zwraca ile jest w bazie donationMoney (liczba wierszy) i donationItem (liczba wierszy).
-        """
         money_count = db.session.query(DonationMoney).count()
         item_count = db.session.query(DonationItem).count()
         return {
@@ -139,9 +124,6 @@ class ReportService:
         }
 
     def stats_donation_sums(self):
-        """
-        Suma kwoty (Money) i suma ilości (Item).
-        """
         total_money = db.session.query(db.func.sum(DonationMoney.cashAmount)).scalar() or 0
         total_items = db.session.query(db.func.sum(DonationItem.amount)).scalar() or 0
         return {
@@ -150,31 +132,22 @@ class ReportService:
         }
 
     def stats_donation_items_by_type(self):
-        """
-        Zwraca np. { "Food": 25, "Clothes": 40 }
-        bazując na sumie DonationItem.amount, grupując po DonationType.type.
-        """
         from app.models.donation import DonationItem, DonationType
 
         data = {}
-        # POBIERAMY naraz: DonationItem (alias: di) i DonationType (alias: dt.type)
         rows = (
             db.session.query(
                 DonationItem.amount,
-                DonationType.type  # to jest kolumna "type" z DonationType
+                DonationType.type
             )
             .join(DonationType, DonationItem.donation_type_id == DonationType.id)
             .all()
         )
         for (amt, dt_type) in rows:
-            # dt_type to np. "Food", "Clothes"
             data[dt_type] = data.get(dt_type, 0) + amt
         return data
 
     def stats_donation_money_by_campaign(self):
-        """
-        Suma money (DonationMoney.cashAmount) wg kampanii (CharityCampaign).
-        """
         data = {}
         money_rows = (
             db.session.query(DonationMoney)
