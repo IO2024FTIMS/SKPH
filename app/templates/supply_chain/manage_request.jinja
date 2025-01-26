@@ -67,7 +67,12 @@
   </select>
   <br>
   <label for="item_amount">{{_('Avalible resource amount:')}}</label>
-  <label name="item_amount">{{stock_item_count}}</label>
+  {% if stock_item.amount is defined %}
+  <input type="number" name="item_amount" value="{{stock_item.amount}}" readonly></input>
+  {% else %}
+  <input type="number" name="item_amount" value="0" readonly></input>
+  {% endif %}
+
   <br>
   <input type="submit" value="{{_('Send to affected')}}">
 </form>
