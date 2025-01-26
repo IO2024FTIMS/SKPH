@@ -33,6 +33,8 @@
     <a class="btn btn-primary btn-lg" href="{{ url_for('maps.index') }}">{{ _("Maps Module") }}</a>
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('chat.index') }}">{{ _("Chat Module") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.demo') }}">{{ _("Tracking and managing resources module") }}</a>
   </div>
   {% endif %}
   <!-- AUTHORITIES -->
@@ -48,7 +50,7 @@
     <a class="btn btn-primary btn-lg" href="{{ url_for('organization.create_charity_campaign') }}">{{
       _("Create a charity campaign") }}</a>
     <br>
-    <a class="btn btn-primary btn-lg" href="#">{{
+    <a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.view_all') }}">{{
       _("Track supplies") }}</a>
   </div>
   {% endif %}
@@ -123,6 +125,9 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('organization.list_my_charity_campaigns') }}">{{
       _("Manage charity campaigns") }}</a>
+    <br>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.index') }}">{{
+      _("Manage resources") }}</a>
     <br>
   </div>
   {% endif %}

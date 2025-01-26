@@ -3,6 +3,9 @@ from datetime import datetime
 from flask import Blueprint, redirect, render_template, request
 from sqlalchemy import text, cast, VARCHAR
 
+from flask_login import login_required, current_user
+from app.auth.user_service import roles_required
+
 from app.extensions import db
 from app.models.address import Address
 from app.models.affected import Affected
@@ -47,73 +50,152 @@ def get_request_data(req_id=None):
     return current_requests
 
 
-def get_stock_with_types(organization_charity_campaign):
-    # query = text('''select ist.id, dt.type, ist.amount  from item_stock ist
-    #     join donation_type dt on ist.item_type_id = dt.id where dt.type != \'Money\'''')
-
-    print(stock_with_types)
-    db.session.execute(stock_with_types)
-    return stock_with_types
+@bp.route('/demo', methods=['GET'])
+def demo():
+    return render_template('module_demo.jinja')
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 def index():
     # TODO
     # add possibility to choose charity campagin from an organization point of view
-    charity_campaign = db.session.query(CharityCampaign).all()
-    if len(charity_campaign) == 0:
-        return render_template('supply_chain.jinja',
-                               charity_campaign=None,
-                               item_donations=None)
 
-    #curr_organization_name = 'FUNDACJA OJCA RYDZYKA'
     curr_organization_name = 'WOŚP'
     curr_organization = Organization.query.filter(Organization.organization_name == curr_organization_name).first()
-    print('organization: ')
-    print(curr_organization)
+    if curr_organization is None:
+        return render_template('supply_chain.jinja', charity_campaign=None, item_donations=None)
 
-    charity_campaign = db.session.query(CharityCampaign).\
-        join(OrganizationCharityCampaign, CharityCampaign.id == OrganizationCharityCampaign.charity_campaign_id).\
-        join(Organization, Organization.id == OrganizationCharityCampaign.organization_id).\
-        filter(Organization.organization_name == curr_organization.organization_name).first()
+    if request.method == 'GET':
+        all_charity_campaigns = db.session.query(CharityCampaign).\
+            join(OrganizationCharityCampaign, CharityCampaign.id == OrganizationCharityCampaign.charity_campaign_id).\
+            join(Organization, Organization.id == OrganizationCharityCampaign.organization_id).\
+            filter(Organization.organization_name == curr_organization.organization_name).all()
+        if len(all_charity_campaigns) == 0:
+            return render_template('supply_chain.jinja',
+                                charity_campaign=None,
+                                item_donations=None)
 
-    avalible_volunteers = Volunteer.query.all()
-    current_requests = get_request_data()
-
-    curr_organization_charity_campaign = OrganizationCharityCampaign \
-                    .query.filter(OrganizationCharityCampaign.organization == curr_organization) \
-                    .filter(OrganizationCharityCampaign.charity_campaign == charity_campaign).first()
+        #curr_organization_name = 'FUNDACJA OJCA RYDZYKA'
+        curr_charity_campaign = all_charity_campaigns[0]
     
-    item_donations = ItemStock.query \
-        .join(DonationType, ItemStock.item_type_id == DonationType.id) \
-        .add_columns(ItemStock.amount, DonationType.type) \
-        .filter(DonationType.type != 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
-    print(item_donations)
+        # requests for current charity campaign
+        current_requests = Request.query \
+            .join(DonationType, Request.donation_type_id == DonationType.id) \
+            .join(Affected, Request.affected_id == Affected.id) \
+            .join(Address, Request.req_address_id == Address.id) \
+            .add_columns(Request.id, Request.name, Request.status, Affected.first_name, Affected.last_name, Affected.campaign_id,
+                         Address.city, Address.street, Address.voivodeship, DonationType.type, Request.amount) \
+            .filter(Affected.campaign_id == curr_charity_campaign.id) \
+            .all()
 
-    donation_item_history = DonationItem.query \
-        .join(Donor, DonationItem.donor_id == Donor.donor_id) \
-        .join(DonationType, DonationItem.donation_type_id == DonationType.id) \
-        .add_columns(DonationItem.donationItem_id, DonationItem.description, DonationItem.amount, cast(DonationItem.donation_date, VARCHAR), DonationType.type, Donor.name, Donor.surname) \
-        .filter(DonationItem.charity_campaign == curr_organization_charity_campaign).all()
-    donation_money_history = DonationMoney.query \
-        .join(Donor, DonationMoney.donor_id == Donor.donor_id) \
-        .filter(DonationMoney.charity_campaign == curr_organization_charity_campaign).all()
-    money_type = DonationType.query.filter(DonationType.type == 'Money').first()
-    #curr_account_balance = ItemStock.query.filter(ItemStock.item_type == money_type and ItemStock.organization_charity_campaign_id == curr_organization_charity_campaign.id).first()
-    curr_account_balance = ItemStock.query \
-        .join(DonationType, ItemStock.item_type_id == DonationType.id) \
-        .filter(DonationType.type == 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).first()
+        # current OrganizationCharityCampaign
+        curr_organization_charity_campaign = OrganizationCharityCampaign \
+                        .query.filter(OrganizationCharityCampaign.organization == curr_organization) \
+                        .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign).first()
+        
+        # current item donations
+        item_donations = ItemStock.query \
+            .join(DonationType, ItemStock.item_type_id == DonationType.id) \
+            .add_columns(ItemStock.amount, DonationType.type) \
+            .filter(DonationType.type != 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
 
-    return render_template('supply_chain.jinja',
-                           item_donations=item_donations,
-                           charity_campaign=charity_campaign,
-                           volunteers=avalible_volunteers,
-                           current_requests=current_requests,
-                           request_status=RequestStatus,
-                           curr_organization=curr_organization,
-                           donation_item_history=donation_item_history,
-                           donation_money_history=donation_money_history,
-                           curr_account_balance=curr_account_balance)
+        # donation item history for current OrganizationCharityCampaign
+        donation_item_history = DonationItem.query \
+            .join(Donor, DonationItem.donor_id == Donor.donor_id) \
+            .join(DonationType, DonationItem.donation_type_id == DonationType.id) \
+            .add_columns(DonationItem.donationItem_id, DonationItem.description, DonationItem.amount, cast(DonationItem.donation_date, VARCHAR), DonationType.type, Donor.name, Donor.surname) \
+            .filter(DonationItem.charity_campaign == curr_organization_charity_campaign).all()
+        
+        # donation money history for current OrganizationCharityCampaign
+        donation_money_history = DonationMoney.query \
+            .join(Donor, DonationMoney.donor_id == Donor.donor_id) \
+            .filter(DonationMoney.charity_campaign == curr_organization_charity_campaign).all()
+        
+        # Current money amount - account balance for current OrganizationCharityCampaign
+        curr_account_balance = ItemStock.query \
+            .join(DonationType, ItemStock.item_type_id == DonationType.id) \
+            .filter(DonationType.type == 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).first()
+
+        return render_template('supply_chain.jinja',
+                            item_donations=item_donations,
+                            charity_campaign=curr_charity_campaign,
+                            current_requests=current_requests,
+                            request_status=RequestStatus,
+                            curr_organization=curr_organization,
+                            donation_item_history=donation_item_history,
+                            donation_money_history=donation_money_history,
+                            curr_account_balance=curr_account_balance,
+                            all_charity_campaigns=all_charity_campaigns)
+    
+
+    elif request.method == 'POST':
+        #charity campaign selection
+        selected_charity_campaign_id = request.form['curr_charity_campaign']
+        curr_charity_campaign = CharityCampaign.query.filter(CharityCampaign.id == selected_charity_campaign_id).first()
+        if curr_charity_campaign is None:
+            return redirect('/supply-chain')
+        #organization info
+        if curr_organization is None:
+           return render_template('supply_chain.jinja',
+                                charity_campaign=None,
+                                item_donations=None)
+        
+        # get all avaliable charity campaigns
+        all_charity_campaigns = db.session.query(CharityCampaign).\
+            join(OrganizationCharityCampaign, CharityCampaign.id == OrganizationCharityCampaign.charity_campaign_id).\
+            join(Organization, Organization.id == OrganizationCharityCampaign.organization_id).\
+            filter(Organization.organization_name == curr_organization.organization_name).all()
+
+        # get requests for current organization
+        current_requests = Request.query \
+            .join(DonationType, Request.donation_type_id == DonationType.id) \
+            .join(Affected, Request.affected_id == Affected.id) \
+            .join(Address, Request.req_address_id == Address.id) \
+            .add_columns(Request.id, Request.name, Request.status, Affected.first_name, 
+                         Affected.last_name, Affected.campaign_id, Address.city, Address.street, 
+                         Address.voivodeship, DonationType.type, Request.amount) \
+            .filter(Affected.campaign_id == curr_charity_campaign.id) \
+            .all()
+        
+        # get current OrganizationCharityCampaign
+        curr_organization_charity_campaign = OrganizationCharityCampaign \
+                        .query.filter(OrganizationCharityCampaign.organization == curr_organization) \
+                        .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign).first()
+         
+        # get item donations
+        item_donations = ItemStock.query \
+            .join(DonationType, ItemStock.item_type_id == DonationType.id) \
+            .add_columns(ItemStock.amount, DonationType.type) \
+            .filter(DonationType.type != 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
+
+        # get item donation history
+        donation_item_history = DonationItem.query \
+            .join(Donor, DonationItem.donor_id == Donor.donor_id) \
+            .join(DonationType, DonationItem.donation_type_id == DonationType.id) \
+            .add_columns(DonationItem.donationItem_id, DonationItem.description, DonationItem.amount, cast(DonationItem.donation_date, VARCHAR), DonationType.type, Donor.name, Donor.surname) \
+            .filter(DonationItem.charity_campaign == curr_organization_charity_campaign).all()
+        
+        # get money donation history
+        donation_money_history = DonationMoney.query \
+            .join(Donor, DonationMoney.donor_id == Donor.donor_id) \
+            .filter(DonationMoney.charity_campaign == curr_organization_charity_campaign).all()
+        
+        # get current money amount(account balance)
+        curr_account_balance = ItemStock.query \
+            .join(DonationType, ItemStock.item_type_id == DonationType.id) \
+            .filter(DonationType.type == 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).first()
+
+        # rendrer template
+        return render_template('supply_chain.jinja',
+                            item_donations=item_donations,
+                            charity_campaign=curr_charity_campaign,
+                            current_requests=current_requests,
+                            request_status=RequestStatus,
+                            curr_organization=curr_organization,
+                            donation_item_history=donation_item_history,
+                            donation_money_history=donation_money_history,
+                            curr_account_balance=curr_account_balance,
+                            all_charity_campaigns=all_charity_campaigns)
 
 
 @bp.route('/donate-resources')
@@ -127,7 +209,7 @@ def truncate():
     db.create_all()
     db.session.commit()
     print('what: ')
-    return redirect('/supply-chain')
+    return render_template('module_demo.jinja', data_present=False)
 
 
 @bp.route('/request/<int:req_id>', methods=['GET', 'POST'])
@@ -147,33 +229,30 @@ def manage_request(req_id):
         join donation_type dt on ist.item_type_id = dt.id
         where dt.type = \'''' + str(curr_request_data.type) + '\'' 
         + '''and ist.organization_charity_campaign_id = ''' + str(curr_organization_charity_campaign.id))
+    
     stock_item = ItemStock.query \
         .join(DonationType, ItemStock.item_type_id == DonationType.id) \
         .add_columns() \
         .filter(DonationType.type == curr_request_data.type) \
         .filter(ItemStock.organization_charity_campaign_id == curr_organization_charity_campaign.id) \
         .first()
-    #stock_item = db.session.execute(query).mappings().first()
-    print('stock item:')
-    print(stock_item)
 
     if curr_request_data.status == RequestStatus.COMPLETED:
         return redirect('/supply-chain')
+    
     if request.method == 'GET':
 
         return render_template('manage_request.jinja', curr_request=curr_request_data,
                                stock_item=stock_item)
 
     elif request.method == 'POST':
-
-        print(request.form)
+     
         if stock_item is None:
             return redirect('/supply-chain')
         
         current_request = Request.query.filter(Request.id == req_id).first()
         current_stock = ItemStock.query.filter(ItemStock.id == stock_item.id).first()
         donation_amount = int(request.form['donation_amount'])
-        #resource_amount = int(request.form['resource_amount'])
         if donation_amount <= current_stock.amount:
             current_request.status = RequestStatus.COMPLETED
             current_stock.amount -= donation_amount
@@ -184,50 +263,52 @@ def manage_request(req_id):
 
 @bp.route('/view-all', methods=['GET', 'POST'])
 def view_all():
-    all_charity_campaigns = CharityCampaign.query.all()
+    all_charity_campaigns = CharityCampaign.query \
+        .join(OrganizationCharityCampaign, OrganizationCharityCampaign.charity_campaign_id == CharityCampaign.id) \
+        .all()
+    print('all:')
+    print(all_charity_campaigns)
     if request.method == 'GET':
         return render_template('all_resources.jinja',
                                charity_campaigns=all_charity_campaigns)
     
     elif request.method == 'POST':
-        print("curr id:")
-        print(type(request.form['curr_charity_campaign_id']))
         if request.form['curr_charity_campaign_id'] == 'none':
             return redirect('/supply-chain')
         curr_charity_campaign = CharityCampaign.query.filter(CharityCampaign.id == request.form['curr_charity_campaign_id']).first()
         organizations_with_resources = []
-
         curr_organizations = Organization.query \
             .join(OrganizationCharityCampaign, OrganizationCharityCampaign.charity_campaign_id == curr_charity_campaign.id) \
+            .join(CharityCampaign, OrganizationCharityCampaign.charity_campaign_id == CharityCampaign.id) \
             .all()
         for organization in curr_organizations:
             curr_resources = {}
             curr_organization_charity_campaign = OrganizationCharityCampaign.query \
-                .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign,
-                        OrganizationCharityCampaign.organization == organization).first()
-            stock_for_organization = ItemStock.query \
-                .join(DonationType, ItemStock.item_type_id == DonationType.id) \
-                .add_columns(DonationType.type, ItemStock.amount) \
-                .filter(ItemStock.organization_charity_campaign_id == curr_organization_charity_campaign.id) \
-                .all()
-            item_donations_for_organization = DonationItem.query \
-                .join(DonationType, DonationItem.donation_type_id == DonationType.id) \
-                .add_columns(DonationType.type, DonationItem.amount) \
-                .filter(DonationItem.charity_campaign == curr_organization_charity_campaign) \
-                .all()
+                .filter(OrganizationCharityCampaign.charity_campaign_id == curr_charity_campaign.id,
+                        OrganizationCharityCampaign.organization_id == organization.id).first()
+            if curr_organization_charity_campaign is not None:
+                stock_for_organization = ItemStock.query \
+                    .join(DonationType, ItemStock.item_type_id == DonationType.id) \
+                    .add_columns(DonationType.type, ItemStock.amount) \
+                    .filter(ItemStock.organization_charity_campaign_id == curr_organization_charity_campaign.id) \
+                    .all()
+                
+                item_donations_for_organization = DonationItem.query \
+                    .join(DonationType, DonationItem.donation_type_id == DonationType.id) \
+                    .add_columns(DonationType.type, DonationItem.amount) \
+                    .filter(DonationItem.charity_campaign == curr_organization_charity_campaign) \
+                    .all()
+                
+                money_donations_for_organization = DonationMoney.query \
+                    .filter(DonationMoney.charity_campaign_id == curr_organization_charity_campaign.id) \
+                    .all()
+                
+                curr_resources["organization"] = organization
+                curr_resources["item_stock"] = stock_for_organization
+                curr_resources["item_donations"] = item_donations_for_organization
+                curr_resources["money_donations"] = money_donations_for_organization
             
-            money_donations_for_organization = DonationMoney.query \
-                .filter(DonationMoney.charity_campaign_id == curr_organization_charity_campaign.id) \
-                .all()
-            
-            curr_resources["organization"] = organization
-            curr_resources["item_stock"] = stock_for_organization
-            curr_resources["item_donations"] = item_donations_for_organization
-            curr_resources["money_donations"] = money_donations_for_organization
-        
-            organizations_with_resources.append(curr_resources)
-            print('all items:')
-            print(organizations_with_resources[0]['item_stock'][0].amount)
+                organizations_with_resources.append(curr_resources)
         
         requests_for_charity_campaign = Request.query \
                 .join(Affected, Request.affected_id == Affected.id) \
@@ -238,7 +319,6 @@ def view_all():
                 .filter(Affected.campaign_id == curr_charity_campaign.id) \
                 .all()
 
-        #print(requests_for_charity_campaign[0])
         return render_template('all_resources.jinja',
                                charity_campaigns=all_charity_campaigns,
                                curr_charity_campaign=curr_charity_campaign,
@@ -275,9 +355,10 @@ def add_data():
         db.session.rollback()
         charity_campaign = db.session.query(CharityCampaign).all()
         if len(charity_campaign) == 0:
-            return render_template('supply_chain.jinja', item_donations=None, charity_campaign=None)
+            #return render_template('supply_chain.jinja', item_donations=None, charity_campaign=None)
+            return render_template('module_demo.jinja', data_present=True)
         else:
-            return redirect('/supply-chain')
+            return render_template('module_demo.jinja', data_present=True)
     else:
         db.session.add(address1)
         db.session.add(address2)
@@ -332,6 +413,13 @@ def add_data():
             type="organization"
         )
 
+        user8 = User(
+            email="thirdauthoritye3@email.com",
+            password_hash='ebe222322e3',
+            active=True,
+            type="authorities"
+        )
+
         db.session.add(user1)
         db.session.add(user2)
         db.session.add(user3)
@@ -339,8 +427,9 @@ def add_data():
         db.session.add(user5)
         db.session.add(user6)
         db.session.add(user7)
+        db.session.add(user8)
 
-        print(User.query.filter(User.email == "org@email.com").first().email)
+        #print(User.query.filter(User.email == "org@email.com").first().email)
 
         donor1 = Donor(
             name="John",
@@ -363,7 +452,16 @@ def add_data():
             address_id=Address.query.filter(Address.street == "123 Main St" and Address.city == 'New York').first().id,
             user_id=User.query.filter(User.email == "jane.smith234@example.com").first().id
         )
+        authority2 = Authorities(
+            name="Lodz City Authority",
+            phone="123-45226-333",
+            address_id=Address.query.filter(Address.street == "123 Main St" and Address.city == 'New York').first().id,
+            user=user8
+        )
+
         db.session.add(authority)
+        db.session.add(authority2)
+
         db.session.add(donor1)
         db.session.add(donor2)
         charity_campaign_1 = CharityCampaign(
@@ -378,8 +476,15 @@ def add_data():
             authority=authority
         )
 
+        charity_campaign_3 = CharityCampaign(
+            name='Charity campaign 3',
+            description="third",
+            authority=authority2
+        )
+
         db.session.add(charity_campaign_1)
         db.session.add(charity_campaign_2)
+        db.session.add(charity_campaign_3)
 
         organization1 = Organization(
             organization_name="FUNDACJA OJCA RYDZYKA",
@@ -411,9 +516,14 @@ def add_data():
             organization=organization2
         )
 
+        organization_charity_campaign_3 = OrganizationCharityCampaign(
+            charity_campaign=charity_campaign_2,
+            organization=organization2
+        )
 
         db.session.add(organization_charity_campaign_1)
         db.session.add(organization_charity_campaign_2)
+        db.session.add(organization_charity_campaign_3)
 
         donation_type_2 = DonationType(type='Food')
         donation_type_3 = DonationType(type='Clothes')
@@ -453,6 +563,15 @@ def add_data():
             donation_type=donation_type_4
         )
 
+        donation_item4 = DonationItem(
+            description="ubranie mega donacja",
+            donation_date=datetime.today(),
+            amount=650,
+            donor=donor2,
+            charity_campaign=organization_charity_campaign_2,
+            donation_type=donation_type_3
+        )
+
         affected1 = Affected(
             first_name="John",
             last_name="Affected",
@@ -483,10 +602,14 @@ def add_data():
         stock_3 = ItemStock(item_type=donation_type_4,
                                 organization_charity_campaign=organization_charity_campaign_1,
                                 amount=donation_item3.amount)
+        
+        stock_2.amount += donation_item4.amount
+        
 
         db.session.add(donation_item1)
         db.session.add(donation_item2)
         db.session.add(donation_item3)
+        db.session.add(donation_item4)
         db.session.add(stock_1)
         db.session.add(stock_2)
         db.session.add(stock_3)
@@ -534,17 +657,27 @@ def add_data():
             donor=donor1,
             charity_campaign=organization_charity_campaign_1
         )
+
+        donation_money_2 = DonationMoney(
+            description='Second money donation',
+            donation_type='Money',
+            cashAmount=4000,
+            donor=donor1,
+            charity_campaign=organization_charity_campaign_2
+        )
         stock_money = ItemStock(item_type=donation_type_money,
                                 organization_charity_campaign=organization_charity_campaign_1,
                                 amount=donation_money_1.cashAmount)
         
         stock_money2 = ItemStock(item_type=donation_type_money, 
                                 organization_charity_campaign=organization_charity_campaign_2,
-                                amount=0)
+                                amount=4000)
     
         db.session.add(donation_money_1)
+        db.session.add(donation_money_2)
         db.session.add(stock_money)
+        db.session.add(stock_money2)
   
         db.session.commit()
 
-        return redirect('/supply-chain')
+        return render_template('module_demo.jinja', data_present=True)

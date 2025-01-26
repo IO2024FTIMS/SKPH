@@ -1,7 +1,7 @@
 from datetime import date
 
 from flask import (Blueprint, abort, flash, redirect, render_template,
-                   url_for)
+                   url_for, request)
 from flask_login import current_user
 from app.auth.user_service import roles_required
 from app.extensions import db

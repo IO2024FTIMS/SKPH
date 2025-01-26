@@ -6,8 +6,6 @@
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
   <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.add_data') }}">{{ _("Add sample data") }}</a></p>
-
-
   <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.truncate') }}">{{ _("Remove sample data") }}</a></p>
   <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.view_all') }}">{{ _("Show everything") }}</a></p>
     <table class="table table-hover">
@@ -15,6 +13,16 @@
       {% if curr_organization is defined and charity_campaign is defined %}
       <th>{{ _("Organization name:") }} {{curr_organization.organization_name}}</th>
       <th> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</th>
+      <th>
+        <form method="post">
+          <select name="curr_charity_campaign">
+            {% for ch_campaign in all_charity_campaigns %}
+              <option value="{{ch_campaign.id}}">{{ch_campaign.name}}</option>
+            {% endfor %}
+          </select>
+          <input type="submit" value="Select charity campaign">
+      </form>
+      </th>
       {% endif %}
     </tr>
     <tr>a
