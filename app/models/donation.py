@@ -18,7 +18,7 @@ class DonationMoney(db.Model):
     donor: Mapped["Donor"] = relationship(back_populates="donations_money")
 
     def return_confirmation(self) -> str:
-        return f"Donation confirmed: {self.description}, Amount: {self.cashAmount}"
+        return f"Donation confirmed: id: {self.donationMoney_id}, {self.description}, Amount: {self.cashAmount}"
 
     def __repr__(self):
         return f"<Donation(description={self.description}, amount={self.cashAmount})>"
@@ -37,7 +37,7 @@ class DonationItem(db.Model):
     donation_type = relationship('DonationType')
 
     def return_confirmation(self) -> str:
-        return f"Donation confirmed: {self.description}, Amount: {self.amount}"
+        return f"Donation confirmed: id: {self.donationItem_id}, {self.description}, Number: {self.amount}"
 
     def __repr__(self):
         return f"<Donation(description={self.description}, amount={self.amount})>"

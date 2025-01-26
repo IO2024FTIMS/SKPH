@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-2">
   <div>
-    <a href="{{ url_for('home') }}" class="btn btn-secondary">Back</a>
+  <a href="{{ url_for('donors.index') }}" class="btn btn-secondary">Back</a>
   </div>
   <hr class="my-4" />
   <h2>{{ _("My Donations") }} {# {{ donor.name }} {{ donor.surname }} #}</h2>
@@ -25,9 +25,9 @@
         <td>{{ donation.description }}</td>
         <td>{{ donation.cashAmount }}</td>
         <td>
-          <a class="btn btn-primary btn-sm" href="#">
-            {{_("Generate Confirmation") }}
-          </a>
+            <form action="/donors/confirmMoney/{{ donation.donationMoney_id }}" method="post" class="d-flex w-100">
+            <button class="btn btn-primary w-100">{{ _("Confirmation") }}</button>
+            </form>
         </td>
       </tr>
       {% endfor %}
@@ -48,12 +48,13 @@
       {% for donation in donations_items %}
       <tr>
         <td>{{ donation.description }}</td>
-        <td>{{ donation.donation_type.value }}</td>
-        <td>{{ donation.number }}</td>
+        <td>{{ donation.donation_type_id }}</td>
+        <td>{{ donation.amount }}</td>
         <td>
-          <a class="btn btn-primary btn-sm" href="#">
-            {{_("Generate Confirmation") }}
-          </a>
+             <form action="/donors/confirm/{{ donation.donationItem_id }}" method="post" class="d-flex w-100">
+        <button class="btn btn-primary w-100">{{ _("Confirmation") }}</button>
+      </form>
+
         </td>
       </tr>
       {% endfor %}
