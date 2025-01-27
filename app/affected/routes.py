@@ -1,5 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required, current_user
 
+from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.address import Address
 from app.models.affected import Affected
@@ -7,8 +9,6 @@ from app.models.authorities import Authorities
 from app.models.charity_campaign import CharityCampaign
 from app.models.donation import DonationType
 from app.models.request import Request, RequestStatus
-from flask_login import login_required, current_user
-from app.auth.user_service import roles_required
 
 
 bp = Blueprint('affected', __name__,
@@ -190,7 +190,9 @@ def my_details():
 
     requests = db.session.query(Request).filter_by(affected_id=affected.id).all()
 
-    return render_template('affected_auth_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus)
+    return render_template(
+        'affected_auth_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus
+    )
 
 
 @bp.route('/select_campaign', methods=['GET', 'POST'])
