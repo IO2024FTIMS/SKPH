@@ -16,8 +16,10 @@
       {% endif %}
     </div>
     <hr class="my-4" />
-    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('affected.fetch_all') }}">{{ _("View All Affected") }}</a>
-    <a class="btn btn-primary w-100 mb-2" href="{{ url_for('affected.all_requests') }}">{{ _("View All Requests") }}</a>
+    {% if current_user.is_authenticated and current_user.type in ['admin', 'organization', 'authorities'] %}
+      <a class="btn btn-primary w-100 mb-2" href="{{ url_for('affected.fetch_all') }}">{{ _("View All Affected") }}</a>
+      <a class="btn btn-primary w-100 mb-2" href="{{ url_for('affected.all_requests') }}">{{ _("View All Requests") }}</a>
+    {% endif %}
     {% if current_user.is_authenticated and current_user.type == 'affected' %}
       <a class="btn btn-primary w-100 mb-2 {% if not current_user.affected.campaign_id %}disabled{% endif %}"
          href="{{ url_for('affected.create_request', affected_id=current_user.affected.id) }}">
