@@ -1,5 +1,7 @@
 # SKPH (IO_2024)
 
+## [Documentation](https://tulodz-my.sharepoint.com/:w:/g/personal/247793_edu_p_lodz_pl/EWkqx71Z2zJAlRZ9zMO2aksBBXUYLX__6l3JX3fNOi1HPQ?e=hhHpki)
+
 ## Setup
 1. Create `.env` file in the `docker/database` directory with the selected credentials and settings to your local database.
 
@@ -10,8 +12,8 @@ DB_PASSWORD="<password>"
 DB_PORT="<port>"
 ```
 
-2. Set the `DATABASE_URI` environment variable to match the values in the `.env` file.
-Additionally, set the `MAIL` environment variables .
+2. Set the `DATABASE_URI` environment variables to match the values in the `.env` file.
+Set the and `MAIL_*` environment variables.
 > **Note**: You may need to restart your terminal or IDE for the changes to take effect.
 ```sh
 DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:${port}/${db_name}
