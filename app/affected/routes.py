@@ -8,6 +8,7 @@ from app.models.charity_campaign import CharityCampaign
 from app.models.donation import DonationType
 from app.models.request import Request, RequestStatus
 
+
 bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',
                static_folder='static',
