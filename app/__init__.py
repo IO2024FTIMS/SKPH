@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,8 +16,6 @@ from app.organization.routes import bp as organization_bp
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from config import config
-
-import os
 
 
 def create_app(config_name=None):
