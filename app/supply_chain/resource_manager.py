@@ -1,5 +1,4 @@
 from app.extensions import db
-from app.models.assigned_resources import AssignedResourcesStock
 from app.models.charity_campaign import CharityCampaign
 from app.models.donation import DonationItem
 from app.models.item_stock import ItemStock

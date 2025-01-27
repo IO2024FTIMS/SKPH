@@ -18,7 +18,6 @@ from app.models.item_stock import ItemStock
 from app.models.organization import Organization
 from app.models.request import Request, RequestStatus
 from app.models.user import User
-from app.models.volunteer import Volunteer
 from app.supply_chain.resource_manager import ResourceManager
 
 bp = Blueprint('supply_chain', __name__,
@@ -56,12 +55,15 @@ def demo():
 
 
 @bp.route('/', methods=['GET', 'POST'])
+@roles_required('organization')
 def index():
     # TODO
     # add possibility to choose charity campagin from an organization point of view
 
-    curr_organization_name = 'WOŚP'
-    curr_organization = Organization.query.filter(Organization.organization_name == curr_organization_name).first()
+    curr_user_id = current_user.id
+    curr_organization = Organization.query \
+        .filter(Organization.user_id == curr_user_id).first()
+    print(curr_organization)
     if curr_organization is None:
         return render_template('supply_chain.jinja', charity_campaign=None, item_donations=None)
 
@@ -97,7 +99,7 @@ def index():
         item_donations = ItemStock.query \
             .join(DonationType, ItemStock.item_type_id == DonationType.id) \
             .add_columns(ItemStock.amount, DonationType.type) \
-            .filter(DonationType.type != 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
+            .filter(ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
 
         # donation item history for current OrganizationCharityCampaign
         donation_item_history = DonationItem.query \
@@ -160,13 +162,13 @@ def index():
         # get current OrganizationCharityCampaign
         curr_organization_charity_campaign = OrganizationCharityCampaign \
                         .query.filter(OrganizationCharityCampaign.organization == curr_organization) \
-                        .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign).first()
+                        .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign).first() 
          
         # get item donations
         item_donations = ItemStock.query \
             .join(DonationType, ItemStock.item_type_id == DonationType.id) \
             .add_columns(ItemStock.amount, DonationType.type) \
-            .filter(DonationType.type != 'Money', ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
+            .filter(ItemStock.organization_charity_campaign == curr_organization_charity_campaign).all()
 
         # get item donation history
         donation_item_history = DonationItem.query \
@@ -204,6 +206,7 @@ def donate_resources():
 
 
 @bp.route('/truncate')
+@login_required
 def truncate():
     db.drop_all()
     db.create_all()
@@ -213,22 +216,15 @@ def truncate():
 
 
 @bp.route('/request/<int:req_id>', methods=['GET', 'POST'])
+@roles_required('organization')
 def manage_request(req_id):
-    curr_organization = Organization.query.filter(Organization.organization_name == 'WOŚP').first()
+    curr_organization = Organization.query.filter(Organization.user_id == current_user.id).first()
     curr_request_data = get_request_data(req_id=req_id)
     curr_affected = Affected.query.join(Request, Request.affected_id == Affected.id).filter(Request.id == req_id).first()
     curr_charity_campaign = CharityCampaign.query.filter(CharityCampaign.id == curr_affected.campaign_id).first()
     curr_organization_charity_campaign = OrganizationCharityCampaign.query  \
         .filter(OrganizationCharityCampaign.charity_campaign == curr_charity_campaign,
                 OrganizationCharityCampaign.organization == curr_organization).first()
-    # TODO
-    # implement resource amount relation to the current logged in organization
-    print(curr_organization_charity_campaign.id)
-
-    query = text('''select ist.amount, ist.id  from item_stock ist
-        join donation_type dt on ist.item_type_id = dt.id
-        where dt.type = \'''' + str(curr_request_data.type) + '\'' 
-        + '''and ist.organization_charity_campaign_id = ''' + str(curr_organization_charity_campaign.id))
     
     stock_item = ItemStock.query \
         .join(DonationType, ItemStock.item_type_id == DonationType.id) \
@@ -262,9 +258,12 @@ def manage_request(req_id):
 
 
 @bp.route('/view-all', methods=['GET', 'POST'])
+@roles_required('authorities')
 def view_all():
+    curr_authority = Authorities.query.filter(Authorities.user_id == current_user.id).first()
     all_charity_campaigns = CharityCampaign.query \
         .join(OrganizationCharityCampaign, OrganizationCharityCampaign.charity_campaign_id == CharityCampaign.id) \
+        .filter(CharityCampaign.authorities_id == curr_authority.id) \
         .all()
     print('all:')
     print(all_charity_campaigns)
@@ -328,6 +327,7 @@ def view_all():
                                request_status=RequestStatus)
 
 @bp.route('/add-data')
+@login_required
 def add_data():
     address1 = Address(
         street="123 Main St",

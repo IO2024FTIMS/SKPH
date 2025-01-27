@@ -2,33 +2,42 @@
 
 {% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
 
+{% block script %}
+<script src="../../static/supply_chain/js/view.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
-  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.add_data') }}">{{ _("Add sample data") }}</a></p>
-  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.truncate') }}">{{ _("Remove sample data") }}</a></p>
+  <a class="btn btn-primary btn-lg" href="{{ url_for('home') }}">{{ _("Back") }}</a>
   <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.view_all') }}">{{ _("Show everything") }}</a></p>
-    <table class="table table-hover">
-    <tr>
-      {% if curr_organization is defined and charity_campaign is defined %}
-      <th>{{ _("Organization name:") }} {{curr_organization.organization_name}}</th>
-      <th> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</th>
-      <th>
+  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
+  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Items donated by donors" onclick="changeView(VIEW.DONATED_ITEMS)">
+  <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Money donated by donors" onclick="changeView(VIEW.DONATED_MONEY)">
+  <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Current requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
+  <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+  <br>
+  {% if curr_organization is defined and charity_campaign is defined %}
+      <p> {{ _("Organization name:") }} {{curr_organization.organization_name}} </p>
+      <p> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</p>
         <form method="post">
           <select name="curr_charity_campaign">
             {% for ch_campaign in all_charity_campaigns %}
+              {% if ch_campaign.name == charity_campaign.name %}
+              <option value="{{ch_campaign.id}}" selected>{{ch_campaign.name}}</option>
+              {% else %}
               <option value="{{ch_campaign.id}}">{{ch_campaign.name}}</option>
+              {% endif %}
             {% endfor %}
           </select>
           <input type="submit" value="Select charity campaign">
       </form>
       </th>
       {% endif %}
-    </tr>
-    <tr>a
+    <table class="table table-hover" id="avaliable-resources">
+    <tr>
       <th>{{ _("Avalible Items:") }}</th>
     </tr>
-
     {% if item_donations is none %}
     </table>
     <p> {{ _("Could not find any items") }} </p>
@@ -51,7 +60,7 @@
   </table>
     {% endif %}
 
-    <table class="table table-hover">
+    <table class="table table-hover" id="pending-requests">
       <tr>
         <th>{{ _("Current requests:") }} </th>
       </tr>
@@ -115,14 +124,11 @@
     </table>
       {% endif %}
 
-      <table class="table table-hover" id="donation-item-table">
+      <table class="table table-hover" id="donated-items">
         <tr>
           <th>{{ _("Donation history: ") }} </th>
         </tr>
-        <select name="Donation type">
-          <option>Item</option>
-          <option>Money</option>
-        </select>
+
         {% if current_requests is none %}
         </table>
         <p>{{ _("Could not find any requests") }} </p>
@@ -151,14 +157,11 @@
         {% endif %}
 
 
-        <table class="table table-hover" id="donation-money-table">
+        <table class="table table-hover" id="donated-money">
           <tr>
             <th>{{ _("Money donation history: ") }} </th>
           </tr>
-          <select name="Donation type">
-            <option>Item</option>
-            <option>Money</option>
-          </select>
+
           {% if current_requests is none %}
           </table>
           <p>{{ _("Could not find any requests") }} </p>
@@ -179,14 +182,14 @@
               <td>{{ donation.cashAmount }}</td>
               <td>{{ donation.donation_type }}</td>
               <td>{{ donation.donation_date }}</td>
-              <td>{{ donation.name}}  {{donation.surname}}</td>
+              <td>{{ donation.donor.name}}  {{donation.donor.surname}}</td>
             </tr>
           {% endfor %}
     
         </table>
           {% endif %}
 
-        <table class="table table-hover">
+        <table class="table table-hover" id="request-history">
           <tr>
             <th>{{ _("Request history") }} </th>
           </tr>
@@ -248,7 +251,7 @@
 
   
 
-  <table>
+  <table class="table table-hover" id="avaliable-money">
     <tr>
       <th>{{ _("Avalible money") }}</th>
     </tr>

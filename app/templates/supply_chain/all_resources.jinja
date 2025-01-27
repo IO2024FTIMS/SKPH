@@ -1,49 +1,19 @@
-<script defer>
-  const VIEW = {
-    AVALIABLE_RESOURCES: 'avaliable-resources',
-    DONATED_ITEMS: 'donated-items',
-    DONATED_MONEY: 'donated-money',
-    PENDING_REQUESTS: 'pending-requests',
-    REQUEST_HISTORY: 'request-history' 
-  }
-  
-  let hideAllItems = function () {
-    for (let value in VIEW) {
-      console.log(VIEW[value])
-      let currElement = document.getElementById(VIEW[value]);
-      if (currElement) {
-        currElement.style['display'] = 'none';
-      }
-    }
-  }
 
-  let changeView = function (view) {
-    if(typeof(VIEW, view)) {
-      hideAllItems();
-      console.log(view)
-      let currElement = document.getElementById(view);
-      if(currElement) {
-        currElement.style['display'] = 'block';
-      }
-    }
-  }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    hideAllItems()
-    changeView(VIEW.AVALIABLE_RESOURCES)
- }, false);
-
-</script>
 
 {% extends "base.jinja" %}
 
+
 {% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
 
+{% block script %}
+<script src="../../static/supply_chain/js/view.js"></script>
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
-  <a href="{{ url_for('supply_chain.index') }}">
+  <a href="{{ url_for('home') }}">
     <input type="button" class="btn btn-primary btn-lg" id="back-button" value="Back"> 
   </a>
   <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
