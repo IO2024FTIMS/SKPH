@@ -1,5 +1,8 @@
 # SKPH (IO_2024)
 
+## [Web app](https://skph-io-ftims-dmcudje2egg3cvfr.polandcentral-01.azurewebsites.net)
+Short link: bit.ly/SKPH-IBD4
+
 ## [Documentation](https://tulodz-my.sharepoint.com/:w:/g/personal/247793_edu_p_lodz_pl/EWkqx71Z2zJAlRZ9zMO2aksBBXUYLX__6l3JX3fNOi1HPQ?e=hhHpki)
 
 ## Setup
@@ -13,7 +16,7 @@ DB_PORT="<port>"
 ```
 
 2. Set the `DATABASE_URI` environment variables to match the values in the `.env` file.
-Set the and `MAIL_*` environment variables.
+Set `MAIL_*` environment variables.
 > **Note**: You may need to restart your terminal or IDE for the changes to take effect.
 ```sh
 DATABASE_URI=postgresql+psycopg2://${user_name}:${password}@localhost:${port}/${db_name}
