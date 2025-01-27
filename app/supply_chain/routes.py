@@ -531,9 +531,9 @@ def add_data():
         organization_name="FUNDACJA OJCA RYDZYKA",
         description="bardzo dobra organizacja",
         approved=True,
-        address_id=Address.query.filter(Address.street == "456 Elm St"
-                                        and Address.street_number == 'Apt 202'
-                                        and Address.city == 'Los Angeles').first().id,
+        address_id=Address.query.filter(Address.street == "456 Elm St" and
+                                        Address.street_number == 'Apt 202' and
+                                        Address.city == 'Los Angeles').first().id,
         user_id=User.query.filter(User.email == "org@email.com").first().id,
     )
 
@@ -609,7 +609,7 @@ def add_data():
         needs="food",
         address_id=Address.query.filter(
             Address.street == "456 Elm St" and Address.street_number == 'Apt 202' and Address.city == 'Los Angeles')
-            .first().id,
+                .first().id,
         user_id=User.query.filter(User.email == "affected@email.com").first().id,
         campaign_id=CharityCampaign.query.filter(CharityCampaign.name == 'Charity campaign 1').first().id,
     )
