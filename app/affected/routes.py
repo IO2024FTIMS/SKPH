@@ -7,6 +7,8 @@ from app.models.authorities import Authorities
 from app.models.charity_campaign import CharityCampaign
 from app.models.donation import DonationType
 from app.models.request import Request, RequestStatus
+from flask_login import login_required, current_user
+from app.auth.user_service import roles_required
 
 
 bp = Blueprint('affected', __name__,
@@ -23,6 +25,8 @@ def index():
 
 
 @bp.route('/all')
+@login_required
+@roles_required(['organization', 'authorities'])
 def fetch_all():
     affected = db.session.scalars(db.select(Affected))
     return render_template('all.jinja', affected=affected.all())
@@ -103,23 +107,29 @@ def select_affected():
     return render_template('select_affected.jinja', affected=affected.all())
 
 
-@bp.route('/request/create/<int:affected_id>', methods=['GET', 'POST'])
-def create_request(affected_id):
-    affected = db.get_or_404(Affected, affected_id)
+@bp.route('/request/create', methods=['GET', 'POST'])
+@login_required
+@roles_required(['affected'])
+def create_request():
+    affected = db.session.scalar(db.select(Affected).where(Affected.user_id == current_user.id))
+    if not affected:
+        flash('No data found for the current user.')
+        return redirect(url_for('affected.index'))
 
     if request.method == 'POST':
         name = request.form['name']
         status = RequestStatus.PENDING
         donation_type_id = int(request.form.get('needs'))
-        quantity = int(request.form['quantity'])
+        amount = int(request.form['amount'])
         street = request.form['street']
         street_number = request.form['street_number']
         city = request.form['city']
         voivodeship = request.form['voivodeship']
 
         # Validation
-        if not all([name, donation_type_id, quantity, street, street_number, city, voivodeship]):
-            return redirect(url_for('affected.create_request', affected_id=affected_id))
+        if not all([name, donation_type_id, amount, street, street_number, city, voivodeship]):
+            flash('All fields are required.')
+            return redirect(url_for('affected.create_request'))
 
         # Create new address
         new_address = Address(
@@ -137,19 +147,21 @@ def create_request(affected_id):
             status=status,
             req_address=new_address,
             donation_type_id=donation_type_id,
-            quantity=quantity,
-            affected_id=affected_id
+            amount=amount,
+            affected_id=affected.id
         )
         db.session.add(new_request)
         db.session.commit()
 
-        return redirect(url_for('affected.affected_details', affected_id=affected_id))
+        return redirect(url_for('affected.my_details'))
 
     donation_types = db.session.scalars(db.select(DonationType)).all()
     return render_template('create_request.jinja', affected=affected, donation_types=donation_types)
 
 
 @bp.route('/requests')
+@login_required
+@roles_required(['organization', 'authorities'])
 def all_requests():
     requests = db.session.scalars(db.select(Request)).all()
 
@@ -157,6 +169,8 @@ def all_requests():
 
 
 @bp.route('/affected/<int:affected_id>')
+@login_required
+@roles_required(['organization', 'authorities'])
 def affected_details(affected_id):
     affected = db.get_or_404(Affected, affected_id)
 
@@ -165,7 +179,43 @@ def affected_details(affected_id):
     return render_template('affected_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus)
 
 
+@bp.route('/my_details')
+@login_required
+@roles_required(['affected'])
+def my_details():
+    affected = db.session.scalar(db.select(Affected).where(Affected.user_id == current_user.id))
+    if not affected:
+        flash('No data found for the current user.')
+        return redirect(url_for('affected.index'))
+
+    requests = db.session.query(Request).filter_by(affected_id=affected.id).all()
+
+    return render_template('affected_auth_details.jinja', affected=affected, requests=requests, RequestStatus=RequestStatus)
+
+
+@bp.route('/select_campaign', methods=['GET', 'POST'])
+@login_required
+@roles_required(['affected'])
+def select_campaign():
+    affected = db.session.scalar(db.select(Affected).where(Affected.user_id == current_user.id))
+    if not affected:
+        flash('No data found for the current user.')
+        return redirect(url_for('affected.index'))
+
+    if request.method == 'POST':
+        campaign_id = request.form.get('campaign_id')
+        affected.campaign_id = campaign_id
+        db.session.commit()
+        flash('Campaign selected successfully.')
+        return redirect(url_for('affected.my_details'))
+
+    campaigns = db.session.scalars(db.select(CharityCampaign)).all()
+    return render_template('select_campaign.jinja', affected=affected, campaigns=campaigns)
+
+
 @bp.route('/request/update_status/<int:request_id>', methods=['GET', 'POST'])
+@login_required
+@roles_required(['organization', 'authorities'])
 def update_request_status(request_id):
     request_obj = db.get_or_404(Request, request_id)
 
@@ -183,30 +233,32 @@ def update_request_status(request_id):
 
 
 @bp.route('/request/edit/<int:request_id>', methods=['GET', 'POST'])
+@login_required
 def edit_request(request_id):
     request_obj = db.get_or_404(Request, request_id)
 
-    # Tylko requesty w statusie PENDING mogą być edytowane
     if request_obj.status != RequestStatus.PENDING:
-        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+        return redirect(url_for('affected.my_details'))
 
     if request.method == 'POST':
         name = request.form.get('name')
-        donation_type_id = int(request.form.get('needs'))
-        quantity = int(request.form.get('quantity'))
+        donation_type_id = request.form.get('donation_type')
+        amount = request.form.get('amount')
         street = request.form.get('street')
         street_number = request.form.get('street_number')
         city = request.form.get('city')
         voivodeship = request.form.get('voivodeship')
 
-        # Walidacja
-        if not all([name, donation_type_id, quantity, street, street_number, city, voivodeship]):
+        if not all([name, donation_type_id, amount, street, street_number, city, voivodeship]):
+            flash('All fields are required.')
             return redirect(url_for('affected.edit_request', request_id=request_id))
 
-        # Aktualizacja danych
+        donation_type_id = int(donation_type_id)
+        amount = int(amount)
+
         request_obj.name = name
         request_obj.donation_type_id = donation_type_id
-        request_obj.quantity = quantity
+        request_obj.amount = amount
         request_obj.req_address.street = street
         request_obj.req_address.street_number = street_number
         request_obj.req_address.city = city
@@ -214,24 +266,22 @@ def edit_request(request_id):
 
         db.session.commit()
 
-        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+        return redirect(url_for('affected.my_details'))
 
     donation_types = db.session.scalars(db.select(DonationType)).all()
     return render_template('edit_request.jinja', request=request_obj, donation_types=donation_types)
 
 
 @bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])
+@login_required
 def delete_request(request_id):
     request_obj = db.get_or_404(Request, request_id)
 
-    # Only delete requests with the PENDING status
     if request_obj.status != RequestStatus.PENDING:
-        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+        return redirect(url_for('affected.my_details'))
 
-    # Delete the request and its associated address
-    affected_id = request_obj.affected_id
-    db.session.delete(request_obj.req_address)  # First delete the address
-    db.session.delete(request_obj)  # Then delete the request
+    db.session.delete(request_obj.req_address)
+    db.session.delete(request_obj)
     db.session.commit()
 
-    return redirect(url_for('affected.affected_details', affected_id=affected_id))
+    return redirect(url_for('affected.my_details'))

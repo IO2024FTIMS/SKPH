@@ -10,7 +10,7 @@
 
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <form action="{{ url_for('affected.create_request', affected_id=affected.id) }}" method="post">
+      <form action="{{ url_for('affected.create_request') }}" method="post">
         <fieldset>
           <div class="form-group">
             <label for="name">{{ _("Request Name:") }}</label>
@@ -19,7 +19,7 @@
 
           <div class="form-group">
             <label for="donation_type">{{ _("Needs:") }}</label>
-            <select class="form-control" id="donation_type" name="donation_type" required>
+            <select class="form-control" id="donation_type" name="needs" required>
                {% for donation_type in donation_types %}
                  <option value="{{ donation_type.id }}">{{ donation_type.type }}</option>
               {% endfor %}
