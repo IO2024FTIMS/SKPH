@@ -1,0 +1,86 @@
+{% extends "base.jinja" %}
+
+{% block title %}{{ _("Tracking and managing resources module") }}{% endblock %}
+
+{% block script %}
+
+<script src="../../static/supply_chain/js/manageRequest.js" defer></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4" id="content-div">
+  <h1>{{ _("Tracking and managing resources module") }}</h1>
+<h2>{{ _('Manage request panel') }}</h2>
+<table class="table table-hover">
+  <tr>
+    <th>{{ _("Request:") }} </th>
+  </tr>
+
+  <tr>
+    <td>{{ _("Name") }}</td>
+    <td>{{ _("Status") }}</td>
+    <td>{{ _("Affected") }}  </td>
+    <td>{{ _("Address") }} </td>
+    <td>{{ _("Needs") }}</td>
+    <td>{{ _("Amount") }}</td>
+    
+  </tr>
+    <tr>
+      <td>{{ curr_request.name }}</td>
+      <td>{{ curr_request.status }}</td>
+      <td>
+        <table class="table">
+          <tr>
+            <td>{{ _("First name:") }}</td>
+            <td>{{ curr_request.first_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ _("Last name") }}  </td>
+            <td> {{ curr_request.last_name }} </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr>
+            <td>{{ _("City") }}:</td>
+            <td>{{ curr_request.city }}</td>
+          </tr>
+          <tr>
+            <td>{{ _("Street") }}  </td>
+            <td> {{ curr_request.street }} </td>
+          </tr>
+        </table>
+      </td>
+      <td>{{ curr_request.type }}</td>
+      <td> {{curr_request.amount}} </td>
+    </tr>
+
+</table>
+<form method="post" id="send-resource" onsubmit="return checkForm()">
+  <label for="donation_amount">{{ _('Donation amount:') }}</label> 
+  <input type="number" name="donation_amount" value="{{curr_request.amount}}" min="{{curr_request.amount}}" max="{{stock_item.amount}}">
+  <br>
+  <label for="donation_type">{{ _('Donation type:') }}</label>
+  <select name="donation_type">
+    <option value={{curr_request.type}}>{{curr_request.type}}</option>
+  </select>
+  <br>
+  <label for="item_amount">{{_('Avalible resource amount:')}}</label>
+  {% if stock_item.amount is defined %}
+  <input type="number" name="item_amount" value="{{stock_item.amount}}" readonly></input>
+  {% elif stock_item.cashAmount is defined %}
+  <input type="number" name="item_amount" value="{{stock_item.cashAmount}}" readonly></input>
+  {% else %}
+  <input type="number" name="item_amount" value="0" readonly></input>
+  {% endif %}
+
+  <br>
+  <input type="submit" value="{{_('Send to affected')}}">
+</form>
+
+
+</div>
+
+{% endblock %}

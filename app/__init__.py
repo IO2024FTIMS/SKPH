@@ -14,7 +14,9 @@ from app.extensions import babel, db, get_locale, mail
 from app.maps.routes import bp as maps_bp
 from app.organization.routes import bp as organization_bp
 from app.reports.routes import bp as reports_bp
+from app.supply_chain.routes import bp as supply_chain_bp
 from app.volunteers.routes import bp as volunteers_bp
+
 from config import config
 
 
@@ -44,6 +46,8 @@ def create_app(config_name=None):
     flask_app.register_blueprint(donors_bp, url_prefix='/donors')
     flask_app.register_blueprint(organization_bp, url_prefix='/organizations')
     flask_app.register_blueprint(maps_bp, url_prefix='/maps')
+
+    flask_app.register_blueprint(supply_chain_bp, url_prefix='/supply-chain')
 
     @flask_app.route('/')
     def home():

@@ -1,7 +1,7 @@
 from datetime import date
 
-from flask import (Blueprint, abort, flash, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, abort, flash, redirect, render_template,
+                   url_for, request)
 from flask_login import current_user
 from app.auth.user_service import roles_required
 from app.extensions import db
@@ -10,6 +10,7 @@ from app.models.authorities import Authorities
 from app.models.charity_campaign import OrganizationCharityCampaign, CharityCampaign
 from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
+from app.models.item_stock import ItemStock
 from app.models.organization import Organization
 
 bp = Blueprint('donors', __name__,
@@ -37,6 +38,7 @@ def fetch_donors():
     donors = db.session.scalars(db.select(Donor))
     return render_template('donor_view.jinja', donors=donors.all())
 
+
 # TODO: Link the donation to a specific charity campaign
 
 
@@ -61,6 +63,24 @@ def create_donation():
                 charity_campaign_id=charity_campaign
             )
             db.session.add(new_donation_money)
+            money_type = DonationType.query.filter(DonationType.type == 'Money').first()
+            if money_type is None:
+                money_type = DonationMoney(type='Money')
+
+            curr_stock = ItemStock.query.join(DonationType, ItemStock.item_type_id == DonationType.id) \
+                .filter(ItemStock.organization_charity_campaign_id == charity_campaign, DonationType.type == 'Money') \
+                .first()
+
+            if curr_stock is None:
+                new_stock = ItemStock(item_type=money_type,
+                                      organization_charity_campaign_id=charity_campaign,
+                                      amount=amount)
+                db.session.add(new_stock)
+
+            else:
+                curr_stock.amount += float(amount)
+                db.session.add(curr_stock)
+
             db.session.commit()
             flash('Donation created successfully')
             del new_donation_money
@@ -74,6 +94,20 @@ def create_donation():
                 charity_campaign_id=charity_campaign
             )
             db.session.add(new_donation_item)
+            curr_stock = ItemStock.query.join(DonationType, ItemStock.item_type_id == DonationType.id) \
+                .filter(ItemStock.organization_charity_campaign_id == charity_campaign,
+                        DonationType.id == type_d) \
+                .first()
+            if curr_stock is None:
+                new_stock = ItemStock(item_type_id=type_d,
+                                      organization_charity_campaign_id=charity_campaign,
+                                      amount=amount)
+                db.session.add(new_stock)
+
+            else:
+                curr_stock.amount += float(amount)
+                db.session.add(curr_stock)
+
             db.session.commit()
             flash('Donation created successfully')
             del new_donation_item

@@ -3,8 +3,8 @@ from datetime import datetime
 
 from app.extensions import db
 from app.models.affected import Affected
-from app.models.charity_campaign import OrganizationCharityCampaign
-from app.models.donation import DonationItem, DonationMoney
+from app.models.charity_campaign import OrganizationCharityCampaign, CharityCampaign
+from app.models.donation import DonationItem, DonationMoney, DonationType
 from app.models.donor import Donor
 from app.models.organization import Organization
 from app.models.request import Request
@@ -18,7 +18,6 @@ class ReportService:
         self._next_id = 1
 
     def generate_report(self):
-
         affected_list = db.session.query(Affected).all()
 
         needs_counter = Counter()
@@ -56,6 +55,7 @@ class ReportService:
                 return rep
         return None
 
+    # ====== Affected statystyki =======
     def stats_by_city(self):
         data = {}
         affected_list = db.session.query(Affected).all()
@@ -80,23 +80,16 @@ class ReportService:
             data[n] = data.get(n, 0) + 1
         return data
 
+    # ====== Request statystyki =======
     def stats_request_by_status(self):
         data = {}
         requests_list = db.session.query(Request).all()
         for req in requests_list:
-            # req.status jest RequestStatus, np. RequestStatus.PENDING
-            status_str = req.status.value  # 'Pending', 'Approved', ...
+            status_str = req.status.value  # np. 'Pending', 'Approved'
             data[status_str] = data.get(status_str, 0) + 1
         return data
 
-    def stats_request_by_needs(self):
-        data = {}
-        requests_list = db.session.query(Request).all()
-        for req in requests_list:
-            n = req.needs if req.needs else "No needs"
-            data[n] = data.get(n, 0) + 1
-        return data
-
+    # ====== Volunteer statystyki =======
     def stats_by_city_volunteer(self):
         data = {}
         volunteers = db.session.query(Volunteer).all()
@@ -117,6 +110,7 @@ class ReportService:
     def get_all_volunteers(self):
         return db.session.query(Volunteer).all()
 
+    # ====== Donor statystyki =======
     def get_all_donors(self):
         return db.session.query(Donor).all()
 
@@ -130,12 +124,43 @@ class ReportService:
 
     def stats_donation_sums(self):
         total_money = db.session.query(db.func.sum(DonationMoney.cashAmount)).scalar() or 0
-        total_items = db.session.query(db.func.sum(DonationItem.number)).scalar() or 0
+        total_items = db.session.query(db.func.sum(DonationItem.amount)).scalar() or 0
         return {
             "Total money sum": float(total_money),
             "Total item sum": float(total_items)
         }
 
+    def stats_donation_items_by_type(self):
+        data = {}
+        rows = (
+            db.session.query(
+                DonationItem.amount,
+                DonationType.type
+            )
+            .join(DonationType, DonationItem.donation_type_id == DonationType.id)
+            .all()
+        )
+        for (amt, dt_type) in rows:
+            data[dt_type] = data.get(dt_type, 0) + amt
+        return data
+
+    def stats_donation_money_by_campaign(self):
+        data = {}
+        money_rows = (
+            db.session.query(DonationMoney)
+            .join(OrganizationCharityCampaign, DonationMoney.charity_campaign_id == OrganizationCharityCampaign.id)
+            .join(CharityCampaign, OrganizationCharityCampaign.charity_campaign_id == CharityCampaign.id)
+            .all()
+        )
+        for dm in money_rows:
+            # dm.charity_campaign to OrganizationCharityCampaign
+            # dm.charity_campaign.charity_campaign to CharityCampaign
+            camp = dm.charity_campaign.charity_campaign
+            camp_name = camp.name if camp else "Brak kampanii"
+            data[camp_name] = data.get(camp_name, 0) + dm.cashAmount
+        return data
+
+    # ====== Organization statystyki =======
     def stats_organization_approval(self):
         approved_count = db.session.query(Organization).filter_by(approved=True).count()
         not_approved_count = db.session.query(Organization).filter_by(approved=False).count()
@@ -152,12 +177,10 @@ class ReportService:
 
     def count_volunteers_per_organization(self, org: Organization) -> int:
         org_campaigns = db.session.query(OrganizationCharityCampaign).filter_by(organization_id=org.id).all()
-
         volunteers_set = set()
         for oc in org_campaigns:
             for vol in oc.volunteers:
                 volunteers_set.add(vol.id)
-
         return len(volunteers_set)
 
     def get_campaigns_for_organization(self, org: Organization):
