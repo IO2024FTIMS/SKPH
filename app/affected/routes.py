@@ -1,5 +1,6 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, render_template_string
-from flask_login import login_required, current_user
+from flask import (Blueprint, abort, flash, redirect, render_template,
+                   render_template_string, request, url_for)
+from flask_login import current_user, login_required
 from flask_mailman import EmailMessage
 
 from app.auth.user_service import roles_required
@@ -10,7 +11,6 @@ from app.models.authorities import Authorities
 from app.models.charity_campaign import CharityCampaign
 from app.models.donation import DonationType
 from app.models.request import Request, RequestStatus
-
 
 bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',

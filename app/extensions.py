@@ -10,8 +10,7 @@ class Base(DeclarativeBase):
 
 
 def get_locale():
-    language = request.accept_languages.best_match(['en', 'pl'])
-    return language
+    return request.cookies.get('lang', 'pl')
 
 
 db = SQLAlchemy(model_class=Base)
