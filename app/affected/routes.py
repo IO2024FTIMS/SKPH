@@ -1,4 +1,4 @@
-from flask import (Blueprint, abort, flash, redirect, render_template,
+from flask import (Blueprint, flash, redirect, render_template,
                    render_template_string, request, url_for)
 from flask_login import current_user, login_required
 from flask_mailman import EmailMessage
