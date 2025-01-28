@@ -52,25 +52,19 @@ def demo():
     return render_template('module_demo.jinja')
 
 
+
 @bp.route('/', methods=['GET', 'POST'])
 @roles_required('organization')
-def index():
+def index(error_message=None):
     curr_user_id = current_user.id
     curr_organization = Organization.query \
         .filter(Organization.user_id == curr_user_id).first()
-    print(curr_organization)
-    if curr_organization is None:
-        return render_template('supply_chain.jinja', charity_campaign=None, item_donations=None)
 
     if request.method == 'GET':
         all_charity_campaigns = db.session.query(CharityCampaign). \
             join(OrganizationCharityCampaign, CharityCampaign.id == OrganizationCharityCampaign.charity_campaign_id). \
             join(Organization, Organization.id == OrganizationCharityCampaign.organization_id). \
             filter(Organization.organization_name == curr_organization.organization_name).all()
-        if len(all_charity_campaigns) == 0:
-            return render_template('supply_chain.jinja',
-                                   charity_campaign=None,
-                                   item_donations=None)
 
         # curr_organization_name = 'FUNDACJA OJCA RYDZYKA'
         curr_charity_campaign = all_charity_campaigns[0]
@@ -132,9 +126,7 @@ def index():
         selected_charity_campaign_id = request.form['curr_charity_campaign']
         curr_charity_campaign = CharityCampaign.query.filter(CharityCampaign.id == selected_charity_campaign_id).first()
         if curr_charity_campaign is None or curr_organization is None:
-            return render_template('supply_chain.jinja',
-                                   charity_campaign=None,
-                                   item_donations=None)
+            return render_template('supply_chain.jinja')
         # get all avaliable charity campaigns
         all_charity_campaigns = db.session.query(CharityCampaign). \
             join(OrganizationCharityCampaign, CharityCampaign.id == OrganizationCharityCampaign.charity_campaign_id). \
@@ -192,12 +184,9 @@ def index():
                                donation_item_history=donation_item_history,
                                donation_money_history=donation_money_history,
                                curr_account_balance=curr_account_balance,
-                               all_charity_campaigns=all_charity_campaigns)
-    return redirect('/supply-chain')
-
-
-@bp.route('/donate-resources')
-def donate_resources():
+                               all_charity_campaigns=all_charity_campaigns,
+                               error_message=error_message)
+    
     return redirect('/supply-chain')
 
 
@@ -231,19 +220,21 @@ def manage_request(req_id):
         .first()
 
     if curr_request_data.status == RequestStatus.COMPLETED:
-        return redirect('/supply-chain')
-
+        return render_template('manage_request.jinja', 
+                                curr_request=curr_request_data,
+                                error_message='Request already completed',
+                                stock_item=stock_item)
     if request.method == 'GET':
-
         return render_template('manage_request.jinja', curr_request=curr_request_data,
                                stock_item=stock_item)
 
     elif request.method == 'POST':
-
         if stock_item is None:
-            return render_template('supply_chain.jinja',
-                                   charity_campaign=None,
-                                   item_donations=None)
+            return render_template('manage_request.jinja', 
+                                    curr_request=curr_request_data,
+                                    error_message='Could not send items to affected - no items in stock',
+                                    stock_item=stock_item)
+                                   
 
         current_request = Request.query.filter(Request.id == req_id).first()
         current_stock = ItemStock.query.filter(ItemStock.id == stock_item.id).first()
@@ -253,10 +244,19 @@ def manage_request(req_id):
             current_stock.amount -= donation_amount
             current_request.amount = donation_amount
             db.session.commit()
-            return render_template('supply_chain.jinja',
-                                   charity_campaign=None,
-                                   item_donations=None)
-    return redirect('/supply-chain')
+            return render_template('manage_request.jinja', 
+                                    curr_request=curr_request_data,
+                                    success_message='Items sent successfully',
+                                    stock_item=stock_item)
+        else:
+            print('error')
+            return render_template('manage_request.jinja', 
+                                    curr_request=curr_request_data,
+                                    error_message='Could not send items to affected - an error occured',
+                                    stock_item=stock_item)
+        
+    return render_template('supply_chain.jinja', 
+                            error_message='Something went wrong. please refresh the page')
 
 
 @bp.route('/view-all', methods=['GET', 'POST'])
@@ -264,7 +264,6 @@ def manage_request(req_id):
 def view_all():
     curr_authority = Authorities.query.filter(Authorities.user_id == current_user.id).first()
     all_charity_campaigns = CharityCampaign.query \
-        .join(OrganizationCharityCampaign, OrganizationCharityCampaign.charity_campaign_id == CharityCampaign.id) \
         .filter(CharityCampaign.authorities_id == curr_authority.id) \
         .all()
     if request.method == 'GET':
@@ -273,6 +272,7 @@ def view_all():
 
     elif request.method == 'POST':
         if request.form['curr_charity_campaign_id'] == 'none':
+            print('not good')
             return render_template('supply_chain.jinja',
                                    charity_campaign=None,
                                    item_donations=None)
@@ -322,6 +322,7 @@ def view_all():
             .filter(Affected.campaign_id == curr_charity_campaign.id) \
             .all()
 
+        print(organizations_with_resources)
         return render_template('all_resources.jinja',
                                charity_campaigns=all_charity_campaigns,
                                curr_charity_campaign=curr_charity_campaign,

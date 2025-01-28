@@ -8,20 +8,29 @@
 
 {% block content %}
 <div class="container-fluid mt-4">
+  {% if error_message is defined and error_message is not none %}
+  <div class="alert alert-dismissible alert-danger">
+    <strong>{{ _("Error:") }} {{error_message}}</strong> 
+  </div>
+  {% endif %}
   <h1>{{ _("Tracking and managing resources module") }}</h1>
-  <a class="btn btn-primary btn-lg" href="{{ url_for('home') }}">{{ _("Back") }}</a>
-  <p><a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.view_all') }}">{{ _("Show everything") }}</a></p>
-  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
-  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Items donated by donors" onclick="changeView(VIEW.DONATED_ITEMS)">
-  <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Money donated by donors" onclick="changeView(VIEW.DONATED_MONEY)">
-  <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Current requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
-  <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+  <a class="btn btn-dark btn-lg" href="{{ url_for('home') }}">{{ _("Back") }}</a>
+  <div class="btn-group" role="group">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Items donated by donors" onclick="changeView(VIEW.DONATED_ITEMS)">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Money donated by donors" onclick="changeView(VIEW.DONATED_MONEY)">
+    <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Current requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
+    <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+  </div>
+  <br>
   <br>
   {% if curr_organization is defined and charity_campaign is defined %}
-      <p> {{ _("Organization name:") }} {{curr_organization.organization_name}} </p>
-      <p> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</p>
+
+      <h1> {{ _("Organization name:") }} {{curr_organization.organization_name}} </h1>
+      <h2> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</h2>
+      <br>
         <form method="post">
-          <select name="curr_charity_campaign">
+          <select name="curr_charity_campaign" class="form-select">
             {% for ch_campaign in all_charity_campaigns %}
               {% if ch_campaign.name == charity_campaign.name %}
               <option value="{{ch_campaign.id}}" selected>{{ch_campaign.name}}</option>
@@ -30,105 +39,43 @@
               {% endif %}
             {% endfor %}
           </select>
-          <input type="submit" value="Select charity campaign">
+          <input class="btn btn-secondary" type="submit" value="Select charity campaign">
       </form>
-      </th>
+
       {% endif %}
-    <table class="table table-hover" id="avaliable-resources">
-    <tr>
-      <th>{{ _("Avalible Items:") }}</th>
-    </tr>
-    {% if item_donations is none %}
-    </table>
-    <p> {{ _("Could not find any items") }} </p>
-
-    {% else %}
-    <tr>
-      <td>{{ _("Lp") }} </td>
-      <td>{{ _("Resource type:") }} </td>
-      <td>{{ _("Number") }} </td>
-    </tr>
-    {% for donation in item_donations %}
-
+      <br>
+    <div class="container-fluid">
+      <table class="table table-hover" id="avaliable-resources">
       <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ donation.type }}</td>
-        <td>{{ donation.amount }}</td>
+        <th>{{ _("Avaliable Items:") }}</th>
       </tr>
-
-    {% endfor %}
-  </table>
-    {% endif %}
-
-    <table class="table table-hover" id="pending-requests">
-      <tr>
-        <th>{{ _("Current requests:") }} </th>
-      </tr>
-  
-      {% if current_requests is none %}
+      {% if item_donations is none %}
       </table>
-      <p>{{ _("Could not find any requests") }} </p>
-  
+      <p> {{ _("Could not find any items") }} </p>
+
       {% else %}
       <tr>
         <td>{{ _("Lp") }} </td>
-        <td>{{ _("Name") }}</td>
-        <td>{{ _("Status") }}</td>
-        <td>{{ _("Affected") }}  </td>
-        <td>{{ _("Address") }} </td>
-        <td>{{ _("Needs") }}</td>
-        <td>{{ _("Amount") }}</td>
-        
+        <td>{{ _("Resource type:") }} </td>
+        <td>{{ _("Number") }} </td>
       </tr>
-      {% for curr_request in current_requests %}
-      {% if curr_request.status == request_status.PENDING %}
+      {% for donation in item_donations %}
+
         <tr>
           <td>{{ loop.index }}</td>
-          <td>{{ curr_request.name }}</td>
-          <td>{{ curr_request.status }}</td>
-          <td>
-            <table class="table">
-              <tr>
-                <td>{{ _("First name:") }}</td>
-                <td>{{ curr_request.first_name }}</td>
-              </tr>
-              <tr>
-                <td>{{ _("Last name") }}  </td>
-                <td> {{ curr_request.last_name }} </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <table>
-              <tr>
-                <td>{{ _("City") }}:</td>
-                <td>{{ curr_request.city }}</td>
-              </tr>
-              <tr>
-                <td>{{ _("Street") }}  </td>
-                <td> {{ curr_request.street }} </td>
-              </tr>
-            </table>
-          </td>
-          <td>{{ curr_request.type }}</td>
-          <td> {{curr_request.amount}} </td>
-          <td>
-            <a href="{{ url_for('supply_chain.manage_request', req_id=curr_request.id) }}">
-            {{ _("Manage request") }}
-        </a>
-          </td>
+          <td>{{ donation.type }}</td>
+          <td>{{ donation.amount }}</td>
         </tr>
-      {% endif %}
+
       {% endfor %}
-
-    </table>
+      </table>
       {% endif %}
 
-      <table class="table table-hover" id="donated-items">
+      <table class="table table-hover" id="pending-requests">
         <tr>
-          <th>{{ _("Donation history: ") }} </th>
+          <th>{{ _("Current requests:") }} </th>
         </tr>
-
+    
         {% if current_requests is none %}
         </table>
         <p>{{ _("Could not find any requests") }} </p>
@@ -136,30 +83,61 @@
         {% else %}
         <tr>
           <td>{{ _("Lp") }} </td>
-          <td>{{ _("Description") }}</td>
-          <td>{{ _("Amount") }}  </td>
-          <td>{{ _("Item type") }}  </td>
-          <td>{{ _("Date") }} </td>
-          <td>{{ _("Donor") }}</td>
+          <td>{{ _("Name") }}</td>
+          <td>{{ _("Status") }}</td>
+          <td>{{ _("Affected") }}  </td>
+          <td>{{ _("Address") }} </td>
+          <td>{{ _("Needs") }}</td>
+          <td>{{ _("Amount") }}</td>
+          
         </tr>
-        {% for donation in donation_item_history %}
+        {% for curr_request in current_requests %}
+        {% if curr_request.status == request_status.PENDING %}
           <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ donation.description }}</td>
-            <td>{{ donation.amount }}</td>
-            <td>{{ donation.type }}</td>
-            <td>{{ donation.DonationItem.donation_date }}</td>
-            <td>{{ donation.name}}  {{donation.surname}}</td>
+            <td>{{ curr_request.name }}</td>
+            <td>{{ curr_request.status.value }}</td>
+            <td>
+              <table class="table table-hover">
+                <tr>
+                  <td>{{ _("First name:") }}</td>
+                  <td>{{ curr_request.first_name }}</td>
+                </tr>
+                <tr>
+                  <td>{{ _("Last name") }}  </td>
+                  <td> {{ curr_request.last_name }} </td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <table>
+                <tr>
+                  <td>{{ _("City") }}:</td>
+                  <td>{{ curr_request.city }}</td>
+                </tr>
+                <tr>
+                  <td>{{ _("Street") }}  </td>
+                  <td> {{ curr_request.street }} </td>
+                </tr>
+              </table>
+            </td>
+            <td>{{ curr_request.type }}</td>
+            <td> {{curr_request.amount}} </td>
+            <td>
+              <a class="btn btn-primary" href="{{ url_for('supply_chain.manage_request', req_id=curr_request.id) }}">
+              {{ _("Manage request") }}
+          </a>
+            </td>
           </tr>
+        {% endif %}
         {% endfor %}
-  
+
       </table>
         {% endif %}
 
-
-        <table class="table table-hover" id="donated-money">
+        <table class="table table-hover" id="donated-items">
           <tr>
-            <th>{{ _("Money donation history: ") }} </th>
+            <th colspan="6">{{ _("Donation history: ") }} </th>
           </tr>
 
           {% if current_requests is none %}
@@ -175,94 +153,113 @@
             <td>{{ _("Date") }} </td>
             <td>{{ _("Donor") }}</td>
           </tr>
-          {% for donation in donation_money_history %}
+          {% for donation in donation_item_history %}
             <tr>
               <td>{{ loop.index }}</td>
               <td>{{ donation.description }}</td>
-              <td>{{ donation.cashAmount }}</td>
-              <td>{{ donation.donation_type }}</td>
-              <td>{{ donation.donation_date }}</td>
-              <td>{{ donation.donor.name}}  {{donation.donor.surname}}</td>
+              <td>{{ donation.amount }}</td>
+              <td>{{ donation.type }}</td>
+              <td>{{ donation.DonationItem.donation_date }}</td>
+              <td>{{ donation.name}}  {{donation.surname}}</td>
             </tr>
           {% endfor %}
     
         </table>
           {% endif %}
 
-        <table class="table table-hover" id="request-history">
-          <tr>
-            <th>{{ _("Request history") }} </th>
-          </tr>
-      
-          {% if current_requests is none %}
-          </table>
-          <p>{{ _("Could not find any requests in the history") }} </p>
-      
-          {% else %}
-          <tr>
-            <td>{{ _("Lp") }} </td>
-            <td>{{ _("Name") }}</td>
-            <td>{{ _("Status") }}</td>
-            <td>{{ _("Affected") }} </td>
-            <td>{{ _("Address") }} </td>
-            <td>{{ _("Needs") }}</td>
-            <td>{{ _("Amount") }}</td>
-            
-          </tr>
-          {% for curr_request in current_requests %}
-          {% if curr_request.status == request_status.COMPLETED %}
+
+          <table class="table table-hover" id="donated-money">
             <tr>
-              <td>{{ loop.index }}</td>
-              <td>{{ curr_request.name }}</td>
-              <td>{{ curr_request.status }}</td>
-              <td>
-                <table class="table">
-                  <tr>
-                    <td>{{ _("First name:") }}</td>
-                    <td>{{ curr_request.first_name }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ _("Last name") }}  </td>
-                    <td> {{ curr_request.last_name }} </td>
-                  </tr>
-                </table>
-              </td>
-              <td>
-                <table>
-                  <tr>
-                    <td>{{ _("City") }}:</td>
-                    <td>{{ curr_request.city }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ _("Street") }}  </td>
-                    <td> {{ curr_request.street }} </td>
-                  </tr>
-                </table>
-              </td>
-              <td>{{ curr_request.type }}</td>
-              <td> {{curr_request.amount}} </td>
+              <th colspan="6">{{ _("Money donation history: ") }} </th>
             </tr>
-          {% endif %}
-          {% endfor %}
-    
-        </table>
-          {% endif %}
 
+            {% if current_requests is none %}
+            </table>
+            <p>{{ _("Could not find any requests") }} </p>
+        
+            {% else %}
+            <tr>
+              <td>{{ _("Lp") }} </td>
+              <td>{{ _("Description") }}</td>
+              <td>{{ _("Amount") }}  </td>
+              <td>{{ _("Item type") }}  </td>
+              <td>{{ _("Date") }} </td>
+              <td>{{ _("Donor") }}</td>
+            </tr>
+            {% for donation in donation_money_history %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ donation.description }}</td>
+                <td>{{ donation.cashAmount }}</td>
+                <td>{{ donation.donation_type }}</td>
+                <td>{{ donation.donation_date }}</td>
+                <td>{{ donation.donor.name}}  {{donation.donor.surname}}</td>
+              </tr>
+            {% endfor %}
+      
+          </table>
+            {% endif %}
 
-  
-
-  <table class="table table-hover" id="avaliable-money">
-    <tr>
-      <th>{{ _("Avalible money") }}</th>
-    </tr>
-    <tr>
-      {% if curr_account_balance is defined %}
-      <td>{{ curr_account_balance.amount }}</td>
-      {% else %}
-      <td>0</td>
-      {% endif %}
-    </tr>
-  </table>
-
+          <table class="table table-hover" id="request-history">
+            <thead>
+              <tr>
+                <th scope="col" colspan="7">{{ _("Request history") }} </th>
+              </tr>
+            </thead>      
+            {% if current_requests is none %}
+            </table>
+            <p>{{ _("Could not find any requests in the history") }} </p>
+        
+            {% else %}
+            <tbody>
+              <tr>
+                <td>{{ _("Lp") }} </td>
+                <td>{{ _("Name") }}</td>
+                <td>{{ _("Status") }}</td>
+                <td>{{ _("Affected") }} </td>
+                <td>{{ _("Address") }} </td>
+                <td>{{ _("Needs") }}</td>
+                <td>{{ _("Amount") }}</td>
+                
+              </tr>
+              {% for curr_request in current_requests %}
+              {% if curr_request.status == request_status.COMPLETED %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ curr_request.name }}</td>
+                  <td>{{ curr_request.status.value }}</td>
+                  <td>
+                    <table class="table">
+                      <tr>
+                        <td>{{ _("First name:") }}</td>
+                        <td>{{ curr_request.first_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{ _("Last name") }}  </td>
+                        <td> {{ curr_request.last_name }} </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td>{{ _("City") }}:</td>
+                        <td>{{ curr_request.city }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{ _("Street") }}  </td>
+                        <td> {{ curr_request.street }} </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td>{{ curr_request.type }}</td>
+                  <td> {{curr_request.amount}} </td>
+                </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+            {% endif %}
+      </div>
 </div>
 {% endblock %}

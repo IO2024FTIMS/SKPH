@@ -7,7 +7,10 @@ const VIEW = {
     AVALIABLE_MONEY: 'avaliable-money'
   }
 
-  let hideAllItems = function () {
+
+
+
+let hideAllItems = function () {
     for (let value in VIEW) {
       console.log(VIEW[value])
       let currElement = document.getElementById(VIEW[value]);
@@ -32,3 +35,5 @@ const VIEW = {
     hideAllItems()
     changeView(VIEW.AVALIABLE_RESOURCES)
  }, false);
+
+
