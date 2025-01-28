@@ -313,4 +313,3 @@ def delete_request(request_id):
     db.session.commit()
 
     return redirect(url_for('affected.my_details'))
-
