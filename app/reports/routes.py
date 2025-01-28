@@ -27,7 +27,7 @@ def ui():
 # =================== RAPORT AFFECTED ===================
 @bp.route('/affected-report', methods=['GET'])
 @login_required
-@roles_required(['affected', 'authorities', 'admin'])
+@roles_required(['authorities', 'organization', 'admin'])
 def affected_report():
     affected_list = db.session.query(Affected).all()
 
@@ -104,7 +104,7 @@ def affected_report():
 
 @bp.route('/affected-report-csv', methods=['GET'])
 @login_required
-@roles_required(['affected', 'authorities', 'admin'])
+@roles_required(['authorities', 'organization', 'admin'])
 def affected_report_csv():
     affected_list = db.session.query(Affected).all()
     output = io.StringIO()
@@ -128,7 +128,7 @@ def affected_report_csv():
 # =================== RAPORT VOLUNTEER ===================
 @bp.route('/volunteer-report', methods=['GET'])
 @login_required
-@roles_required(['volunteer', 'authorities', 'admin'])
+@roles_required(['organization', 'authorities', 'admin'])
 def volunteer_report():
     volunteer_list = report_service.get_all_volunteers()
     city_stats = report_service.stats_by_city_volunteer()
@@ -193,7 +193,7 @@ def volunteer_report():
 
 @bp.route('/volunteer-report-csv', methods=['GET'])
 @login_required
-@roles_required(['volunteer', 'authorities', 'admin'])
+@roles_required(['organization', 'authorities', 'admin'])
 def volunteer_report_csv():
     volunteer_list = report_service.get_all_volunteers()
     output = io.StringIO()
@@ -215,7 +215,7 @@ def volunteer_report_csv():
 # =================== RAPORT DONOR ===================
 @bp.route('/donor-report', methods=['GET'])
 @login_required
-@roles_required(['donor', 'authorities', 'admin'])
+@roles_required(['organization', 'authorities', 'admin'])
 def donor_report():
     donors = report_service.get_all_donors()
 
@@ -301,7 +301,7 @@ def donor_report():
 
 @bp.route('/donor-report-csv', methods=['GET'])
 @login_required
-@roles_required(['donor', 'authorities', 'admin'])
+@roles_required(['organization', 'authorities', 'admin'])
 def donor_report_csv():
     donors = report_service.get_all_donors()
     output = io.StringIO()
@@ -321,7 +321,7 @@ def donor_report_csv():
 
 @bp.route('/single-donor-report', methods=['GET'])
 @login_required
-@roles_required(['donor', 'authorities', 'admin'])
+@roles_required(['organization', 'donor', 'authorities', 'admin'])
 def single_donor_report():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
@@ -433,7 +433,7 @@ def single_donor_report():
 
 @bp.route('/single-donor-report-csv', methods=['GET'])
 @login_required
-@roles_required(['donor', 'authorities', 'admin'])
+@roles_required(['organization', 'donor', 'authorities', 'admin'])
 def single_donor_report_csv():
     donor_id = request.args.get('donor_id', type=int)
     if not donor_id:
