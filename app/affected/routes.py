@@ -1,8 +1,9 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for, render_template_string
 from flask_login import login_required, current_user
+from flask_mailman import EmailMessage
 
 from app.auth.user_service import roles_required
-from app.extensions import db
+from app.extensions import db, mail
 from app.models.address import Address
 from app.models.affected import Affected
 from app.models.authorities import Authorities
@@ -15,6 +16,27 @@ bp = Blueprint('affected', __name__,
                template_folder='../templates/affected',
                static_folder='static',
                static_url_path='affected')
+
+
+def send_status_update_email(user, request_obj):
+    email_body = render_template_string(
+        "Hello {{ user.first_name }},<br><br>"
+        "The status of your request '{{ request_obj.name }}' has been updated to '{{ request_obj.status.value }}'.<br><br>"
+        "Best regards,<br>Your Team<br>"
+        "SKPH IO",
+        user=user,
+        request_obj=request_obj
+    )
+
+    message = EmailMessage(
+        subject="Request Status Update",
+        body=email_body,
+        to=[user.email]
+    )
+    message.content_subtype = "html"
+
+    with mail.get_connection() as connection:
+        message.send(connection)
 
 
 @bp.route('/')
@@ -215,25 +237,6 @@ def select_campaign():
     return render_template('select_campaign.jinja', affected=affected, campaigns=campaigns)
 
 
-@bp.route('/request/update_status/<int:request_id>', methods=['GET', 'POST'])
-@login_required
-@roles_required(['organization', 'authorities'])
-def update_request_status(request_id):
-    request_obj = db.get_or_404(Request, request_id)
-
-    if request.method == 'POST':
-        new_status = request.form.get('status')
-        if new_status not in RequestStatus.__members__:
-            return redirect(url_for('affected.update_request_status', request_id=request_id))
-
-        request_obj.status = RequestStatus[new_status]
-        db.session.commit()
-
-        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
-
-    return render_template('update_request_status.jinja', request=request_obj, statuses=RequestStatus)
-
-
 @bp.route('/request/edit/<int:request_id>', methods=['GET', 'POST'])
 @login_required
 def edit_request(request_id):
@@ -274,6 +277,28 @@ def edit_request(request_id):
     return render_template('edit_request.jinja', request=request_obj, donation_types=donation_types)
 
 
+@bp.route('/request/update_status/<int:request_id>', methods=['GET', 'POST'])
+@login_required
+@roles_required(['organization', 'authorities'])
+def update_request_status(request_id):
+    request_obj = db.get_or_404(Request, request_id)
+
+    if request.method == 'POST':
+        new_status = request.form.get('status')
+        if new_status not in RequestStatus.__members__:
+            return redirect(url_for('affected.update_request_status', request_id=request_id))
+
+        request_obj.status = RequestStatus[new_status]
+        db.session.commit()
+
+        affected_user = request_obj.affected.user
+        send_status_update_email(affected_user, request_obj)
+
+        return redirect(url_for('affected.affected_details', affected_id=request_obj.affected_id))
+
+    return render_template('update_request_status.jinja', request=request_obj, statuses=RequestStatus)
+
+
 @bp.route('/request/delete/<int:request_id>', methods=['POST', 'GET'])
 @login_required
 def delete_request(request_id):
@@ -287,3 +312,7 @@ def delete_request(request_id):
     db.session.commit()
 
     return redirect(url_for('affected.my_details'))
+
+
+
+
