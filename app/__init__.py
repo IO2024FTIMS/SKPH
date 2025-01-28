@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
