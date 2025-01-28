@@ -11,7 +11,6 @@
     enabling effective coordination of emergency aid.""") }}
   </p>
   <hr class="my-4">
-  {# {% if current_user.is_authenticated %} #}
   {% if current_user.type == 'admin' %}
   <h3>{{ _("Modules") }}</h3>
   <div class="d-flex flex-column">
@@ -32,7 +31,6 @@
     <a class="btn btn-primary btn-lg" href="{{ url_for('supply_chain.demo') }}">{{ _("Tracking and managing resources
       module") }}</a>
   </div>
-  {# {% endif %} #}
   {% endif %}
   <!-- AUTHORITIES -->
   {% if current_user.type == 'authorities' %}
@@ -114,10 +112,6 @@
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('organization.sign_to_charity_campaign') }}">{{
       _("Sign to a charity campaign") }}
-    </a>
-    <br>
-    <a class="btn btn-primary btn-lg" href="#">{{
-      _("Manage donations") }}
     </a>
     <br>
     <a class="btn btn-primary btn-lg" href="{{ url_for('organization.list_my_charity_campaigns') }}">{{
