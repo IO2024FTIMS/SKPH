@@ -21,7 +21,8 @@ bp = Blueprint('affected', __name__,
 def send_status_update_email(user, request_obj):
     email_body = render_template_string(
         "Hello {{ user.first_name }},<br><br>"
-        "The status of your request '{{ request_obj.name }}' has been updated to '{{ request_obj.status.value }}'.<br><br>"
+        "The status of your request '{{ request_obj.name }}' "
+        "has been updated to '{{ request_obj.status.value }}'.<br><br>"
         "Best regards,<br>Your Team<br>"
         "SKPH IO",
         user=user,
@@ -312,7 +313,4 @@ def delete_request(request_id):
     db.session.commit()
 
     return redirect(url_for('affected.my_details'))
-
-
-
 
