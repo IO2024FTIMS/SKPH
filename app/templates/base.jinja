@@ -33,21 +33,30 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('organization.list_organizations') }}">{{ _("Organizations")}}</a>
           </li>
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('chat.index') }}">{{ _("Chat")}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('maps.index') }}">{{ _("Maps")}}</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="#">{{ _("About") }}</a>
           </li>
-          {# <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-              aria-expanded="false">Dropdown</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Separated link</a>
-            </div>
-          </li> #}
         </ul>
+        <form action="{{ url_for('set_language') }}" method="post" class="form-inline my-2 my-lg-0">
+          <div class="dropdown">
+            <button class="btn btn-link dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              🌐 {{ _("Language") }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="languageDropdown">
+              <button type="submit" name="lang" value="en" class="dropdown-item">🇬🇧 English</button>
+              <button type="submit" name="lang" value="pl" class="dropdown-item">🇵🇱 Polski</button>
+            </div>
+          </div>
+        </form>
         {% if current_user.is_authenticated %}
         <div class="navbar-text mr-3">
           {{ current_user.email }} ({{ current_user.type }})
