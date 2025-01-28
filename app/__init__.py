@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,12 +15,14 @@ from app.organization.routes import bp as organization_bp
 from app.reports.routes import bp as reports_bp
 from app.volunteers.routes import bp as volunteers_bp
 from app.supply_chain.routes import bp as supply_chain_bp
-from config import Config
+from config import config
 
 
-def create_app(config_class=Config):
+def create_app(config_name=None):
+    if config_name is None:
+        config_name = os.getenv('FLASK_ENV', 'development')
     flask_app = Flask(__name__)
-    flask_app.config.from_object(config_class)
+    flask_app.config.from_object(config[config_name])
 
     # Initialize Flask extensions here
     db.init_app(flask_app)
