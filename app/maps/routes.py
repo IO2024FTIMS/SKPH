@@ -2,7 +2,9 @@ import openrouteservice
 from flask import Blueprint, render_template, request, jsonify
 from app.auth.user_service import roles_required
 from app.extensions import db
+from app.models.address import Address
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
+from geopy.geocoders import Nominatim
 
 ORS_API_KEY = "api"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
@@ -18,10 +20,51 @@ bp = Blueprint(
 
 @bp.route("/")
 def index():
-
+    # Pobieranie POI, które są aktywne
     pois = POI.query.filter_by(status=True).all()
+
+    # Pobieranie danger_area i relief_area
     danger_areas = DangerArea.query.filter_by(status=True).all()
     relief_areas = ReliefArea.query.filter_by(status=True).all()
+
+    # Pobieranie adresów z bazy danych
+    addresses = Address.query.all()
+    address_coords = []
+
+    # Dodawanie POI na podstawie adresów, jeśli ich nie ma w bazie
+    for address in addresses:
+        # Łączenie informacji z adresu w jeden string
+        full_address = f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
+
+        # Sprawdzamy, czy POI o tej nazwie (adresie) już istnieje
+        existing_poi = POI.query.filter_by(name=full_address).first()
+
+        # Jeśli POI nie istnieje, dodajemy je do bazy
+        if not existing_poi:
+            coords = geocode_address(full_address)
+            if coords:
+                coordinates = Coordinates(x=coords[0], y=coords[1])
+                db.session.add(coordinates)
+                poi = POI(
+                    name=full_address,
+                    coordinates=coordinates,
+                    type_of_poi="address",
+                    status=True,
+                )
+                db.session.add(poi)
+                db.session.commit()  # Zatwierdzamy dodanie POI do bazy
+
+                # Dodajemy POI do listy address_coords
+                address_coords.append(
+                    {
+                        "address": full_address,
+                        "lat": coords[0],
+                        "lng": coords[1],
+                    }
+                )
+
+    # Ponowne pobranie wszystkich POI po dodaniu nowych
+    pois = POI.query.filter_by(status=True).all()
 
     return render_template(
         "bare-map.jinja",
@@ -34,11 +77,39 @@ def index():
 @bp.route("/add")
 @roles_required(["admin", "organization"])
 def add_page():
-
     pois = POI.query.filter_by(status=True).all()
     danger_areas = DangerArea.query.filter_by(status=True).all()
     relief_areas = ReliefArea.query.filter_by(status=True).all()
 
+    # Pobieranie adresów z bazy danych
+    addresses = Address.query.all()
+    address_coords = []
+
+    # Dodawanie POI na podstawie adresów, jeśli ich nie ma w bazie
+    for address in addresses:
+        # Łączenie informacji z adresu w jeden string
+        full_address = f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
+
+        # Sprawdzamy, czy POI o tej nazwie (adresie) już istnieje
+        existing_poi = POI.query.filter_by(name=full_address).first()
+
+        # Jeśli POI nie istnieje, dodajemy je do bazy
+        if not existing_poi:
+            coords = geocode_address(full_address)
+            if coords:
+                # Tworzymy nowe współrzędne i POI
+                coordinates = Coordinates(x=coords[0], y=coords[1])
+                db.session.add(coordinates)
+                poi = POI(
+                    name=full_address,
+                    coordinates=coordinates,
+                    type_of_poi="Address",  # Przykładowy typ POI dla adresów
+                    status=True,
+                )
+                db.session.add(poi)
+                db.session.commit()
+
+    # Po dodaniu nowych POI i przygotowaniu danych, renderujemy szablon
     return render_template(
         "map.jinja",
         pois=pois,
@@ -196,3 +267,11 @@ def calculate_route(start, end):
     except RuntimeError as e:
         print(f"Error calculating route: {e}")
         return None
+
+
+def geocode_address(address):
+    geolocator = Nominatim(user_agent="geoapi")
+    location = geolocator.geocode(address)
+    if location:
+        return location.latitude, location.longitude
+    return None
