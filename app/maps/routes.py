@@ -1,6 +1,5 @@
 import openrouteservice
 from flask import Blueprint, render_template, request, jsonify
-from flask_login import login_required, current_user
 from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
