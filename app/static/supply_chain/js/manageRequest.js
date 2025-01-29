@@ -24,3 +24,18 @@ let checkForm = function () {
     }
     return true;
 }
+
+let mainForm = document.forms[0];
+
+mainForm.onsubmit = function(event) {
+    let donationAmount = parseInt(mainForm.elements['donationAmount'].value);
+    let itemStockAmount = parseInt(mainForm.elements['item_amount'].value);
+    let amountErrorMessage = document.getElementById['amount-error-div']
+    if (donationAmount > itemStockAmount) {
+        amountErrorMessage.style['display'] = 'block';
+        event.preventDefault();
+    } else {
+        amountErrorMessage.style['display'] = 'none';
+        document.getElementById['submit-button'].disabled = true;
+    }
+}
