@@ -1,10 +1,10 @@
 import openrouteservice
 from flask import Blueprint, render_template, request, jsonify
+from geopy.geocoders import Nominatim
 from app.auth.user_service import roles_required
 from app.extensions import db
 from app.models.address import Address
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
-from geopy.geocoders import Nominatim
 
 ORS_API_KEY = "api"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
