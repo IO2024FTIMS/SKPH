@@ -41,9 +41,9 @@
             <a class="nav-link" href="{{ url_for('maps.index') }}">{{ _("Maps")}}</a>
           </li>
           {% endif %}
-          <li class="nav-item">
+          {# <li class="nav-item">
             <a class="nav-link" href="#">{{ _("About") }}</a>
-          </li>
+          </li> #}
         </ul>
         <form action="{{ url_for('set_language') }}" method="post" class="form-inline my-2 my-lg-0">
           <div class="dropdown">
@@ -91,10 +91,6 @@
   <main>
     {% block content %} {% endblock %}
   </main>
-
-  {# <footer class="d-flex justify-content-end align-items-end mr-2" style="height: 42vh;">
-    <p>{{ _(" Crisis Management System - building a better future together. © 2025 All rights reserved.") }}</p>
-  </footer> #}
 
   <!-- Include jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
