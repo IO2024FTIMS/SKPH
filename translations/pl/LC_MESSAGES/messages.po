@@ -587,7 +587,7 @@ msgstr "Numer ulicy"
 #: app/templates/volunteers/volunteer_tasks.jinja:66
 #: app/templates/volunteers/volunteer_tasks.jinja:88
 msgid "Update Status"
-msgstr "Zaktualizuj status zgłoszenia"
+msgstr "Zaktualizuj Status"
 
 #: app/templates/affected/create_request.jinja:8
 msgid "Create a New Request for"
