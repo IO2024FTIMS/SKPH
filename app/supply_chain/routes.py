@@ -65,15 +65,8 @@ def index(error_message=None):
             join(Organization, Organization.id == OrganizationCharityCampaign.organization_id). \
             filter(Organization.organization_name == curr_organization.organization_name).all()
 
-        if len(all_charity_campaigns) > 0:
-            curr_charity_campaign = all_charity_campaigns[0]
-
-        else:
-            return render_template('supply_chain.jinja',
-                        all_charity_campaigns=None,
-                        error_message="Organization: " + curr_organization.organization_name + " is not assigned to any charity campaign",
-                        curr_organization=curr_organization
-                        )
+        # curr_organization_name = 'FUNDACJA OJCA RYDZYKA'
+        curr_charity_campaign = all_charity_campaigns[0]
 
         # requests for current charity campaign
         current_requests = Request.query \
@@ -335,7 +328,7 @@ def view_all():
                                organizations_with_resources=organizations_with_resources,
                                requests_for_charity_campaign=requests_for_charity_campaign,
                                request_status=RequestStatus)
-    return redirect('/')
+    return redirect('/supply-chain')
 
 
 def create_address():
