@@ -52,7 +52,6 @@ def demo():
     return render_template('module_demo.jinja')
 
 
-
 @bp.route('/', methods=['GET', 'POST'])
 @roles_required('organization')
 def index(error_message=None):
@@ -186,7 +185,7 @@ def index(error_message=None):
                                curr_account_balance=curr_account_balance,
                                all_charity_campaigns=all_charity_campaigns,
                                error_message=error_message)
-    
+
     return redirect('/supply-chain')
 
 
@@ -220,21 +219,20 @@ def manage_request(req_id):
         .first()
 
     if curr_request_data.status == RequestStatus.COMPLETED:
-        return render_template('manage_request.jinja', 
-                                curr_request=curr_request_data,
-                                error_message='Request already completed',
-                                stock_item=stock_item)
+        return render_template('manage_request.jinja',
+                               curr_request=curr_request_data,
+                               error_message='Request already completed',
+                               stock_item=stock_item)
     if request.method == 'GET':
         return render_template('manage_request.jinja', curr_request=curr_request_data,
                                stock_item=stock_item)
 
     elif request.method == 'POST':
         if stock_item is None:
-            return render_template('manage_request.jinja', 
-                                    curr_request=curr_request_data,
-                                    error_message='Could not send items to affected - no items in stock',
-                                    stock_item=stock_item)
-                                   
+            return render_template('manage_request.jinja',
+                                   curr_request=curr_request_data,
+                                   error_message='Could not send items to affected - no items in stock',
+                                   stock_item=stock_item)
 
         current_request = Request.query.filter(Request.id == req_id).first()
         current_stock = ItemStock.query.filter(ItemStock.id == stock_item.id).first()
@@ -244,19 +242,19 @@ def manage_request(req_id):
             current_stock.amount -= donation_amount
             current_request.amount = donation_amount
             db.session.commit()
-            return render_template('manage_request.jinja', 
-                                    curr_request=curr_request_data,
-                                    success_message='Items sent successfully',
-                                    stock_item=stock_item)
+            return render_template('manage_request.jinja',
+                                   curr_request=curr_request_data,
+                                   success_message='Items sent successfully',
+                                   stock_item=stock_item)
         else:
             print('error')
-            return render_template('manage_request.jinja', 
-                                    curr_request=curr_request_data,
-                                    error_message='Could not send items to affected - an error occured',
-                                    stock_item=stock_item)
-        
-    return render_template('supply_chain.jinja', 
-                            error_message='Something went wrong. please refresh the page')
+            return render_template('manage_request.jinja',
+                                   curr_request=curr_request_data,
+                                   error_message='Could not send items to affected - an error occured',
+                                   stock_item=stock_item)
+
+    return render_template('supply_chain.jinja',
+                           error_message='Something went wrong. please refresh the page')
 
 
 @bp.route('/view-all', methods=['GET', 'POST'])
