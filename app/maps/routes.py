@@ -1,9 +1,7 @@
 import openrouteservice
 from flask import Blueprint, render_template, request, jsonify
-from geopy.geocoders import Nominatim
 from app.auth.user_service import roles_required
 from app.extensions import db
-from app.models.address import Address
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
 
 ORS_API_KEY = "api"
@@ -20,48 +18,10 @@ bp = Blueprint(
 
 @bp.route("/")
 def index():
+
     pois = POI.query.filter_by(status=True).all()
     danger_areas = DangerArea.query.filter_by(status=True).all()
     relief_areas = ReliefArea.query.filter_by(status=True).all()
-    addresses = Address.query.all()
-
-    # Tworzymy zbiór istniejących adresów w tabeli Address
-    existing_addresses = {
-        f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
-        for address in addresses
-    }
-
-    # Sprawdzanie i dodawanie brakujących POI na podstawie adresów
-    for address in addresses:
-        full_address = f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
-
-        existing_poi = POI.query.filter_by(name=full_address,
-                                           type_of_poi="address").first()
-
-        if not existing_poi:
-            coords = geocode_address(full_address)
-            if coords:
-                coordinates = Coordinates(x=coords[0], y=coords[1])
-                db.session.add(coordinates)
-                poi = POI(
-                    name=full_address,
-                    coordinates=coordinates,
-                    type_of_poi="address",
-                    status=True,
-                )
-                db.session.add(poi)
-                db.session.commit()
-
-    # Usuwanie POI, które nie mają odpowiadającego adresu w tabeli Address
-    pois_to_delete = POI.query.filter_by(type_of_poi="address").all()
-
-    for poi in pois_to_delete:
-        if poi.name not in existing_addresses:
-            db.session.delete(poi)
-
-    db.session.commit()  # Zatwierdzamy wszystkie zmiany w bazie danych
-
-    pois = POI.query.filter_by(status=True).all()
 
     return render_template(
         "bare-map.jinja",
@@ -74,48 +34,10 @@ def index():
 @bp.route("/add")
 @roles_required(["admin", "organization"])
 def add_page():
+
     pois = POI.query.filter_by(status=True).all()
     danger_areas = DangerArea.query.filter_by(status=True).all()
     relief_areas = ReliefArea.query.filter_by(status=True).all()
-    addresses = Address.query.all()
-
-    # Tworzymy zbiór istniejących adresów w tabeli Address
-    existing_addresses = {
-        f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
-        for address in addresses
-    }
-
-    # Sprawdzanie i dodawanie brakujących POI na podstawie adresów
-    for address in addresses:
-        full_address = f"{address.street} {address.street_number}, {address.city}, {address.voivodeship}"
-
-        existing_poi = POI.query.filter_by(name=full_address,
-                                           type_of_poi="Address").first()
-
-        if not existing_poi:
-            coords = geocode_address(full_address)
-            if coords:
-                coordinates = Coordinates(x=coords[0], y=coords[1])
-                db.session.add(coordinates)
-                poi = POI(
-                    name=full_address,
-                    coordinates=coordinates,
-                    type_of_poi="Address",
-                    status=True,
-                )
-                db.session.add(poi)
-                db.session.commit()
-
-    # Usuwanie POI, które nie mają odpowiadającego adresu w tabeli Address
-    pois_to_delete = POI.query.filter_by(type_of_poi="Address").all()
-
-    for poi in pois_to_delete:
-        if poi.name not in existing_addresses:
-            db.session.delete(poi)
-
-    db.session.commit()  # Zatwierdzamy wszystkie zmiany w bazie danych
-
-    pois = POI.query.filter_by(status=True).all()
 
     return render_template(
         "map.jinja",
@@ -274,11 +196,3 @@ def calculate_route(start, end):
     except RuntimeError as e:
         print(f"Error calculating route: {e}")
         return None
-
-
-def geocode_address(address):
-    geolocator = Nominatim(user_agent="geoapi")
-    location = geolocator.geocode(address)
-    if location:
-        return location.latitude, location.longitude
-    return None
