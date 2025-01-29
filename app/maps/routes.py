@@ -30,6 +30,7 @@ def index():
     # Pobieranie adresów z bazy danych
     addresses = Address.query.all()
     address_coords = []
+    print(address_coords)  # żeby uciszyć pylint
 
     # Dodawanie POI na podstawie adresów, jeśli ich nie ma w bazie
     for address in addresses:
