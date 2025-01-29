@@ -46,7 +46,6 @@ def index():
                 db.session.add(poi)
                 db.session.commit()
 
-
     pois = POI.query.filter_by(status=True).all()
 
     return render_template(
