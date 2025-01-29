@@ -14,19 +14,20 @@
 <div class="container-fluid mt-4">
   <h1>{{ _("Tracking and managing resources module") }}</h1>
   <a href="{{ url_for('home') }}">
-    <input type="button" class="btn btn-primary btn-lg" id="back-button" value="Back"> 
+    <input type="button" class="btn btn-dark btn-lg" id="back-button" value="Back"> 
   </a>
-  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
-  <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Donated items" onclick="changeView(VIEW.DONATED_ITEMS)">
-  <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Donated money" onclick="changeView(VIEW.DONATED_MONEY)">
-  <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Pending requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
-  <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
-
+  <div class="btn-group" role="group">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Donated items" onclick="changeView(VIEW.DONATED_ITEMS)">
+    <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Donated money" onclick="changeView(VIEW.DONATED_MONEY)">
+    <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Pending requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
+    <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+  </div>
   <h2>{{ _("All resources") }}</h2>
   <div>
     <form method="post">
       <label for="curr_charity_campaign">{{ _("Charity campaign") }}</label>
-      <select name="curr_charity_campaign_id">
+      <select name="curr_charity_campaign_id" class="form-select">
         {% if curr_charity_campaign is defined %}
           {% for charity_campaign in charity_campaigns %}
             {% if charity_campaign.id == curr_charity_campaign.id %} 
@@ -42,19 +43,18 @@
           {% endfor %}
         {% endif %}
       </select>
-      <input type="submit" value="Show resources for charity campaign">
+      <input type="submit" class="btn btn-secondary" value="Show resources for charity campaign">
     </form>
-
 
       {% if organizations_with_resources is defined %}
         <table class="table table-hover" id="avaliable-resources">
           <tr>
-            <th colspan="3">Avaliable resources</th>
+            <th colspan="3">{{ _("Avaliable resources") }}</th>
           </tr>
           <tr>
-            <td>Organization</td>
-            <td>Item type</td>
-            <td>Amount</td>
+            <td> {{ _("Organization") }}</td>
+            <td> {{ _("Item type") }}</td>
+            <td> {{ _("Amount") }}</td>
           </tr>
           {% for curr_resource in organizations_with_resources %}
           <tr>
@@ -83,12 +83,12 @@
 
         <table class="table table-hover" id="donated-items">
           <tr>
-            <th colspan="3">Donations - items</th>
+            <th colspan="3"> {{ _("Donations - items") }}</th>
           </tr>
           <tr>
-            <td>Organization</td>
-            <td>Donation type</td>
-            <td>Donation amount</td>
+            <td> {{ _("Organization") }}</td>
+            <td> {{ _("Donation type") }}</td>
+            <td> {{ _("Donation amount") }}</td>
           </tr>
           {% for curr_resource in organizations_with_resources %}
             {% if curr_resource.item_donations is defined and curr_resource.item_donations|length > 0 %}
@@ -119,12 +119,12 @@
 
         <table class="table table-hover" id="donated-money">
           <tr>
-            <th colspan="3">Donations - money</th>
+            <th colspan="3"> {{ _("Donations - money") }}</th>
           </tr>
           <tr>
-            <td>Organization</td>
-            <td>Donation type</td>
-            <td>Donation amount</td>
+            <td> {{ _("Organization") }}</td>
+            <td> {{ _("Donation type") }}</td>
+            <td> {{ _("Donation amount") }}</td>
           </tr>
           {% for curr_resource in organizations_with_resources %}
             {% if curr_resource.money_donations is defined and curr_resource.money_donations|length > 0 %}
@@ -206,7 +206,7 @@
 
         <table class="table table-hover" id="request-history">
           <tr>
-            <th colspan="3">Request history</th>
+            <th colspan="3">{{ _("Request history") }}</th>
           </tr>
           <tr>
             <td>{{ _("Lp") }} </td>
@@ -254,29 +254,7 @@
           {% endfor %}
 
         </table>
-
-
       {% endif %}
-
-    <!-- <table>
-      {% if curr_organizations is defined %}
-        <tr>
-          <td>Organization name:</td>
-        </tr>
-        {% for organization in curr_organizations %}
-        <tr>
-          <td>{{ organization.organization_name }}</td>
-        </tr>
-        {% endfor %}
-      {% else %} 
-        <tr>
-          <th>{{ _("Could not find any organizations for selected charity campaign") }}</th>
-        </tr>
-      {% endif %}
-    </table> -->
-
-  
-  
   </div>
 </div>
 
