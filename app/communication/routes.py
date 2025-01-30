@@ -16,7 +16,7 @@ bp = Blueprint('chat', __name__,
 @bp.route('/')
 def index():
     users = User.query.all()
-    return render_template('communication/index.html', users=users)
+    return render_template('communication/chat.html', users=users)
 
 
 @bp.route('/chat')
