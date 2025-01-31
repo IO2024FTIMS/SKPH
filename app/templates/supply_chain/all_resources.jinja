@@ -17,11 +17,12 @@
     <input type="button" class="btn btn-dark btn-lg" id="back-button" value="Back"> 
   </a>
   <div class="btn-group" role="group">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Donated items" onclick="changeView(VIEW.DONATED_ITEMS)">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Donated money" onclick="changeView(VIEW.DONATED_MONEY)">
-    <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Pending requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
-    <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+    <a  class="btn btn-primary btn-lg" id="donated-items-button"  onclick="changeView(VIEW.AVALIABLE_RESOURCES)">{{_("Avaliable resources")}}</a>
+    <a  class="btn btn-primary btn-lg" id="donated-items-button"  onclick="changeView(VIEW.DONATED_ITEMS)">{{_("Items donated by donors")}}</a>
+    <a  class="btn btn-primary btn-lg" id="donated-money-button"  onclick="changeView(VIEW.DONATED_MONEY)">{{_("Money donated by donors")}}</a>
+    <a  class="btn btn-primary btn-lg" id="pending-requests-button"  onclick="changeView(VIEW.PENDING_REQUESTS)">{{_("Current requests")}}</a>
+    <a  class="btn btn-primary btn-lg" id=" request-history-button"  onclick="changeView(VIEW.REQUEST_HISTORY)">{{_("Completed requests")}}</a>
+  
   </div>
   <h2>{{ _("All resources") }}</h2>
   <div>
@@ -43,7 +44,7 @@
           {% endfor %}
         {% endif %}
       </select>
-      <input type="submit" class="btn btn-secondary" value="Show resources for charity campaign">
+      <input type="submit" class="btn btn-secondary" value='{{_("Show resources for charity campaign")}}'>
     </form>
 
       {% if organizations_with_resources is defined %}

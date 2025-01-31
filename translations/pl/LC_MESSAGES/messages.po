@@ -1646,6 +1646,40 @@ msgstr "Nie oceniono"
 msgid "View All Volunteers"
 msgstr "Zobacz Listę Wszystkich Wolontariuszy"
 
+
+#: app/templates/communication/chat.html:6
+msgid "SKPH - Chat"
+msgstr "SKPH - Chat"
+
+#: app/templates/communication/chat.html:78
+msgid "Welcome, "
+msgstr "Witaj, "
+
+#: app/templates/communication/chat.html:81
+#: app/templates/communication/chat.html:81
+msgid "Find a user"
+msgstr "Znajdź użytkownika"
+
+#: app/templates/communication/chat.html:82
+msgid "Search"
+msgstr "Wyszukaj"
+
+#: app/templates/communication/chat.html:86
+msgid "Your existing chats:"
+msgstr "Twoje istniejące czaty:"
+
+#: app/templates/communication/chat.html:96
+msgid "Chat with "
+msgstr "Czat z "
+
+#: app/templates/communication/chat.html:98
+msgid "Type a message"
+msgstr "Napisz wiadomość"
+
+#: app/templates/communication/cchat.html:99
+msgid "Send"
+msgstr "Wyślij"
+
 #~ msgid "System zarządzania kryzysowego"
 #~ msgstr ""
 

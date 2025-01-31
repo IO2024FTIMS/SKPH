@@ -1,8 +1,5 @@
 # SKPH (IO_2024)
 
-## [Web app](https://skph-io-ftims-dmcudje2egg3cvfr.polandcentral-01.azurewebsites.net)
-Short link: [bit.ly/SKPH-IBD4](bit.ly/SKPH-IBD4)
-
 ## [Documentation](https://tulodz-my.sharepoint.com/:w:/g/personal/247793_edu_p_lodz_pl/EWkqx71Z2zJAlRZ9zMO2aksBBXUYLX__6l3JX3fNOi1HPQ?e=hhHpki)
 
 ## Setup
