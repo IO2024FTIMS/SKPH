@@ -6,7 +6,7 @@ from app.extensions import db
 from app.models.address import Address
 from app.models.map import POI, DangerArea, ReliefArea, Coordinates
 
-ORS_API_KEY = "5b3ce3597851110001cf6248154cdb3362c64e51867c893469356c21"
+ORS_API_KEY = "API_KEY"
 ors_client = openrouteservice.Client(key=ORS_API_KEY)
 
 bp = Blueprint(
