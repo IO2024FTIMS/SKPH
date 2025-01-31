@@ -10,23 +10,24 @@
 <div class="container-fluid mt-4">
   {% if error_message is defined and error_message is not none %}
   <div class="alert alert-dismissible alert-danger">
-    <strong>{{ _("Error:") }} {{error_message}}</strong> 
+    <strong>{{ _("Error:") }} {{_(error_message)}}</strong> 
   </div>
   {% endif %}
   <h1>{{ _("Tracking and managing resources module") }}</h1>
   <a class="btn btn-dark btn-lg" href="{{ url_for('home') }}">{{ _("Back") }}</a>
   <div class="btn-group" role="group">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Avaliable resources" onclick="changeView(VIEW.AVALIABLE_RESOURCES)">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-items-button" value="Items donated by donors" onclick="changeView(VIEW.DONATED_ITEMS)">
-    <input type="button" class="btn btn-primary btn-lg" id="donated-money-button" value="Money donated by donors" onclick="changeView(VIEW.DONATED_MONEY)">
-    <input type="button" class="btn btn-primary btn-lg" id="pending-requests-button" value="Current requests" onclick="changeView(VIEW.PENDING_REQUESTS)">
-    <input type="button" class="btn btn-primary btn-lg" id="request-history-button" value="Completed requests" onclick="changeView(VIEW.REQUEST_HISTORY)">
+    <a  class="btn btn-primary btn-lg" id="donated-items-button"  onclick="changeView(VIEW.AVALIABLE_RESOURCES)">{{_("Avaliable resources")}}</a>
+    <a  class="btn btn-primary btn-lg" id="donated-items-button"  onclick="changeView(VIEW.DONATED_ITEMS)">{{_("Items donated by donors")}}</a>
+    <a  class="btn btn-primary btn-lg" id="donated-money-button"  onclick="changeView(VIEW.DONATED_MONEY)">{{_("Money donated by donors")}}</a>
+    <a  class="btn btn-primary btn-lg" id="pending-requests-button"  onclick="changeView(VIEW.PENDING_REQUESTS)">{{_("Current requests")}}</a>
+    <a  class="btn btn-primary btn-lg" id=" request-history-button"  onclick="changeView(VIEW.REQUEST_HISTORY)">{{_("Completed requests")}}</a>
   </div>
   <br>
   <br>
-  {% if curr_organization is defined and charity_campaign is defined %}
+  {% if curr_organization is defined %}
 
       <h1> {{ _("Organization name:") }} {{curr_organization.organization_name}} </h1>
+      {% if charity_campaign is defined %}
       <h2> {{ _("Chrity campagin name:") }} {{ charity_campaign.name }}</h2>
       <br>
         <form method="post">
@@ -39,8 +40,10 @@
               {% endif %}
             {% endfor %}
           </select>
-          <input class="btn btn-secondary" type="submit" value="Select charity campaign">
+          <input class="btn btn-secondary" type="submit" value='{{_("Select charity campaign")}}'>
       </form>
+
+      {% endif %}
 
       {% endif %}
       <br>
